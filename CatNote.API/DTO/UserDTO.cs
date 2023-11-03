@@ -1,6 +1,6 @@
 ﻿namespace CatNote.API.DTO;
 
-public class UserLoginDTO
+public class UserDTO
 {
     public string UserName { get; set; } = null!;
     public IEnumerable<TaskDTO>? Tasks { get; set; }
