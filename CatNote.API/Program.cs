@@ -1,4 +1,7 @@
+using CatNote.BLL.DI;
 using CatNote.DAL;
+using CatNote.DAL.DI;
+using CatNote.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CatNote.API;
@@ -14,8 +17,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-
-        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+        builder.Services.AddBusinessServices(connection);
 
         var app = builder.Build();
 

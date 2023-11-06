@@ -6,8 +6,8 @@ namespace CatNote.DAL.Repositories;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
 {
-    protected readonly ApplicationDbContext dbContext;
-    protected readonly DbSet<TEntity> dbSet;
+    protected ApplicationDbContext dbContext { get; }
+    protected DbSet<TEntity> dbSet { get; }
 
     public GenericRepository(ApplicationDbContext applicationDbContext)
     {
