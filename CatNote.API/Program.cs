@@ -1,7 +1,15 @@
+using CatNote.DAL;
+using Microsoft.EntityFrameworkCore;
+
 namespace CatNote.API;
 
 public class Program
 {
+    public Program(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+    public IConfiguration Configuration { get; }
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +17,10 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
 
         var app = builder.Build();
 
