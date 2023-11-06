@@ -1,7 +1,8 @@
-﻿namespace CatNote.DAL.Entities
+﻿using CatNote.DAL.Entities.Abstractions;
+
+namespace CatNote.DAL.Entities;
+
+public class BaseEntity : IBaseEntity
 {
-    public class BaseEntity
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; }
 }
