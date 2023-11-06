@@ -5,11 +5,6 @@ namespace CatNote.API;
 
 public class Program
 {
-    public Program(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-    public IConfiguration Configuration { get; }
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
