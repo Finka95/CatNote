@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CatNote.DAL\CatNote.DAL.csproj" />
-    <ProjectReference Include="..\CatNote.Domain\CatNote.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

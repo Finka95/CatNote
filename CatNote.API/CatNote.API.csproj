@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
@@ -17,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CatNote.BLL\CatNote.BLL.csproj" />
+    <ProjectReference Include="..\CatNote.Domain\CatNote.Domain.csproj" />
   </ItemGroup>
 
 </Project>
