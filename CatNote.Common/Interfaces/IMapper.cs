@@ -3,5 +3,5 @@
 public interface IMapper<TSourceEntity, TDestinationEntity>
 {
     public TSourceEntity ToEntity(TDestinationEntity destinationEntity);
-    public TDestinationEntity ToEntity(TSourceEntity sourceEntity);
+    public TDestinationEntity FromEntity(TSourceEntity sourceEntity);
 }
