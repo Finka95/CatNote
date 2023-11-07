@@ -15,10 +15,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         dbSet = applicationDbContext.Set<TEntity>();
     }
 
-    public async Task Create(TEntity element, CancellationToken cancellationToken)
+    public async Task<TEntity> Create(TEntity element, CancellationToken cancellationToken)
     {
         dbSet.Add(element);
         await dbContext.SaveChangesAsync(cancellationToken);
+
+        return element;
     }
 
     public async Task Delete(int id, CancellationToken cancellationToken)
@@ -43,9 +45,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return result!;
     }
 
-    public async Task Update(TEntity element, CancellationToken cancellationToken)
+    public async Task<TEntity> Update(TEntity element, CancellationToken cancellationToken)
     {
         dbContext.Entry(element).State = EntityState.Modified;
         await dbContext.SaveChangesAsync(cancellationToken);
+
+        return element;
     }
 }

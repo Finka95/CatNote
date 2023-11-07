@@ -25,8 +25,9 @@ public static class DependencyRegistration
         services.AddSingleton<IMapper<TaskEntity, TaskModel>, TaskModelMapper>();
         services.AddSingleton<IMapper<UserEntity, UserModel>, UserModelMapper>();
 
-        services.AddScoped<IGenericService<UserModel, UserEntity>>();
-        services.AddScoped<IGenericService<TaskModel, TaskEntity>>();
-        services.AddScoped<IGenericService<AchievementModel, AchievementEntity>>();
+        services.AddScoped<IGenericService<TaskModel>, GenericService<TaskModel, TaskEntity>>();
+        services.AddScoped<IGenericService<AchievementModel>, GenericService<AchievementModel, AchievementEntity>>();
+        services.AddScoped<IGenericService<UserModel>, GenericService<UserModel, UserEntity>>();
+
     }
 }

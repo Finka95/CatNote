@@ -4,7 +4,7 @@ using CatNote.DAL.Repositories.Interfaces;
 
 namespace CatNote.BLL.Services;
 
-public class GenericService<TModel, TEntity> : IGenericService<TModel, TEntity>
+public class GenericService<TModel, TEntity> : IGenericService<TModel>
     where TEntity : IBaseEntity
 {
     private readonly IMapper<TEntity, TModel> _mapper;
@@ -16,11 +16,13 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel, TEntity>
         _genericRepository = genericRepository;
     }
 
-    public async Task Create(TModel model, CancellationToken cancellationToken)
+    public async Task<TModel> Create(TModel model, CancellationToken cancellationToken)
     {
         var entity = _mapper.ToEntity(model);
 
-        await _genericRepository.Create(entity, cancellationToken);
+        var resultEntity = await _genericRepository.Create(entity, cancellationToken);
+
+        return _mapper.FromEntity(resultEntity);
     }
 
     public async Task Delete(int id, CancellationToken cancellationToken)
@@ -35,11 +37,13 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel, TEntity>
         return resultEntity.Select(x => _mapper.FromEntity(x));
     }
 
-    public async Task Update(TModel model, CancellationToken cancellationToken)
+    public async Task<TModel> Update(TModel model, CancellationToken cancellationToken)
     {
         var entity = _mapper.ToEntity(model);
 
-        await _genericRepository.Update(entity, cancellationToken);
+        var resultEntity = await _genericRepository.Update(entity, cancellationToken);
+
+        return _mapper.FromEntity(resultEntity);
     }
 
     public async Task<TModel> GetById(int id, CancellationToken cancellationToken)
