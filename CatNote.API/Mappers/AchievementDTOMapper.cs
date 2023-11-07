@@ -1,20 +1,19 @@
 ﻿using CatNote.API.DTO;
 using CatNote.BLL.Models;
-using CatNote.Common.Interfaces;
-using CatNote.DAL.Entities;
+using CatNote.Domain.Interfaces;
 
 namespace CatNote.API.Mappers;
 
 public class AchievementDTOMapper : IMapper<AchievementModel, AchievementDTO>
 {
-    public AchievementModel ToEntity(AchievementDTO achievementDTO) => new AchievementModel
+    public AchievementModel ToEntity(AchievementDTO achievementDTO) => new ()
     {
         Id = achievementDTO.Id,
         Title = achievementDTO.Title,
         Description = achievementDTO.Description
     };
 
-    public AchievementDTO FromEntity(AchievementModel achievementModel) => new AchievementDTO
+    public AchievementDTO FromEntity(AchievementModel achievementModel) => new ()
     {
         Id = achievementModel.Id,
         Title = achievementModel.Title,

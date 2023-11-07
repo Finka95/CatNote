@@ -1,12 +1,12 @@
 ﻿using CatNote.API.DTO;
 using CatNote.BLL.Models;
-using CatNote.Common.Interfaces;
+using CatNote.Domain.Interfaces;
 
 namespace CatNote.API.Mappers;
 
 public class TaskDTOMapper : IMapper<TaskModel, TaskDTO>
 {
-    public TaskModel ToEntity(TaskDTO taskDTO) => new TaskModel
+    public TaskModel ToEntity(TaskDTO taskDTO) => new ()
     {
         Id = taskDTO.Id,
         Title = taskDTO.Title,
@@ -14,7 +14,7 @@ public class TaskDTOMapper : IMapper<TaskModel, TaskDTO>
         Status = taskDTO.Status
     };
 
-    public TaskDTO FromEntity(TaskModel taskModel) => new TaskDTO
+    public TaskDTO FromEntity(TaskModel taskModel) => new ()
     {
         Id = taskModel.Id,
         Title = taskModel.Title,

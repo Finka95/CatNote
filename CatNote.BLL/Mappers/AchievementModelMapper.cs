@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CatNote.BLL.Models;
+﻿using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
+using CatNote.Domain.Interfaces;
 
 namespace CatNote.BLL.Mappers;
 
-public static class AchievementModelMapper
+public class AchievementModelMapper : IMapper<AchievementEntity, AchievementModel>
 {
-    public static AchievementEntity ToEntity(AchievementModel achievementModel) => new AchievementEntity
+    public AchievementEntity ToEntity(AchievementModel achievementModel) => new ()
     {
         Id = achievementModel.Id,
         Title = achievementModel.Title,
         Description = achievementModel.Description
     };
 
-    public static AchievementModel FromEntity(AchievementEntity achievementEntity) => new AchievementModel
+    public AchievementModel FromEntity(AchievementEntity achievementEntity) => new ()
     {
         Id = achievementEntity.Id,
         Title = achievementEntity.Title,

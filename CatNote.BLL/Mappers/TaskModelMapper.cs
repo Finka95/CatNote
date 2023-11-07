@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CatNote.BLL.Models;
+﻿using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
+using CatNote.Domain.Interfaces;
 
 namespace CatNote.BLL.Mappers;
 
-public static class TaskModelMapper
+public class TaskModelMapper : IMapper<TaskEntity, TaskModel>
 {
-    public static TaskEntity ToEntity(TaskModel taskModel) => new TaskEntity
+    public TaskEntity ToEntity(TaskModel taskModel) => new ()
     {
         Id = taskModel.Id,
         Date = taskModel.Date,
@@ -18,7 +14,7 @@ public static class TaskModelMapper
         Title = taskModel.Title
     };
 
-    public static TaskModel FromEntity(TaskEntity taskEntity) => new TaskModel
+    public TaskModel FromEntity(TaskEntity taskEntity) => new ()
     {
         Id = taskEntity.Id,
         Date = taskEntity.Date,

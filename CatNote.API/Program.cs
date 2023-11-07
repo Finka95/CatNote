@@ -1,9 +1,5 @@
 using CatNote.API.DI;
 using CatNote.BLL.DI;
-using CatNote.DAL;
-using CatNote.DAL.DI;
-using CatNote.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace CatNote.API;
 

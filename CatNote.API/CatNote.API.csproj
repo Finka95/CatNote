@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CatNote.BLL\CatNote.BLL.csproj" />
-    <ProjectReference Include="..\CatNote.Common\CatNote.Common.csproj" />
     <ProjectReference Include="..\CatNote.Domain\CatNote.Domain.csproj" />
   </ItemGroup>
 

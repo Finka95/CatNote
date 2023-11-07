@@ -1,7 +1,6 @@
 ﻿using CatNote.API.DTO;
 using CatNote.BLL.Models;
-using CatNote.Common.Interfaces;
-using CatNote.DAL.Entities;
+using CatNote.Domain.Interfaces;
 
 namespace CatNote.API.Mappers;
 
@@ -16,23 +15,27 @@ public class UserDTOMapper : IMapper<UserModel, UserDTO>
         _achivementMapper = achivementMapper;
     }
 
-    public UserModel ToEntity(UserDTO userDTO) => new UserModel
+    public UserModel ToEntity(UserDTO userDTO) => new ()
     {
             Id = userDTO.Id,
             UserName = userDTO.UserName,
-            Tasks = userDTO.Tasks
+            Tasks = userDTO.Tasks?
                 .Select(x => _taskMapper.ToEntity(x))
                 .ToList(),
-            Achievements = userDTO.Achievements
+            Achievements = userDTO.Achievements?
                 .Select(x => _achivementMapper.ToEntity(x))
                 .ToList()
     };
 
-    public UserDTO FromEntity(UserModel userModel) => new UserDTO
+    public UserDTO FromEntity(UserModel userModel) => new ()
     {
         Id = userModel.Id,
         UserName = userModel.UserName,
-        Tasks = userModel.Tasks.Select(x => _taskMapper.FromEntity(x)).ToList(),
-        Achievements = userModel.Achievements.Select(x => _achivementMapper.FromEntity(x))
+        Tasks = userModel.Tasks?
+            .Select(x => _taskMapper.FromEntity(x))
+            .ToList(),
+        Achievements = userModel.Achievements?
+            .Select(x => _achivementMapper.FromEntity(x))
+            .ToList()
     };
 }
