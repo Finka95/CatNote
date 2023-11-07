@@ -8,7 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CatNote.BLL.Mappers;
+using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.DI;
+using CatNote.BLL.Models;
 
 namespace CatNote.BLL.DI;
 public static class DependencyRegistration
@@ -16,5 +19,9 @@ public static class DependencyRegistration
     public static void AddBusinessServices(this IServiceCollection services, string connectionString)
     {
         services.AddDatabaseServices(connectionString);
+
+        services.AddSingleton<IMapper<AchievementEntity, AchievementModel>, AchievementModelMapper>();
+        services.AddSingleton<IMapper<TaskEntity, TaskModel>, TaskModelMapper>();
+        services.AddSingleton<IMapper<UserEntity, UserModel>, UserModelMapper>();
     }
 }

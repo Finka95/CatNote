@@ -1,8 +1,5 @@
+using CatNote.API.DI;
 using CatNote.BLL.DI;
-using CatNote.DAL;
-using CatNote.DAL.DI;
-using CatNote.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace CatNote.API;
 
@@ -18,6 +15,7 @@ public class Program
 
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddBusinessServices(connection);
+        builder.Services.AddMapperServices();
 
         var app = builder.Build();
 

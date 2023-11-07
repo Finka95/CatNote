@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatNote.Tests", "CatNote.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2FDC63E9-5FEB-4078-B373-CF59A743B5FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatNote.Domain", "CatNote.Domain\CatNote.Domain.csproj", "{99D272F6-DB38-4D2F-8750-175E3AD01D0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatNote.Domain", "CatNote.Domain\CatNote.Domain.csproj", "{99D272F6-DB38-4D2F-8750-175E3AD01D0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

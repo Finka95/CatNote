@@ -15,37 +15,37 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         dbSet = applicationDbContext.Set<TEntity>();
     }
 
-    public async Task Create(TEntity element)
+    public async Task Create(TEntity element, CancellationToken cancellationToken)
     {
         dbSet.Add(element);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task Delete(int id)
+    public async Task Delete(int id, CancellationToken cancellationToken)
     {
-        var element = dbSet.FirstOrDefault(x => x.Id == id);
+        var element = await dbSet.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (element != null)
         {
             dbSet.Remove(element);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 
-    public async Task<IEnumerable<TEntity>> GetAll()
+    public async Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken)
     {
-        return await dbSet.AsNoTracking().ToListAsync();
+        return await dbSet.AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity> GetById(int id)
+    public async Task<TEntity> GetById(int id, CancellationToken cancellationToken)
     {
-        var result = await dbSet.FindAsync(id);
+        var result = await dbSet.FindAsync(id, cancellationToken);
         return result!;
     }
 
-    public async Task Update(TEntity element)
+    public async Task Update(TEntity element, CancellationToken cancellationToken)
     {
         dbContext.Entry(element).State = EntityState.Modified;
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
