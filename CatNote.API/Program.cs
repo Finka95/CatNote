@@ -1,3 +1,4 @@
+using CatNote.API.DI;
 using CatNote.BLL.DI;
 using CatNote.DAL;
 using CatNote.DAL.DI;
@@ -18,6 +19,7 @@ public class Program
 
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddBusinessServices(connection);
+        builder.Services.AddMapperServices();
 
         var app = builder.Build();
 

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CatNote.Common\CatNote.Common.csproj" />
     <ProjectReference Include="..\CatNote.DAL\CatNote.DAL.csproj" />
     <ProjectReference Include="..\CatNote.Domain\CatNote.Domain.csproj" />
   </ItemGroup>
