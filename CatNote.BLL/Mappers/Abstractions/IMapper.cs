@@ -1,4 +1,4 @@
-﻿namespace CatNote.Domain.Interfaces;
+﻿namespace CatNote.BLL.Mappers.Abstractions;
 
 public interface IMapper<T1, T2>
 {

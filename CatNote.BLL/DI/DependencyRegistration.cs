@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CatNote.BLL.Mappers;
+using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.DI;
 using CatNote.BLL.Models;
-using CatNote.Domain.Interfaces;
 
 namespace CatNote.BLL.DI;
 public static class DependencyRegistration

@@ -1,8 +1,8 @@
 ﻿using CatNote.API.DTO;
 using CatNote.API.Mappers;
+using CatNote.BLL.Mappers.Abstractions;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
-using CatNote.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 namespace CatNote.API.DI;
 

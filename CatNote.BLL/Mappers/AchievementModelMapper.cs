@@ -1,6 +1,6 @@
-﻿using CatNote.BLL.Models;
+﻿using CatNote.BLL.Mappers.Abstractions;
+using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
-using CatNote.Domain.Interfaces;
 
 namespace CatNote.BLL.Mappers;
 
