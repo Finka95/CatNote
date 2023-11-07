@@ -12,6 +12,7 @@ using CatNote.BLL.Mappers;
 using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.DI;
 using CatNote.BLL.Models;
+using CatNote.BLL.Services;
 
 namespace CatNote.BLL.DI;
 public static class DependencyRegistration
@@ -23,5 +24,9 @@ public static class DependencyRegistration
         services.AddSingleton<IMapper<AchievementEntity, AchievementModel>, AchievementModelMapper>();
         services.AddSingleton<IMapper<TaskEntity, TaskModel>, TaskModelMapper>();
         services.AddSingleton<IMapper<UserEntity, UserModel>, UserModelMapper>();
+
+        services.AddScoped<IGenericService<UserModel, UserEntity>>();
+        services.AddScoped<IGenericService<TaskModel, TaskEntity>>();
+        services.AddScoped<IGenericService<AchievementModel, AchievementEntity>>();
     }
 }
