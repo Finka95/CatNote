@@ -1,5 +1,5 @@
 ﻿using CatNote.DAL.Entities;
-using CatNote.DAL.Repositories.Interfaces;
+using CatNote.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace CatNote.DAL.Repositories;
@@ -41,8 +41,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<TEntity> GetById(int id, CancellationToken cancellationToken)
     {
-        var result = await dbSet.FindAsync(id, cancellationToken);
-        return result!;
+        return await dbSet.AsNoTracking().FirstAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<TEntity> Update(TEntity element, CancellationToken cancellationToken)

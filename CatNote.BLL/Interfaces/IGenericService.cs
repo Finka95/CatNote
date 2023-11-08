@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CatNote.DAL.Entities.Abstractions;
-
-namespace CatNote.BLL.Services;
+﻿namespace CatNote.BLL.Interfaces;
 
 public interface IGenericService<TModel>
 {

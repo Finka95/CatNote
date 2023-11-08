@@ -1,6 +1,7 @@
-﻿using CatNote.BLL.Mappers.Abstractions;
+﻿using CatNote.BLL.Interfaces;
+using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.Entities.Abstractions;
-using CatNote.DAL.Repositories.Interfaces;
+using CatNote.DAL.Interfaces;
 
 namespace CatNote.BLL.Services;
 
@@ -25,10 +26,7 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
         return _mapper.FromEntity(resultEntity);
     }
 
-    public async Task Delete(int id, CancellationToken cancellationToken)
-    {
-        await _genericRepository.Delete(id, cancellationToken);
-    }
+    public async Task Delete(int id, CancellationToken cancellationToken) => await _genericRepository.Delete(id, cancellationToken);
 
     public async Task<IEnumerable<TModel>> GetAll(CancellationToken cancellationToken)
     {

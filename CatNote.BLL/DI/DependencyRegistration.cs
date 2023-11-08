@@ -1,5 +1,4 @@
 ﻿using CatNote.DAL.Entities;
-using CatNote.DAL.Repositories.Interfaces;
 using CatNote.DAL.Repositories;
 using CatNote.DAL;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +12,7 @@ using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.DI;
 using CatNote.BLL.Models;
 using CatNote.BLL.Services;
+using CatNote.BLL.Interfaces;
 
 namespace CatNote.BLL.DI;
 public static class DependencyRegistration

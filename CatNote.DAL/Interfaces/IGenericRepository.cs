@@ -1,6 +1,6 @@
 ﻿using CatNote.DAL.Entities.Abstractions;
 
-namespace CatNote.DAL.Repositories.Interfaces;
+namespace CatNote.DAL.Interfaces;
 
 public interface IGenericRepository<TEntity> where TEntity : IBaseEntity
 {
