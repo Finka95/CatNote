@@ -39,8 +39,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<TEntity> GetById(int id, CancellationToken cancellationToken)
     {
-        var result = await dbSet.FindAsync(id, cancellationToken);
-        return result!;
+        return await dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task Update(TEntity element, CancellationToken cancellationToken)
