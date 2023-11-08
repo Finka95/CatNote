@@ -1,7 +1,7 @@
 ﻿namespace CatNote.BLL.Mappers.Abstractions;
 
-public interface IMapper<T1, T2>
+public interface IMapper<TEntity, TModel>
 {
-    public T1 ToEntity(T2 destinationEntity);
-    public T2 FromEntity(T1 sourceEntity);
+    public TEntity ToEntity(TModel destinationEntity);
+    public TModel FromEntity(TEntity sourceEntity);
 }
