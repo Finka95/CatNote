@@ -42,17 +42,13 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
 
         var resultEntity = await _genericRepository.Update(entity, cancellationToken);
 
-        return resultEntity == null
-            ? throw new NotFoundException("Not found")
-            : _mapper.FromEntity(resultEntity);
+        return _mapper.FromEntity(resultEntity);
     }
 
     public async Task<TModel> GetById(int id, CancellationToken cancellationToken)
     {
         var resultEntity = await _genericRepository.GetById(id, cancellationToken);
 
-        return resultEntity == null
-            ? throw new NotFoundException("Not found")
-            : _mapper.FromEntity(resultEntity);
+        return _mapper.FromEntity(resultEntity);
     }
 }

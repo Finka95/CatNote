@@ -1,4 +1,5 @@
-﻿using CatNote.BLL.Mappers.Abstractions;
+﻿using CatNote.BLL.Exceptions;
+using CatNote.BLL.Mappers.Abstractions;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 
@@ -13,10 +14,15 @@ public class AchievementModelMapper : IMapper<AchievementEntity, AchievementMode
         Description = achievementModel.Description
     };
 
-    public AchievementModel FromEntity(AchievementEntity achievementEntity) => new()
+    public AchievementModel FromEntity(AchievementEntity achievementEntity)
     {
-        Id = achievementEntity.Id,
-        Title = achievementEntity.Title,
-        Description = achievementEntity.Description
-    };
+        return achievementEntity == null
+            ? throw new NotFoundException("Not found")
+            : new()
+            {
+                Id = achievementEntity.Id,
+                Title = achievementEntity.Title,
+                Description = achievementEntity.Description
+            };
+    }
 }
