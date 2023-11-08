@@ -1,5 +1,4 @@
 ﻿using CatNote.DAL.Entities;
-using CatNote.DAL.Repositories.Interfaces;
 using CatNote.DAL.Repositories;
 using CatNote.DAL;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +11,8 @@ using CatNote.BLL.Mappers;
 using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.DI;
 using CatNote.BLL.Models;
+using CatNote.BLL.Services;
+using CatNote.BLL.Interfaces;
 
 namespace CatNote.BLL.DI;
 public static class DependencyRegistration
@@ -23,5 +24,10 @@ public static class DependencyRegistration
         services.AddSingleton<IMapper<AchievementEntity, AchievementModel>, AchievementModelMapper>();
         services.AddSingleton<IMapper<TaskEntity, TaskModel>, TaskModelMapper>();
         services.AddSingleton<IMapper<UserEntity, UserModel>, UserModelMapper>();
+
+        services.AddScoped<IGenericService<TaskModel>, GenericService<TaskModel, TaskEntity>>();
+        services.AddScoped<IGenericService<AchievementModel>, GenericService<AchievementModel, AchievementEntity>>();
+        services.AddScoped<IGenericService<UserModel>, GenericService<UserModel, UserEntity>>();
+
     }
 }

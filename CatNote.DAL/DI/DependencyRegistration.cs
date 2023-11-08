@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CatNote.DAL.Entities;
+using CatNote.DAL.Interfaces;
 using CatNote.DAL.Repositories;
-using CatNote.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
