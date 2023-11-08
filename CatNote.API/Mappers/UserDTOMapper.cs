@@ -15,19 +15,19 @@ public class UserDTOMapper : IMapper<UserModel, UserDTO>
         _achivementMapper = achivementMapper;
     }
 
-    public UserModel ToEntity(UserDTO userDTO) => new ()
+    public UserModel ToEntity(UserDTO userDTO) => new()
     {
-            Id = userDTO.Id,
-            UserName = userDTO.UserName,
-            Tasks = userDTO.Tasks?
+        Id = userDTO.Id,
+        UserName = userDTO.UserName,
+        Tasks = userDTO.Tasks?
                 .Select(x => _taskMapper.ToEntity(x))
                 .ToList(),
-            Achievements = userDTO.Achievements?
+        Achievements = userDTO.Achievements?
                 .Select(x => _achivementMapper.ToEntity(x))
                 .ToList()
     };
 
-    public UserDTO FromEntity(UserModel userModel) => new ()
+    public UserDTO FromEntity(UserModel userModel) => new()
     {
         Id = userModel.Id,
         UserName = userModel.UserName,

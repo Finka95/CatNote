@@ -27,7 +27,7 @@ public class UserModelMapper : IMapper<UserEntity, UserModel>
             .ToList()
     };
 
-    public UserModel FromEntity(UserEntity userEntity) => new ()
+    public UserModel FromEntity(UserEntity userEntity) => new()
     {
         Id = userEntity.Id,
         UserName = userEntity.UserName,

@@ -1,4 +1,5 @@
-﻿using CatNote.BLL.Interfaces;
+﻿using CatNote.BLL.Exceptions;
+using CatNote.BLL.Interfaces;
 using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.Entities.Abstractions;
 using CatNote.DAL.Interfaces;
@@ -41,13 +42,17 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
 
         var resultEntity = await _genericRepository.Update(entity, cancellationToken);
 
-        return _mapper.FromEntity(resultEntity);
+        return resultEntity == null
+            ? throw new NotFoundException("Not found")
+            : _mapper.FromEntity(resultEntity);
     }
 
     public async Task<TModel> GetById(int id, CancellationToken cancellationToken)
     {
         var resultEntity = await _genericRepository.GetById(id, cancellationToken);
 
-        return _mapper.FromEntity(resultEntity);
+        return resultEntity == null
+            ? throw new NotFoundException("Not found")
+            : _mapper.FromEntity(resultEntity);
     }
 }

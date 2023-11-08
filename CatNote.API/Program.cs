@@ -1,5 +1,9 @@
 using CatNote.API.DI;
+using CatNote.API.Middlewares;
 using CatNote.BLL.DI;
+using FluentValidation;
+using System.Reflection;
+using FluentValidation.AspNetCore;
 
 namespace CatNote.API;
 
@@ -13,6 +17,8 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddFluentValidationAutoValidation();
+
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddBusinessServices(connection);
         builder.Services.AddMapperServices();
@@ -24,6 +30,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseHttpsRedirection();
 
