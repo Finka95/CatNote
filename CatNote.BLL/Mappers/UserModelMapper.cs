@@ -1,4 +1,5 @@
-﻿using CatNote.BLL.Mappers.Abstractions;
+﻿using CatNote.BLL.Exceptions;
+using CatNote.BLL.Mappers.Abstractions;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 
@@ -27,15 +28,20 @@ public class UserModelMapper : IMapper<UserEntity, UserModel>
             .ToList()
     };
 
-    public UserModel FromEntity(UserEntity userEntity) => new ()
+    public UserModel FromEntity(UserEntity userEntity)
     {
-        Id = userEntity.Id,
-        UserName = userEntity.UserName,
-        Tasks = userEntity.Tasks?
-            .Select(x => _taskMapper.FromEntity(x))
-            .ToList(),
-        Achievements = userEntity.Achievements?
-            .Select(x => _achievementsMapper.FromEntity(x))
-            .ToList()
-    };
+        return userEntity == null
+            ? throw new NotFoundException("Not Found")
+            : new()
+            {
+                Id = userEntity.Id,
+                UserName = userEntity.UserName,
+                Tasks = userEntity.Tasks?
+                .Select(x => _taskMapper.FromEntity(x))
+                .ToList(),
+                Achievements = userEntity.Achievements?
+                .Select(x => _achievementsMapper.FromEntity(x))
+                .ToList()
+            };
+    }
 }

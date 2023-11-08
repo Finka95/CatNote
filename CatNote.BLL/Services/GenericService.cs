@@ -1,4 +1,5 @@
-﻿using CatNote.BLL.Interfaces;
+﻿using CatNote.BLL.Exceptions;
+using CatNote.BLL.Interfaces;
 using CatNote.BLL.Mappers.Abstractions;
 using CatNote.DAL.Entities.Abstractions;
 using CatNote.DAL.Interfaces;

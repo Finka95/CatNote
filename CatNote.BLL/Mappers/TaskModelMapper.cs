@@ -1,4 +1,5 @@
-﻿using CatNote.BLL.Mappers.Abstractions;
+﻿using CatNote.BLL.Exceptions;
+using CatNote.BLL.Mappers.Abstractions;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 
@@ -14,11 +15,16 @@ public class TaskModelMapper : IMapper<TaskEntity, TaskModel>
         Title = taskModel.Title
     };
 
-    public TaskModel FromEntity(TaskEntity taskEntity) => new ()
+    public TaskModel FromEntity(TaskEntity taskEntity)
     {
-        Id = taskEntity.Id,
-        Date = taskEntity.Date,
-        Title = taskEntity.Title,
-        Status = taskEntity.Status
-    };
+        return taskEntity == null
+            ? throw new NotFoundException("Not Found")
+            : new()
+            {
+                Id = taskEntity.Id,
+                Date = taskEntity.Date,
+                Title = taskEntity.Title,
+                Status = taskEntity.Status
+            };
+    }
 }
