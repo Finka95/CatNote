@@ -1,6 +1,5 @@
-﻿using CatNote.BLL.Interfaces;
-using CatNote.BLL.Mappers.Abstractions;
-using Microsoft.AspNetCore.Components.Forms;
+﻿using AutoMapper;
+using CatNote.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatNote.API.Controllers;
@@ -9,10 +8,10 @@ namespace CatNote.API.Controllers;
 [Route("api/[controller]")]
 public class GenericController<TModel, TDto> : ControllerBase, IGenericController<TDto>
 {
-    private readonly IMapper<TModel, TDto> _mapper;
+    private readonly IMapper _mapper;
     private readonly IGenericService<TModel> _service;
 
-    public GenericController(IMapper<TModel, TDto> mapper, IGenericService<TModel> service)
+    public GenericController(IMapper mapper, IGenericService<TModel> service)
     {
         _mapper = mapper;
         _service = service;
@@ -21,11 +20,11 @@ public class GenericController<TModel, TDto> : ControllerBase, IGenericControlle
     [HttpPost]
     public async Task<TDto> Create(TDto dto, CancellationToken cancellationToken)
     {
-        var model = _mapper.ToEntity(dto);
+        var model = _mapper.Map<TModel>(dto);
 
         var resultModel = await _service.Create(model, cancellationToken);
 
-        return _mapper.FromEntity(resultModel);
+        return _mapper.Map<TDto>(resultModel);
         ;
     }
 
@@ -40,7 +39,7 @@ public class GenericController<TModel, TDto> : ControllerBase, IGenericControlle
     {
         var resultModel = await _service.GetAll(cancellationToken);
 
-        return resultModel.Select(x => _mapper.FromEntity(x)).ToList();
+        return _mapper.Map<List<TDto>>(resultModel);
     }
 
     [HttpGet("{id}")]
@@ -48,16 +47,16 @@ public class GenericController<TModel, TDto> : ControllerBase, IGenericControlle
     {
         var resultModel = await _service.GetById(id, cancellationToken);
 
-        return _mapper.FromEntity(resultModel);
+        return _mapper.Map<TDto>(resultModel);
     }
 
     [HttpPut]
     public async Task<TDto> Update(TDto dto, CancellationToken cancellationToken)
     {
-        var model = _mapper.ToEntity(dto);
+        var model = _mapper.Map<TModel>(dto);
 
         var resultModel = await _service.Update(model, cancellationToken);
 
-        return _mapper.FromEntity(resultModel);
+        return _mapper.Map<TDto>(resultModel);
     }
 }
