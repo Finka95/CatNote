@@ -10,6 +10,6 @@ public class TaskShortDTOValidator : AbstractValidator<TaskShortDTO>
         RuleFor(x => x.Title)
             .NotEmpty()
             .NotNull()
-            .WithMessage("Description Required");
+            .WithMessage("Title Required");
     }
 }

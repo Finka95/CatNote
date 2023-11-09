@@ -10,7 +10,7 @@ public class AchievementDTOValidator : AbstractValidator<AchievementDTO>
         RuleFor(x => x.Title)
             .NotEmpty()
             .NotNull()
-            .WithMessage("Description Required");
+            .WithMessage("Title Required");
 
         RuleFor(x => x.Description)
             .NotEmpty()

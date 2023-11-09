@@ -10,6 +10,6 @@ public class UserDTOValidator : AbstractValidator<UserDTO>
         RuleFor(x => x.UserName)
             .NotEmpty()
             .NotNull()
-            .WithMessage("Description Required");
+            .WithMessage("UserName Required");
     }
 }

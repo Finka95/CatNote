@@ -10,16 +10,16 @@ public class TaskDTOValidator : AbstractValidator<TaskDTO>
         RuleFor(x => x.Title)
             .NotEmpty()
             .NotNull()
-            .WithMessage("Description Required");
+            .WithMessage("Title Required");
 
         RuleFor(x => x.Status)
             .NotEmpty()
             .NotNull()
-            .WithMessage("Description Required");
+            .WithMessage("Status Required");
 
         RuleFor(x => x.Date)
             .NotEmpty()
             .NotNull()
-            .WithMessage("Description Required");
+            .WithMessage("Date Required");
     }
 }
