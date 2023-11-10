@@ -118,6 +118,6 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
         var result = await _client.GetAsync($"api/User/{id}");
 
         //Assert
-        result.Should().BeNull();
+        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 }
