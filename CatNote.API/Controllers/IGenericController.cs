@@ -1,7 +1,4 @@
-﻿using CatNote.BLL.Mappers.Abstractions;
-using Microsoft.AspNetCore.Mvc;
-
-namespace CatNote.API.Controllers;
+﻿namespace CatNote.API.Controllers;
 
 public interface IGenericController<TDto>
 {
