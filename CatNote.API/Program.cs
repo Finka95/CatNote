@@ -4,6 +4,8 @@ using CatNote.BLL.DI;
 using FluentValidation.AspNetCore;
 using System.Reflection;
 using CatNote.BLL.Mappers;
+using System.Runtime.ConstrainedExecution;
+using System.Net.Http;
 
 namespace CatNote.API;
 
