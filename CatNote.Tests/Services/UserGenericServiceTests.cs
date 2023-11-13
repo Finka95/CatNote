@@ -24,7 +24,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_CallCreateMethodOfRepositoryAndReturnUserModel()
+    public async Task Create_CorrectModelPass_ReturnUserModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
@@ -51,7 +51,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_UserById_CallDeleteMethodOfRepository()
+    public async Task Delete_UserById_ReturnSuccess()
     {
         //Arrange
         var userId = 1;
@@ -66,7 +66,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllUsers_CallGetAllMethodOfRepositoryAndReturnUserModelList()
+    public async Task GetAll_GetAllUsers_ReturnUserModelList()
     {
         //Arrange
         var userEntityList = new List<UserEntity>();
@@ -94,7 +94,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByCorrectIdPass_CallGetByIdOfRepositoryAndReturnUserModel()
+    public async Task GetById_GetUserByCorrectIdPass_ReturnUserModel()
     {
         //Arrange
         var userId = 1;
@@ -122,7 +122,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByIncorrectId_CallGetByIdOfRepositoryAndReturnNull()
+    public async Task GetById_GetUserByIncorrectId_ReturnNull()
     {
         //Arrange
         var userId = 5;
@@ -139,7 +139,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateUserByCorrectIdPass_CallUpdateOfRepositoryAndReturnUserModel()
+    public async Task Update_UpdateUserByCorrectIdPass_ReturnUserModel()
     {
         //Arrange
         var userModel = UserData.GetUserModel();
@@ -179,7 +179,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateUserByIncorrectIdPass_CallUpdateOfRepositoryAndReturnNull()
+    public async Task Update_UpdateUserByIncorrectIdPass_ReturnNull()
     {
         //Arrange
         var userModel = UserData.GetUserModel();

@@ -24,7 +24,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_CallCreateMethodOfRepositoryAndReturnAchievementModel()
+    public async Task Create_CorrectModelPass_ReturnAchievementModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
@@ -52,7 +52,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_AchievementByCorrectId_CallDeleteMethodOfRepository()
+    public async Task Delete_AchievementByCorrectId_ReturnSuccess()
     {
         //Arrange
         var achievementId = 1;
@@ -67,7 +67,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllAchievements_CallGetAllMethodOfRepositoryAndReturnAchievementModelList()
+    public async Task GetAll_GetAllAchievements_ReturnAchievementModelList()
     {
         //Arrange
         var achievementEntityList = new List<AchievementEntity>();
@@ -95,7 +95,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetAchievementByCorrectIdPass_CallGetByIdOfRepositoryAndReturnAchievementModel()
+    public async Task GetById_GetAchievementByCorrectIdPass_ReturnAchievementModel()
     {
         //Arrange
         var achievementId = 1;
@@ -124,7 +124,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetAchievementByIncorrectId_CallGetByIdOfRepositoryAndReturnNull()
+    public async Task GetById_GetAchievementByIncorrectId_ReturnNull()
     {
         //Arrange
         var achievementId = 5;
@@ -141,7 +141,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateAchievementByCorrectIdPass_CallUpdateOfRepositoryAndReturnAchievementModel()
+    public async Task Update_UpdateAchievementByCorrectIdPass_ReturnAchievementModel()
     {
         //Arrange
         var achievementModel = AchievementData.GetAchievementModel();
@@ -184,7 +184,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateAchievementByIncorrectIdPass_CallUpdateOfRepositoryAndReturnNull()
+    public async Task Update_UpdateAchievementByIncorrectIdPass_ReturnNull()
     {
         //Arrange
         var achievementModel = AchievementData.GetAchievementModel();

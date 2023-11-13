@@ -24,7 +24,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_CallCreateMethodOfRepositoryAndReturnTaskModel()
+    public async Task Create_CorrectModelPass_ReturnTaskModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
@@ -53,7 +53,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_TaskByCorrectId_CallDeleteMethodOfRepository()
+    public async Task Delete_TaskByCorrectId_ReturnSuccess()
     {
         //Arrange
         var taskId = 1;
@@ -68,7 +68,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllTasks_CallGetAllMethodOfRepositoryAndReturnTaskModelList()
+    public async Task GetAll_GetAllTasks_ReturnTaskModelList()
     {
         //Arrange
         var taskEntityList = new List<TaskEntity>();
@@ -96,7 +96,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetTaskByCorrectIdPass_CallGetByIdOfRepositoryAndReturnTaskModel()
+    public async Task GetById_GetTaskByCorrectIdPass_ReturnTaskModel()
     {
         //Arrange
         var taskId = 1;
@@ -126,7 +126,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetTaskByIncorrectId_CallGetByIdOfRepositoryAndReturnNull()
+    public async Task GetById_GetTaskByIncorrectId_ReturnNull()
     {
         //Arrange
         var taskId = 5;
@@ -143,7 +143,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateTaskByCorrectIdPass_CallUpdateOfRepositoryAndReturnTaskModel()
+    public async Task Update_UpdateTaskByCorrectIdPass_ReturnTaskModel()
     {
         //Arrange
         var taskModel = TaskData.GetTaskModel();
@@ -189,7 +189,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateTaskByIncorrectIdPass_CallUpdateOfRepositoryAndReturnNull()
+    public async Task Update_UpdateTaskByIncorrectIdPass_ReturnNull()
     {
         //Arrange
         var taskModel = TaskData.GetTaskModel();
