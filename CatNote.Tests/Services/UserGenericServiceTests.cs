@@ -10,13 +10,13 @@ using Xunit;
 
 namespace CatNote.Tests.Services;
 
-public class GenericServiceTests
+public class UserGenericServiceTests
 {
     private readonly Mock<IGenericRepository<UserEntity>> _mockGenericRepository;
     private readonly Mock<IMapper> _mockMapper;
     private readonly GenericService<UserModel, UserEntity> _userService;
 
-    public GenericServiceTests()
+    public UserGenericServiceTests()
     {
         _mockGenericRepository = new Mock<IGenericRepository<UserEntity>>();
         _mockMapper = new Mock<IMapper>();
@@ -24,7 +24,7 @@ public class GenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CreateNewUser_CallCreateMethodOfRepositoryAndReturnUserModel()
+    public async Task Create_CorrectModelPass_CallCreateMethodOfRepositoryAndReturnUserModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
@@ -51,7 +51,7 @@ public class GenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_DeleteUser_CallDeleteMethodOfRepository()
+    public async Task Delete_UserById_CallDeleteMethodOfRepository()
     {
         //Arrange
         var userId = 1;
@@ -94,7 +94,7 @@ public class GenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUseById_CallGetByIdOfRepositoryAndReturnUserModel()
+    public async Task GetById_GetUserByCorrectIdPass_CallGetByIdOfRepositoryAndReturnUserModel()
     {
         //Arrange
         var userId = 1;
@@ -122,7 +122,24 @@ public class GenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateUser_CallUpdateOfRepositoryAndReturnUserModel()
+    public async Task GetById_GetUserByIncorrectId_CallGetByIdOfRepositoryAndReturnNull()
+    {
+        //Arrange
+        var userId = 5;
+
+        var cancellationToken = new CancellationToken();
+
+        _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity)null);
+
+        //Act
+        var result = await _userService.GetById(userId, cancellationToken);
+
+        //Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Update_UpdateUserByCorrectIdPass_CallUpdateOfRepositoryAndReturnUserModel()
     {
         //Arrange
         var userModel = UserData.GetUserModel();
@@ -158,6 +175,36 @@ public class GenericServiceTests
         result.Id.Should().Be(userModelResult.Id);
         result.UserName.Should().Be(userModelResult.UserName);
         
+        _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Update_UpdateUserByIncorrectIdPass_CallUpdateOfRepositoryAndReturnNull()
+    {
+        //Arrange
+        var userModel = UserData.GetUserModel();
+
+        var userEntityResult = new UserEntity
+        {
+            Id = 2,
+            UserName = "name2"
+        };
+
+        var cancellationToken = new CancellationToken();
+
+        SetupMapper<UserEntity, UserModel>(userEntityResult);
+        _mockGenericRepository.Setup(x => x.Update(It.IsAny<UserEntity>(), cancellationToken))
+            .ReturnsAsync((UserEntity)null);
+
+        //Act
+        var result = await _userService.Update(userModel, cancellationToken);
+
+        //Assert
+        _mockMapper.Verify(x => x.Map<UserEntity>(It.IsAny<UserModel>()), Times.Once);
+        _mockGenericRepository.Verify(x => x.Update(It.IsAny<UserEntity>(), cancellationToken), Times.Once);
+
+        result.Should().Be(null);
+
         _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
     }
 
