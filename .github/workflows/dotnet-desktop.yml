@@ -9,8 +9,6 @@ jobs:
   build:
 
     strategy:
-      matrix:
-        configuration: [Release]
     runs-on: ubuntu-latest
 
     steps:
@@ -31,6 +29,10 @@ jobs:
 
     - name: Build the application
       run: dotnet build --no-restore
+
+    - name: configuration
+      matrix:
+        configuration: [Release]
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
