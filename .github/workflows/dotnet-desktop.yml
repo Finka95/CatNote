@@ -73,6 +73,7 @@ jobs:
         dotnet restore
         dotnet build --no-restore 
         dotnet dotcover test --dcReportType=HTML
+        mkdir .sonarqube
         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
 
