@@ -69,15 +69,11 @@ jobs:
         EXCLUDE_FROM_COVERAGE: ""
       shell: powershell
       run: |
-        .\.sonar\scanner\dotnet-sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" -d:sonar.coverage.exclusions="${{ env.EXCLUDE_FROM_COVERAGE }}" -d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
+        .\.sonar\scanner\dotnet-sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" -d:sonar.coverage.exclusions="${{ env.EXCLUDE_FROM_COVERAGE }}" -d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html /d:sonar.working.directory=".sonar\scanner"
         dotnet restore
         dotnet build --no-restore 
         dotnet dotcover test --dcReportType=HTML
-        $tempSonarDir = Join-Path -Path .sonarqube -ChildPath conf
-        mkdir $tempSonarDir -Force
-        Copy-Item -Path .\.sonar\scanner\* -Destination $tempSonarDir -Recurse
         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
 
 
 
