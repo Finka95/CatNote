@@ -70,6 +70,14 @@ jobs:
         dotnet build --no-restore 
         dotnet test --no-restore --verbosity detailed /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./Results/
         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        
+    - name: Save coverage report as artifact
+      if: always() # Save the report even if the build or tests fail
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: ./Results/*.opencover.xml
+
     # - name: Install Code Coverage tool
     #     shell: powershell
     #     run: dotnet tool install --global JetBrains.dotCover.GlobalTool
