@@ -1,4 +1,4 @@
-name: .NET Core Desktop
+name: CatNote
 
 on:
   pull_request:
@@ -9,14 +9,7 @@ jobs:
   build:
 
     strategy:
-      matrix:
-        configuration: [Debug, Release]
-
-    runs-on: windows-latest
-
-    env:
-      Solution_Name: CatNote.API.sln                         
-      Test_Project_Path: CatNote.Tests\CatNote.Tests.csproj
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -36,6 +29,8 @@ jobs:
 
     - name: Build the application
       run: dotnet build --no-restore
+
+      configuration: [Release]
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
