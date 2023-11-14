@@ -33,4 +33,4 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test --no-build --verbosity Detailed
+      run: dotnet test --no-build --verbosity Detailed /home/runner/work/CatNote/CatNote/CatNote.Tests/bin/Debug/net8.0/CatNote.Tests.dll
