@@ -28,7 +28,7 @@ jobs:
       run: dotnet restore
 
     - name: Build the application
-      run: dotnet build --no-restore --configuration Resease
+      run: dotnet build --no-restore --configuration release
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
