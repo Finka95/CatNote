@@ -57,8 +57,8 @@ jobs:
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        New-Item -Path .\.sonar\scanner -ItemType Directory
-        dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+        mkdir -p ./.sonar/scanner
+        dotnet tool update dotnet-sonarscanner --tool-path ./.sonar/scanner
     - name: Build and analyze
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -66,6 +66,6 @@ jobs:
       shell: bash
       run: |
         .\.sonar\scanner\dotnet-sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-        <dotnet build --no-restore --configuration reliase>
+        dotnet build --no-restore --configuration release
         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
     
