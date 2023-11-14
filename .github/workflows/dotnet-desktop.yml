@@ -7,6 +7,7 @@ on:
 jobs:
 
   build:
+    strategy:
       matrix:
         configuration: [Release]
     runs-on: ubuntu-latest
