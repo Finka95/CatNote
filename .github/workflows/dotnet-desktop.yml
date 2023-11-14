@@ -73,9 +73,11 @@ jobs:
         dotnet restore
         dotnet build --no-restore 
         dotnet dotcover test --dcReportType=HTML
-        mkdir .sonarqube
-        Copy-Item -Path .\.sonar\scanner\ -Destination .sonarqube\ -Recurse
+        $tempSonarDir = Join-Path -Path .sonarqube -ChildPath conf
+        mkdir $tempSonarDir -Force
+        Copy-Item -Path .\.sonar\scanner\* -Destination $tempSonarDir -Recurse
         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
 
 
 
