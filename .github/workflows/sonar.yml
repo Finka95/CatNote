@@ -37,7 +37,7 @@ jobs:
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+          dotnet tool install --global dotnet-sonarscanner --add-source 'https://api.nuget.org/v3/index.json' --ignore-failed-sources
 
       - name: Install Code Coverage tool
         shell: powershell
