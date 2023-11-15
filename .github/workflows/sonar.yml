@@ -44,7 +44,6 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool install --global dotnet-sonarscanner --add-source 'https://api.nuget.org/v3/index.json' --ignore-failed-sources
-
       - name: Install Code Coverage tool
         shell: powershell
         run: dotnet tool install --global JetBrains.dotCover.GlobalTool
