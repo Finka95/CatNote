@@ -24,20 +24,20 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_CallCreateMethodOfRepositoryAndReturnUserModel()
+    public async Task Create_CorrectModelPass_ReturnUserModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
 
-        var userModel = UserData.GetUserModel();
-        var userEntity = UserData.GetUserEntity();
+        var userModel = UserData.UserModel;
+        var userEntity = UserData.UserEntity;
 
         SetupMapper<UserEntity, UserModel>(userEntity);
-        _mockGenericRepository.Setup(x => x.Create(It.IsAny<UserEntity>(), CancellationToken.None)).ReturnsAsync(value: UserData.GetUserEntity());
+        _mockGenericRepository.Setup(x => x.Create(It.IsAny<UserEntity>(), CancellationToken.None)).ReturnsAsync(value: UserData.UserEntity);
         SetupMapper<UserModel, UserEntity>(userModel);
         
         //Act
-        var result = await _userService.Create(UserData.GetUserModel(), cancellationToken);
+        var result = await _userService.Create(UserData.UserModel, cancellationToken);
 
         //Assert
         _mockMapper.Verify(x => x.Map<UserEntity>(It.IsAny<UserModel>()), Times.Once());
@@ -51,7 +51,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_UserById_CallDeleteMethodOfRepository()
+    public async Task Delete_UserById_ReturnSuccess()
     {
         //Arrange
         var userId = 1;
@@ -66,14 +66,14 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllUsers_CallGetAllMethodOfRepositoryAndReturnUserModelList()
+    public async Task GetAll_GetAllUsers_ReturnUserModelList()
     {
         //Arrange
         var userEntityList = new List<UserEntity>();
-        userEntityList.Add(UserData.GetUserEntity());
+        userEntityList.Add(UserData.UserEntity);
 
         var userModelList = new List<UserModel>();
-        var userModel = UserData.GetUserModel();
+        var userModel = UserData.UserModel;
         userModelList.Add(userModel);
 
         var cancellationToken = new CancellationToken();
@@ -94,14 +94,14 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByCorrectIdPass_CallGetByIdOfRepositoryAndReturnUserModel()
+    public async Task GetById_GetUserByCorrectIdPass_ReturnUserModel()
     {
         //Arrange
         var userId = 1;
 
-        var userEntity = UserData.GetUserEntity();
+        var userEntity = UserData.UserEntity;
 
-        var userModel = UserData.GetUserModel();
+        var userModel = UserData.UserModel;
 
         var cancellationToken = new CancellationToken();
 
@@ -122,7 +122,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByIncorrectId_CallGetByIdOfRepositoryAndReturnNull()
+    public async Task GetById_GetUserByIncorrectId_ReturnNull()
     {
         //Arrange
         var userId = 5;
@@ -139,10 +139,10 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateUserByCorrectIdPass_CallUpdateOfRepositoryAndReturnUserModel()
+    public async Task Update_UpdateUserByCorrectIdPass_ReturnUserModel()
     {
         //Arrange
-        var userModel = UserData.GetUserModel();
+        var userModel = UserData.UserModel;
 
         var userEntityResult = new UserEntity
         {
@@ -179,10 +179,10 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateUserByIncorrectIdPass_CallUpdateOfRepositoryAndReturnNull()
+    public async Task Update_UpdateUserByIncorrectIdPass_ReturnNull()
     {
         //Arrange
-        var userModel = UserData.GetUserModel();
+        var userModel = UserData.UserModel;
 
         var userEntityResult = new UserEntity
         {

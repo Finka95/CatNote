@@ -24,20 +24,20 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_CallCreateMethodOfRepositoryAndReturnAchievementModel()
+    public async Task Create_CorrectModelPass_ReturnAchievementModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
 
-        var achievementModel = AchievementData.GetAchievementModel();
-        var achievementEntity = AchievementData.GetAchievementEntity();
+        var achievementModel = AchievementData.AchievementModel;
+        var achievementEntity = AchievementData.AchievementEntity;
 
         SetupMapper<AchievementEntity, AchievementModel>(achievementEntity);
-        _mockGenericRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(value: AchievementData.GetAchievementEntity());
+        _mockGenericRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(value: AchievementData.AchievementEntity);
         SetupMapper<AchievementModel, AchievementEntity>(achievementModel);
 
         //Act
-        var result = await _achievementService.Create(AchievementData.GetAchievementModel(), cancellationToken);
+        var result = await _achievementService.Create(AchievementData.AchievementModel, cancellationToken);
 
         //Assert
         _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once());
@@ -52,7 +52,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_AchievementByCorrectId_CallDeleteMethodOfRepository()
+    public async Task Delete_AchievementByCorrectId_ReturnSuccess()
     {
         //Arrange
         var achievementId = 1;
@@ -67,14 +67,14 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllAchievements_CallGetAllMethodOfRepositoryAndReturnAchievementModelList()
+    public async Task GetAll_GetAllAchievements_ReturnAchievementModelList()
     {
         //Arrange
         var achievementEntityList = new List<AchievementEntity>();
-        achievementEntityList.Add(AchievementData.GetAchievementEntity());
+        achievementEntityList.Add(AchievementData.AchievementEntity);
 
         var achievementModelList = new List<AchievementModel>();
-        var achievementModel = AchievementData.GetAchievementModel();
+        var achievementModel = AchievementData.AchievementModel;
         achievementModelList.Add(achievementModel);
 
         var cancellationToken = new CancellationToken();
@@ -95,14 +95,14 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetAchievementByCorrectIdPass_CallGetByIdOfRepositoryAndReturnAchievementModel()
+    public async Task GetById_GetAchievementByCorrectIdPass_ReturnAchievementModel()
     {
         //Arrange
         var achievementId = 1;
 
-        var achievementEntity = AchievementData.GetAchievementEntity();
+        var achievementEntity = AchievementData.AchievementEntity;
 
-        var achievementModel = AchievementData.GetAchievementModel();
+        var achievementModel = AchievementData.AchievementModel;
 
         var cancellationToken = new CancellationToken();
 
@@ -124,7 +124,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetAchievementByIncorrectId_CallGetByIdOfRepositoryAndReturnNull()
+    public async Task GetById_GetAchievementByIncorrectId_ReturnNull()
     {
         //Arrange
         var achievementId = 5;
@@ -141,10 +141,10 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateAchievementByCorrectIdPass_CallUpdateOfRepositoryAndReturnAchievementModel()
+    public async Task Update_UpdateAchievementByCorrectIdPass_ReturnAchievementModel()
     {
         //Arrange
-        var achievementModel = AchievementData.GetAchievementModel();
+        var achievementModel = AchievementData.AchievementModel;
 
         var achievementEntityResult = new AchievementEntity
         {
@@ -184,10 +184,10 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateAchievementByIncorrectIdPass_CallUpdateOfRepositoryAndReturnNull()
+    public async Task Update_UpdateAchievementByIncorrectIdPass_ReturnNull()
     {
         //Arrange
-        var achievementModel = AchievementData.GetAchievementModel();
+        var achievementModel = AchievementData.AchievementModel;
 
         var achievementEntityResult = new AchievementEntity
         {
