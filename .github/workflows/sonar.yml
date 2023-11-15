@@ -37,6 +37,10 @@ jobs:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
+      
+      - name: Install Code Coverage tool
+        shell: powershell
+        run: dotnet tool install --global JetBrains.dotCover.GlobalTool
 
       - name: Install SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
@@ -44,9 +48,11 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool install --global dotnet-sonarscanner --add-source 'https://api.nuget.org/v3/index.json' --ignore-failed-sources
-      - name: Install Code Coverage tool
+
+      - name: Add SonarCloud scanner to PATH
         shell: powershell
-        run: dotnet tool install --global JetBrains.dotCover.GlobalTool
+        run: |
+          $env:Path += ";$(Get-Command dotnet-sonarscanner | ForEach-Object { Split-Path $_.Source })"
 
       - name: Build and analyze
         env:
