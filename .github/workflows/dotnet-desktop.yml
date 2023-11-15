@@ -28,9 +28,12 @@ jobs:
     - name: Build the application
       run: dotnet build --no-restore --configuration release
 
-     # Execute all tests in the solution
-    - name: Execute tests
-      run: dotnet test --no-restore --verbosity detailed
+     # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test --no-restore --verbosity detailed CatNote.Tests/CatNote.Tests.csproj
+
+    - name: Execute integration tests
+      run: dotnet test --no-restore --verbosity detailed CatNote.IntegrationTests/CatNote.IntegrationTests.csproj
 
     # - name: Set up JDK 17
     #   uses: actions/setup-java@v3
