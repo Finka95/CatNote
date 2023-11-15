@@ -42,6 +42,10 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
 
+      - name: Install Code Coverage tool
+        shell: powershell
+        run: dotnet tool install --global JetBrains.dotCover.GlobalTool
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
