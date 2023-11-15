@@ -58,3 +58,31 @@ jobs:
           dotnet dotcover test --dcReportType=HTML  --filters=+:module=CatNote.Tests*;
           dotnet dotcover test --dcReportType=HTML  --filters=+:module=CatNote.IntegrationTests*
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      
+      - name: Analyze unit tests coverage
+        run: dotnet dotcover test --dcReportType=HTML --filters=+:module=CatNote.Tests*
+        env:
+          CI: true
+
+      - name: Save unit tests coverage report
+        if: success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: dotcover-report-unit
+          path: ./dotCover.Output.html
+        env:
+          CI: true
+
+      - name: Analyze integration tests coverage
+        run: dotnet dotcover test --dcReportType=HTML --filters=+:module=CatNote.IntegrationTests*
+        env:
+          CI: true
+
+      - name: Save integration tests coverage report
+        if: success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: dotcover-report-integration
+          path: ./dotCover.Output.html
+        env:
+          CI: true
