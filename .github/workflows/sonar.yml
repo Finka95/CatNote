@@ -52,11 +52,9 @@ jobs:
           EXCLUDE_FROM_COVERAGE: "/Program.cs, /Middlewares/, /Validators/, /Extensions/*, /Exceptions/, /Constants/, /Mappers/, /Context//, /Migrations/*, /Configuration/, /FixtureCustomizations/, **/Managers/*"
         shell: powershell
         run: |
-          dotnet tool restore
-          $toolPath = Join-Path $env:USERPROFILE ".dotnet\tools"
-          $sonarScannerPath = Join-Path $toolPath "dotnet-sonarscanner"
-          & $sonarScannerPath begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="${{ env.EXCLUDE_FROM_COVERAGE }}" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
+          $sonarScannerPath = Get-Command dotnet-sonarscanner | ForEach-Object { Split-Path $_.Source }
+          & "$sonarScannerPath" begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="${{ env.EXCLUDE_FROM_COVERAGE }}" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
           dotnet restore
           dotnet build --no-restore
           dotnet dotcover test --dcReportType=HTML
-          & $sonarScannerPath end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          & "$sonarScannerPath" end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
