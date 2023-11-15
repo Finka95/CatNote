@@ -102,8 +102,8 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
         var response = await result.Content.ReadFromJsonAsync<UserDTO>();
 
         response.Should().BeOfType<UserDTO>();
-        response.Id.Should().Be(id);
-        response.UserName.Should().Be(newName);
+        response?.Id.Should().Be(id);
+        response?.UserName.Should().Be(newName);
     }
 
     [Theory]
