@@ -133,7 +133,7 @@ public class TaskGenericServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync((TaskEntity)null);
+        _mockGenericRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync((TaskEntity?)null!);
 
         //Act
         var result = await _taskService.GetById(taskId, cancellationToken);
@@ -206,7 +206,7 @@ public class TaskGenericServiceTests
 
         SetupMapper<TaskEntity, TaskModel>(taskEntityResult);
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken))
-            .ReturnsAsync((TaskEntity)null);
+            .ReturnsAsync((TaskEntity?)null!);
 
         //Act
         var result = await _taskService.Update(taskModel, cancellationToken);

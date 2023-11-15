@@ -28,7 +28,7 @@ public class ExceptionHandlingMiddleware
 
             await context.Response.WriteAsync(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

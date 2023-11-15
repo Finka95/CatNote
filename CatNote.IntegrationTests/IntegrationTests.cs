@@ -38,7 +38,7 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
         var user = await result.Content.ReadFromJsonAsync<UserDTO>();
 
         user.Should().BeOfType<UserDTO>().Which.UserName.Should().Be(name);
-        user.Id.Should().Be(id);
+        user?.Id.Should().Be(id);
         
     }
 
@@ -84,7 +84,7 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
         var response = await result.Content.ReadFromJsonAsync<UserDTO>();
 
         response.Should().BeOfType<UserDTO>().Which.Id.Should().Be(id);
-        response.UserName.Should().Be(name);
+        response?.UserName.Should().Be(name);
     }
 
     [Theory]

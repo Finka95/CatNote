@@ -200,7 +200,7 @@ public class AchievementGenericServiceTests
 
         SetupMapper<AchievementEntity, AchievementModel>(achievementEntityResult);
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))
-            .ReturnsAsync((AchievementEntity?)null);
+            .ReturnsAsync((AchievementEntity?)null!);
 
         //Act
         var result = await _achievementService.Update(achievementModel, cancellationToken);
