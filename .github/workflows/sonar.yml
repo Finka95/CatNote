@@ -49,11 +49,6 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool install --global dotnet-sonarscanner --add-source 'https://api.nuget.org/v3/index.json' --ignore-failed-sources
 
-      - name: Add SonarCloud scanner to PATH
-        shell: powershell
-        run: |
-          $env:Path += ";$(Get-Command dotnet-sonarscanner | ForEach-Object { Split-Path $_.Source })"
-
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
