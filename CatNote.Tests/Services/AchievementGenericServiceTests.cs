@@ -131,7 +131,7 @@ public class AchievementGenericServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync((AchievementEntity)null);
+        _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync((AchievementEntity?)null);
 
         //Act
         var result = await _achievementService.GetById(achievementId, cancellationToken);
