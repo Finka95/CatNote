@@ -129,7 +129,7 @@ public class UserGenericServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity)null);
+        _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity?)null!);
 
         //Act
         var result = await _userService.GetById(userId, cancellationToken);
@@ -194,7 +194,7 @@ public class UserGenericServiceTests
 
         SetupMapper<UserEntity, UserModel>(userEntityResult);
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<UserEntity>(), cancellationToken))
-            .ReturnsAsync((UserEntity)null);
+            .ReturnsAsync((UserEntity?)null!);
 
         //Act
         var result = await _userService.Update(userModel, cancellationToken);
