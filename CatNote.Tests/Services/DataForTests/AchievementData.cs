@@ -5,17 +5,9 @@ namespace CatNote.Tests.Services.DataForTests;
 
 public static class AchievementData
 {
-    public static AchievementModel GetAchievementModel() => new()
-    {
-        Id = 1,
-        Title = "defaultTitle",
-        Description = "defaultDescription"
-    };
+    public static AchievementModel AchievementModel =
+        new() { Id = 1, Title = "defaultTitle", Description = "defaultDescription" };
 
-    public static AchievementEntity GetAchievementEntity() => new()
-    {
-        Id = 1,
-        Title = "defaultTitle",
-        Description = "defaultDescription"
-    };
+    public static AchievementEntity AchievementEntity =
+        new() { Id = 1, Title = "defaultTitle", Description = "defaultDescription" };
 }
