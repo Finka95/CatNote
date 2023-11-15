@@ -1,0 +1,33 @@
+name: CatNote
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.x
+
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: dotnet restore
+
+    - name: Build the application
+      run: dotnet build --no-restore --configuration release
+
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test --no-restore --verbosity detailed CatNote.Tests/CatNote.Tests.csproj
