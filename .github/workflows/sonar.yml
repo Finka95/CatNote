@@ -58,9 +58,3 @@ jobs:
           dotnet dotcover test --dcReportType=HTML  --filters=+:module=CatNote.Tests*;
           dotnet dotcover test --dcReportType=HTML  --filters=+:module=CatNote.IntegrationTests*
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-       
-      - name: Upload Code Coverage Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: code-coverage
-          path: '**/*.html'
