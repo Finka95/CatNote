@@ -37,10 +37,6 @@ jobs:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
-      
-      - name: Install Code Coverage tool
-        shell: powershell
-        run: dotnet tool install --global JetBrains.dotCover.GlobalTool
 
       - name: Install SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
@@ -48,6 +44,10 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool install --global dotnet-sonarscanner --add-source 'https://api.nuget.org/v3/index.json' --ignore-failed-sources
+      - name: Install Code Coverage tool
+        shell: powershell
+        run: dotnet tool install --global JetBrains.dotCover.GlobalTool
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,8 +58,8 @@ jobs:
             **/Configuration/, **/FixtureCustomizations/, **/Managers/*"
         shell: powershell
         run: |
-          dotnet sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="${{ env.EXCLUDE_FROM_COVERAGE }}" /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="${{ env.EXCLUDE_FROM_COVERAGE }}"  /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
           dotnet restore
           dotnet build --no-restore
           dotnet dotcover test --dcReportType=HTML
-          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
