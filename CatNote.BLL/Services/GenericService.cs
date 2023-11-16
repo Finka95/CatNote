@@ -40,9 +40,18 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
     {
         var entity = _mapper.Map<TEntity>(model);
 
-        var resultEntity = await _genericRepository.Update(entity, cancellationToken);
+        var findUser = await GetById(entity.Id, cancellationToken);
 
-        return _mapper.Map<TModel>(resultEntity);
+        if (findUser != null)
+        {
+            var resultEntity = await _genericRepository.Update(entity, cancellationToken);
+
+            return _mapper.Map<TModel>(resultEntity);
+        }
+        else
+        {
+            throw new NotFoundException("Entity with Id {element.Id} not found.");
+        }
     }
 
     public async Task<TModel> GetById(int id, CancellationToken cancellationToken)

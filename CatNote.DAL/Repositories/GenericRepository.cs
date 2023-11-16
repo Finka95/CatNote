@@ -40,25 +40,15 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await dbSet.AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity> GetById(int id, CancellationToken cancellationToken)
+    public async Task<TEntity?> GetById(int id, CancellationToken cancellationToken)
     {
-        return await dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ??
-               throw new NotFoundException($"Entity with Id {id} not found.");
+        return await dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<TEntity> Update(TEntity element, CancellationToken cancellationToken)
     {
-        var existingEntity = await dbContext.Set<TEntity>().FindAsync(element.Id);
-
-        if (existingEntity != null)
-        {
-            dbContext.Entry(existingEntity).CurrentValues.SetValues(element);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            return existingEntity;
-        }
-        else
-        {
-            throw new NotFoundException($"Entity with Id {element.Id} not found.");
-        }
+        dbContext.Entry(element).State = EntityState.Modified;
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return element;
     }
 }

@@ -4,17 +4,20 @@ using CatNote.API.DTO;
 using FluentAssertions;
 using System.Net.Http.Json;
 using AutoFixture.Xunit2;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace CatNote.IntegrationTests;
 
 [Collection("Sequential")]
-public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
+public class IntegrationTests
 {
     private readonly HttpClient _client;
 
-    public IntegrationTests(TestingWebAppFactory<Program> factory)
+    public IntegrationTests()
     {
+        var factory = new TestingWebAppFactory();
+
         _client = factory.CreateClient();
     }
 
