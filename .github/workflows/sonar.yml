@@ -62,6 +62,6 @@ jobs:
         with:
           name: sonar-properties
           path: |
-            C:\Users\runneradmin\.dotnet\tools\.store\dotnet-sonarscanner\5.14.0\dotnet-sonarscanner\5.14.0\tools\net5.0\any\sonar-scanner-4.8.1.3023\bin\..\conf\sonar-scanner.properties
+            C:\Users\runneradmin\.dotnet\tools\.store\dotnet-sonarscanner\5.14.0\dotnet-sonarscanner\5.14.0\tools\net5.0\any\sonar-scanner-4.8.1.3023\bin\conf\sonar-scanner.properties
             D:\a\CatNote\CatNote\.sonarqube\out\sonar-project.properties
         # dotnet dotcover test --dcReportType=HTML
