@@ -1,4 +1,4 @@
-﻿using CatNote.BLL.Exceptions;
+﻿using CatNote.Domain.Exceptions;
 
 namespace CatNote.API.Middlewares;
 
@@ -22,7 +22,7 @@ public class ExceptionHandlingMiddleware
         }
     }
 
-    private async Task HandleException(HttpContext context, Exception exception)
+    private static async Task HandleException(HttpContext context, Exception exception)
     {
         switch (exception)
         {

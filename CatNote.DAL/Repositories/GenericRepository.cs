@@ -1,8 +1,7 @@
 using CatNote.DAL.Entities;
-using CatNote.DAL.Exceptions;
 using CatNote.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
+using CatNote.Domain.Exceptions;
 
 namespace CatNote.DAL.Repositories;
 
@@ -49,7 +48,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<TEntity> Update(TEntity element, CancellationToken cancellationToken)
     {
-        var existingEntity = await dbContext.Set<TEntity>().FindAsync(element.Id);
+        var existingEntity = await dbContext.Set<TEntity>().FindAsync(element.Id, cancellationToken);
 
         if (existingEntity != null)
         {
