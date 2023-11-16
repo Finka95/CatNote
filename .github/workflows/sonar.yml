@@ -65,10 +65,21 @@ jobs:
             C:\Users\runneradmin\.dotnet\tools\.store\dotnet-sonarscanner\5.14.0\dotnet-sonarscanner\5.14.0\tools\net5.0\any\sonar-scanner-4.8.1.3023\bin\conf\sonar-scanner.properties
             D:\a\CatNote\CatNote\.sonarqube\out\sonar-project.properties
 
-      - name: Report
-        uses: actions/upload-artifact@v3
+      - name: List directories and files
+        run: |
+          tree /F > file-list.txt
+        shell: cmd
+
+      - name: Upload file list as artifact
+        uses: actions/upload-artifact@v2
         with:
-          name: report
-          path: |
-            d:\sonar.coverage.jacoco/build/reports/jacoco/test/jacocoTestReport.xml
+          name: file-list
+          path: file-list.txt
+
+      # - name: Report
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: report
+      #     path: |
+      #       d:\sonar.coverage.jacoco/build/reports/jacoco/test/jacocoTestReport.xml
         # dotnet dotcover test --dcReportType=HTML
