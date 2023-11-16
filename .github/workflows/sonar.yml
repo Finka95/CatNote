@@ -64,4 +64,22 @@ jobs:
           path: |
             C:\Users\runneradmin\.dotnet\tools\.store\dotnet-sonarscanner\5.14.0\dotnet-sonarscanner\5.14.0\tools\net5.0\any\sonar-scanner-4.8.1.3023\bin\conf\sonar-scanner.properties
             D:\a\CatNote\CatNote\.sonarqube\out\sonar-project.properties
+
+      - name: Save DotCover report as artifact
+        id: upload-report
+        run: |
+          dotCoverReport=$(find . -type f -name "dotCoverReport.html" | head -n 1)
+          if [ -z "$dotCoverReport" ]; then
+            echo "DotCover report not found."
+            exit 1
+          fi
+          echo "DotCover report found at: $dotCoverReport"
+          echo "##[set-output name=dotCoverReportPath]$dotCoverReport"
+        shell: bash
+
+      - name: Upload DotCover report artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dotcover-report
+          path: ${{ steps.upload-report.outputs.dotCoverReportPath }}
         # dotnet dotcover test --dcReportType=HTML
