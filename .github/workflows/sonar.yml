@@ -51,7 +51,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          dotnet sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.jacoco.xmlReportPaths="build/reports/jacoco/test/jacocoTestReport.xml"
           dotnet restore
           dotnet dotcover build --no-restore
           dotnet dotcover test --configuration Debug --no-build
