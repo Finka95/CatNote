@@ -55,6 +55,7 @@ jobs:
           dotnet sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet restore
           dotnet dotcover build --no-restore
-          dotnet dotcover test --dcReportType=HTML  --filters=CatNote.Tests*;
-          dotnet dotcover test --dcReportType=HTML  --filters==CatNote.IntegrationTests*
+          dotnet dotcover test --no-build
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+        # dotnet dotcover test --dcReportType=HTML
