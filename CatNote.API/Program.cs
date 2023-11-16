@@ -1,4 +1,4 @@
-using CatNote.API.Mappers;
+﻿using CatNote.API.Mappers;
 using CatNote.API.Middlewares;
 using CatNote.BLL.DI;
 using FluentValidation.AspNetCore;
@@ -22,12 +22,17 @@ public class Program
         builder.Services.AddFluentValidationAutoValidation();
 
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddBusinessServices(connection);
+
+        if (connection != null)
+        {
+            builder.Services.AddBusinessServices(connection);
+        }
 
         builder.Services.AddAutoMapper(typeof(MapperApiProfile).Assembly, typeof(MapperBllProfile).Assembly);
 
         var app = builder.Build();
 
+        //добавить авто миграции
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();

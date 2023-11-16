@@ -3,11 +3,11 @@ using CatNote.DAL.Entities;
 
 namespace CatNote.Tests.Services.DataForTests;
 
-public static class UserData
+internal static class UserData
 {
-    public static UserModel UserModel =
+    internal static UserModel UserModel =
         new() { Id = 1, UserName = "name" };
 
-    public static UserEntity UserEntity = 
+    internal static UserEntity UserEntity = 
         new() { Id = 1, UserName = "name" };
 }

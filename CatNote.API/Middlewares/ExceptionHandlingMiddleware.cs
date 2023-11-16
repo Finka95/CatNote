@@ -16,23 +16,28 @@ public class ExceptionHandlingMiddleware
         {
             await next.Invoke(context);
         }
-        catch (NotFoundException ex)
+        catch (Exception ex)
         {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-
-            await context.Response.WriteAsync(ex.Message);
+            await HandleException(context, ex);
         }
-        catch (BadRequestException ex)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+    }
 
-            await context.Response.WriteAsync(ex.Message);
-        }
-        catch (Exception)
+    private async Task HandleException(HttpContext context, Exception exception)
+    {
+        switch (exception)
         {
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-            await context.Response.WriteAsync("Internal Server Error. Please contact the administrator.");
+            case NotFoundException ex:
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await context.Response.WriteAsync(ex.Message);
+                break;
+            case BadRequestException ex:
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsync(ex.Message);
+                break;
+            default:
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                await context.Response.WriteAsync("Internal Server Error. Please contact the administrator.");
+                break;
         }
     }
 }

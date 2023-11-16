@@ -1,6 +1,8 @@
 using CatNote.DAL.Entities;
+using CatNote.DAL.Exceptions;
 using CatNote.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace CatNote.DAL.Repositories;
 
@@ -41,14 +43,23 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<TEntity> GetById(int id, CancellationToken cancellationToken)
     {
-        return await dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ?? null!;
+        return await dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ??
+               throw new NotFoundException($"Entity with Id {id} not found.");
     }
 
     public async Task<TEntity> Update(TEntity element, CancellationToken cancellationToken)
     {
-        dbContext.Entry(element).State = EntityState.Modified;
-        await dbContext.SaveChangesAsync(cancellationToken);
+        var existingEntity = await dbContext.Set<TEntity>().FindAsync(element.Id);
 
-        return element;
+        if (existingEntity != null)
+        {
+            dbContext.Entry(existingEntity).CurrentValues.SetValues(element);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return existingEntity;
+        }
+        else
+        {
+            throw new NotFoundException($"Entity with Id {element.Id} not found.");
+        }
     }
 }

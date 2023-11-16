@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CatNote.API;
+﻿using CatNote.API;
 using CatNote.DAL;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,8 +14,7 @@ public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<Program> 
         builder.ConfigureServices(services =>
         {
             var descriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                     typeof(DbContextOptions<ApplicationDbContext>));
+                d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
             if (descriptor != null)
                 services.Remove(descriptor);
@@ -28,6 +22,7 @@ public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<Program> 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseInMemoryDatabase("InMemoryEmployeeTest");
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
             var sp = services.BuildServiceProvider();
@@ -36,8 +31,6 @@ public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<Program> 
             {
                 var scopedServices = scope.ServiceProvider;
                 var appContext = scopedServices.GetRequiredService<ApplicationDbContext>();
-
-                appContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
                 appContext.Database.EnsureDeleted();
                 appContext.Database.EnsureCreated();

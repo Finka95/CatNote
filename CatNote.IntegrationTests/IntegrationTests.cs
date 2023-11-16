@@ -3,6 +3,7 @@ using CatNote.API;
 using CatNote.API.DTO;
 using FluentAssertions;
 using System.Net.Http.Json;
+using AutoFixture.Xunit2;
 using Xunit;
 
 namespace CatNote.IntegrationTests;
@@ -18,10 +19,8 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
     }
 
     [Theory]
-    [InlineData(1, "name1")]
-    [InlineData(2, "name2")]
-    [InlineData(3, "name3")]
-    public async Task IntegrationTestsCreate(int id, string name)
+    [AutoData]
+    public async Task Create_CorrectUserPass_ReturnUserDTO(int id, string name)
     {
         //Arrange
         var userDTO = new UserDTO
@@ -43,7 +42,7 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
     }
 
     [Fact]
-    public async Task IntegrationTestsGetAll()
+    public async Task GetAll_UsersFound_ReturnListUserDTO()
     {
         //Arrange
 
@@ -68,14 +67,14 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
     }
 
     [Theory]
-    [InlineData(7)]
-    public async Task IntegrationTestsGetById(int id)
+    [AutoData]
+    public async Task GetById_UserFound_ReturnUserDTO(int id)
     {
         //Arrange
         var name = $"name{id}";
 
         //Act
-        await _client.PostAsJsonAsync("api/User", new UserDTO { Id = 7, UserName = "name7" });
+        await _client.PostAsJsonAsync("api/User", new UserDTO { Id = id, UserName = $"name{id}" });
 
         var result = await _client.GetAsync($"api/User/{id}");
 
@@ -88,11 +87,37 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
     }
 
     [Theory]
-    [InlineData(8, "name4")]
-    public async Task IntegrationTestsUpdate(int id, string newName)
+    [AutoData]
+    public async Task GetById_UserNotFound_ReturnNull(int id)
     {
         //Arrange
-        await _client.PostAsJsonAsync("api/User", new UserDTO { Id = 8, UserName = "name8" });
+
+        //Act
+        var result = await _client.GetAsync($"api/User/{id}");
+
+        //Assert
+        result.IsSuccessStatusCode.Should().BeFalse();
+    }
+
+    [Theory]
+    [AutoData]
+    public async Task Update_UserByInCorrectIdPass_ReturnNull(int id, string newName)
+    {
+        //Arrange
+
+        //Act
+        var result = await _client.PutAsJsonAsync($"api/User", new UserDTO { Id = id, UserName = newName });
+
+        //Assert
+        result.IsSuccessStatusCode.Should().BeFalse();
+    }
+
+    [Theory]
+    [AutoData]
+    public async Task Update_UserByCorrectIdPass_ReturnUserDTO(int id, string newName)
+    {
+        //Arrange
+        await _client.PostAsJsonAsync("api/User", new UserDTO { Id = id, UserName = $"name{id}" });
 
         //Act
         var result = await _client.PutAsJsonAsync($"api/User", new UserDTO { Id = id, UserName = newName });
@@ -107,17 +132,17 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
     }
 
     [Theory]
-    [InlineData(9)]
-    public async Task IntegrationTestsDelete(int id)
+    [AutoData]
+    public async Task Delete_UserById_ReturnSuccess(int id)
     {
         //Arrange
 
         //Act
-        await _client.PostAsJsonAsync("api/User", new UserDTO { Id = 9, UserName = "name9" });
-        var resultDeleteA = await _client.DeleteAsync($"api/User/{id}");
+        await _client.PostAsJsonAsync("api/User", new UserDTO {Id = id, UserName = $"name{id}" });
+        var resultDeleteAsync = await _client.DeleteAsync($"api/User/{id}");
         var result = await _client.GetAsync($"api/User/{id}");
 
         //Assert
-        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        result.IsSuccessStatusCode.Should().BeFalse();
     }
 }
