@@ -54,7 +54,7 @@ jobs:
           dotnet sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.jacoco.xmlReportPaths="build/reports/jacoco/test/jacocoTestReport.xml"
           dotnet restore
           dotnet dotcover build --no-restore
-          dotnet dotcover test --configuration Debug --no-build
+          dotnet dotcover test --no-build --dcReportType=HTML --logger "console;verbosity=normal"
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       - name: Upload SonarCloud properties
