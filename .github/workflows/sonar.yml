@@ -40,7 +40,6 @@ jobs:
         shell: powershell
         run: |
           dotnet tool install --global dotnet-sonarscanner
-
       - name: Install Code Coverage tool
         shell: powershell
         run: dotnet tool install --global JetBrains.dotCover.GlobalTool
@@ -50,7 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           EXCLUDE_FROM_COVERAGE:
-            ""
+            "**/Middlewares/, **/Validators/, **/Exceptions/, **/Mappers/, **/Migrations/*"
         shell: powershell
         run: |
           dotnet sonarscanner begin /k:"Finka95_CatNote" /o:"finka95" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverage.exclusions="${{ env.EXCLUDE_FROM_COVERAGE }}"  /d:sonar.cs.dotcover.reportsPaths=dotCover.Output.html
@@ -58,7 +57,6 @@ jobs:
           dotnet dotcover build --no-restore
           dotnet dotcover test --no-build --dcReportType=HTML --logger "console;verbosity=normal"
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
       - name: Upload SonarCloud properties
         uses: actions/upload-artifact@v2
         with:
@@ -66,7 +64,6 @@ jobs:
           path: |
             C:\Users\runneradmin\.dotnet\tools\.store\dotnet-sonarscanner\5.14.0\dotnet-sonarscanner\5.14.0\tools\net5.0\any\sonar-scanner-4.8.1.3023\bin\conf\sonar-scanner.properties
             D:\a\CatNote\CatNote\.sonarqube\out\sonar-project.properties
-
       - name: List directories and files
         run: |
           tree /F > file-list.txt
@@ -84,12 +81,3 @@ jobs:
           name: sonarcloud-files
           path: |
             D:\.sonarqube\conf\0\FilesToAnalyze.txt
-
-      # - name: Report
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: report
-      #     path: |
-      #       d:\sonar.coverage.jacoco/build/reports/jacoco/test/jacocoTestReport.xml
-        # dotnet dotcover test --dcReportType=HTML
-        #**/Program.cs, **/Middlewares/, **/Validators/, **/Exceptions/, **/Mappers/, **/Migrations/*
