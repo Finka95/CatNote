@@ -76,6 +76,17 @@ jobs:
           name: file-list
           path: file-list.txt
 
+      - name: Upload SonarCloud files as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: sonarcloud-files
+          path: |
+            .sonarqube/0/FilesToAnalyze.txt
+            .sonarqube/0/ProjectOutFolderPath.txt
+            .sonarqube/0/SonarProjectConfig.xml
+            .sonarqube/0/cs/SonarLint.xml
+            .sonarqube/0/vbnet/SonarLint.xml
+
       # - name: Report
       #   uses: actions/upload-artifact@v3
       #   with:
