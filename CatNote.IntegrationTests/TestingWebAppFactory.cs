@@ -30,10 +30,7 @@ public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<Program> 
             using (var scope = sp.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
-                var appContext = scopedServices.GetRequiredService<ApplicationDbContext>();
-
-                appContext.Database.EnsureDeleted();
-                appContext.Database.EnsureCreated();
+                scopedServices.GetRequiredService<ApplicationDbContext>();
             }
         });
     }

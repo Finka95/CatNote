@@ -58,37 +58,3 @@ jobs:
           dotnet dotcover build --no-restore
           dotnet dotcover test --no-build --dcReportType=HTML --logger "console;verbosity=normal"
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-      - name: Upload SonarCloud properties
-        uses: actions/upload-artifact@v2
-        with:
-          name: sonar-properties
-          path: |
-            C:\Users\runneradmin\.dotnet\tools\.store\dotnet-sonarscanner\5.14.0\dotnet-sonarscanner\5.14.0\tools\net5.0\any\sonar-scanner-4.8.1.3023\bin\conf\sonar-scanner.properties
-            D:\a\CatNote\CatNote\.sonarqube\out\sonar-project.properties
-
-      - name: List directories and files
-        run: |
-          tree /F > file-list.txt
-        shell: cmd
-
-      - name: Upload file list as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: file-list
-          path: file-list.txt
-
-      - name: Upload SonarCloud files as artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: sonarcloud-files
-          path: |
-            D:\.sonarqube\conf\0\FilesToAnalyze.txt
-
-      # - name: Report
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: report
-      #     path: |
-      #       d:\sonar.coverage.jacoco/build/reports/jacoco/test/jacocoTestReport.xml
-        # dotnet dotcover test --dcReportType=HTML

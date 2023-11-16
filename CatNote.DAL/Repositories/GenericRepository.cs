@@ -48,7 +48,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<TEntity> Update(TEntity element, CancellationToken cancellationToken)
     {
-        var existingEntity = await dbContext.Set<TEntity>().FindAsync(element.Id, cancellationToken);
+        var existingEntity = await dbContext.Set<TEntity>().FindAsync(element.Id);
 
         if (existingEntity != null)
         {

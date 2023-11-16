@@ -88,7 +88,7 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
 
     [Theory]
     [AutoData]
-    public async Task GetById_UserNotFound_ReturnNull(int id)
+    public async Task GetById_UserNotFound_ReturnFalseSuccessStatusCode(int id)
     {
         //Arrange
 
@@ -101,7 +101,7 @@ public class IntegrationTests : IClassFixture<TestingWebAppFactory<Program>>
 
     [Theory]
     [AutoData]
-    public async Task Update_UserByInCorrectIdPass_ReturnNull(int id, string newName)
+    public async Task Update_UserByInCorrectIdPass_ReturnFalseSuccessStatusCode(int id, string newName)
     {
         //Arrange
 

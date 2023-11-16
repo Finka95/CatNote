@@ -2,6 +2,8 @@
 using CatNote.BLL.Interfaces;
 using CatNote.DAL.Entities.Abstractions;
 using CatNote.DAL.Interfaces;
+using CatNote.Domain.Exceptions;
+using System.Xml.Linq;
 
 namespace CatNote.BLL.Services;
 
@@ -31,7 +33,6 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
     public async Task<IEnumerable<TModel>> GetAll(CancellationToken cancellationToken)
     {
         var resultEntity = await _genericRepository.GetAll(cancellationToken);
-
         return _mapper.Map<List<TModel>>(resultEntity);
     }
 
