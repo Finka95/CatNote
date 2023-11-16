@@ -1,16 +1,18 @@
 ﻿using CatNote.API.Mappers;
 using CatNote.API.Middlewares;
 using CatNote.BLL.DI;
-using FluentValidation.AspNetCore;
-using System.Reflection;
 using CatNote.BLL.Mappers;
-using System.Runtime.ConstrainedExecution;
-using System.Net.Http;
+using FluentValidation.AspNetCore;
 
 namespace CatNote.API;
 
 public class Program
 {
+    private Program()
+    {
+        
+    }
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
