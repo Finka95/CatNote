@@ -25,7 +25,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_ReturnUserModel()
+    public async Task Create_CorrectModelPass_UserModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
@@ -52,7 +52,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_UserById_ReturnSuccess()
+    public async Task Delete_UserById_Success()
     {
         //Arrange
         var userId = 1;
@@ -67,7 +67,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllUsers_ReturnUserModelList()
+    public async Task GetAll_GetAllUsers_UserModelList()
     {
         //Arrange
         var userEntityList = new List<UserEntity> { UserData.UserEntity };
@@ -94,7 +94,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByCorrectIdPass_ReturnUserModel()
+    public async Task GetById_GetUserByCorrectIdPass_UserModel()
     {
         //Arrange
         var userId = 1;
@@ -122,7 +122,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByIncorrectId_ReturnNull()
+    public async Task GetById_GetUserByIncorrectId_Null()
     {
         //Arrange
         var userId = 5;
@@ -139,7 +139,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UserModelWithCorrectId_ReturnsUpdatedUserModel()
+    public async Task Update_UserModelWithCorrectId_UpdatedUserModel()
     {
         //Arrange
         var userModel = UserData.UserModel;
@@ -172,7 +172,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateUserByIncorrectIdPass_ReturnNotFoundException()
+    public async Task Update_UpdateUserByIncorrectIdPass_NotFoundException()
     {
         //Arrange
         var userModel = UserData.UserModel;

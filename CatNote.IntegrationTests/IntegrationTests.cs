@@ -22,7 +22,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task Create_CorrectUserPass_ReturnUserDTO(int id, string name)
+    public async Task Create_CorrectUserPass_UserDTO(int id, string name)
     {
         //Arrange
         var userDTO = new UserDTO
@@ -44,7 +44,7 @@ public class IntegrationTests
     }
 
     [Fact]
-    public async Task GetAll_UsersFound_ReturnListUserDTO()
+    public async Task GetAll_UsersFound_ListUserDTO()
     {
         //Act
         await _client.PostAsJsonAsync("api/User", new UserDTO{Id = 4, UserName = "name4"});
@@ -68,7 +68,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task GetById_UserFound_ReturnUserDTO(int id)
+    public async Task GetById_UserFound_UserDTO(int id)
     {
         //Arrange
         var name = $"name{id}";
@@ -88,7 +88,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task GetById_UserNotFound_ReturnStatusCodeNoContent(int id)
+    public async Task GetById_UserNotFound_StatusCodeNoContent(int id)
     {
         //Act
         var result = await _client.GetAsync($"api/User/{id}");
@@ -99,7 +99,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task Update_UserByInCorrectIdPass_ReturnFalseSuccessStatusCode(int id, string newName)
+    public async Task Update_UserByInCorrectIdPass_UnsuccessfulStatusCode(int id, string newName)
     {
         //Act
         var result = await _client.PutAsJsonAsync($"api/User", new UserDTO { Id = id, UserName = newName });
@@ -110,7 +110,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task Update_UserByCorrectIdPass_ReturnUserDTO(int id, string newName)
+    public async Task Update_UserByCorrectIdPass_UserDTO(int id, string newName)
     {
         //Arrange
         await _client.PostAsJsonAsync("api/User", new UserDTO { Id = id, UserName = $"name{id}" });
@@ -129,7 +129,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task Delete_UserById_ReturnStatusCodeNoContent(int id)
+    public async Task Delete_UserById_StatusCodeNoContent(int id)
     {
         //Act
         await _client.PostAsJsonAsync("api/User", new UserDTO {Id = id, UserName = $"name{id}" });

@@ -25,7 +25,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_ReturnAchievementModel()
+    public async Task Create_CorrectModelPass_AchievementModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
@@ -53,7 +53,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_AchievementByCorrectId_ReturnSuccess()
+    public async Task Delete_AchievementByCorrectId_Success()
     {
         //Arrange
         var achievementId = 1;
@@ -68,7 +68,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllAchievements_ReturnAchievementModelList()
+    public async Task GetAll_GetAllAchievements_AchievementModelList()
     {
         //Arrange
         var achievementEntityList = new List<AchievementEntity> { AchievementData.AchievementEntity };
@@ -95,7 +95,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetAchievementByCorrectIdPass_ReturnAchievementModel()
+    public async Task GetById_GetAchievementByCorrectIdPass_AchievementModel()
     {
         //Arrange
         var achievementId = 1;
@@ -124,7 +124,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetAchievementByIncorrectId_ReturnNull()
+    public async Task GetById_GetAchievementByIncorrectId_Null()
     {
         //Arrange
         var achievementId = 5;
@@ -141,7 +141,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateAchievementByCorrectIdPass_ReturnAchievementModel()
+    public async Task Update_UpdateAchievementByCorrectIdPass_AchievementModel()
     {
         //Arrange
         var achievementModel = AchievementData.AchievementModel;
@@ -179,7 +179,7 @@ public class AchievementGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateAchievementByIncorrectIdPass_ReturnNotFoundException()
+    public async Task Update_UpdateAchievementByIncorrectIdPass_NotFoundException()
     {
         //Arrange
         var achievementModel = AchievementData.AchievementModel;

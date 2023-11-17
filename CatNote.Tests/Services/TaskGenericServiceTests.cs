@@ -25,7 +25,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_ReturnTaskModel()
+    public async Task Create_CorrectModelPass_TaskModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
@@ -54,7 +54,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_TaskByCorrectId_ReturnSuccess()
+    public async Task Delete_TaskByCorrectId_Success()
     {
         //Arrange
         var taskId = 1;
@@ -69,7 +69,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllTasks_ReturnTaskModelList()
+    public async Task GetAll_GetAllTasks_TaskModelList()
     {
         //Arrange
         var taskEntityList = new List<TaskEntity> { TaskData.TaskEntity };
@@ -95,7 +95,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetTaskByCorrectIdPass_ReturnTaskModel()
+    public async Task GetById_GetTaskByCorrectIdPass_TaskModel()
     {
         //Arrange
         var taskId = 1;
@@ -125,7 +125,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetTaskByIncorrectId_ReturnNull()
+    public async Task GetById_GetTaskByIncorrectId_Null()
     {
         //Arrange
         var taskId = 5;
@@ -142,7 +142,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateTaskByCorrectIdPass_ReturnTaskModel()
+    public async Task Update_UpdateTaskByCorrectIdPass_TaskModel()
     {
         //Arrange
         var taskModel = TaskData.TaskModel;
@@ -178,7 +178,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateTaskByIncorrectIdPass_ReturnNotFoundException()
+    public async Task Update_UpdateTaskByIncorrectIdPass_NotFoundException()
     {
         //Arrange
         var taskModel = TaskData.TaskModel;
