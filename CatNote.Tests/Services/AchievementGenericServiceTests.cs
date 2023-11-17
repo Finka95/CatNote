@@ -3,6 +3,7 @@ using CatNote.BLL.Models;
 using CatNote.BLL.Services;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
+using CatNote.Domain.Exceptions;
 using CatNote.Tests.Services.DataForTests;
 using FluentAssertions;
 using Moq;
@@ -32,9 +33,9 @@ public class AchievementGenericServiceTests
         var achievementModel = AchievementData.AchievementModel;
         var achievementEntity = AchievementData.AchievementEntity;
 
-        SetupMapper<AchievementEntity, AchievementModel>(achievementEntity);
+        SetupMapper(achievementEntity, achievementModel);
         _mockGenericRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(value: AchievementData.AchievementEntity);
-        SetupMapper<AchievementModel, AchievementEntity>(achievementModel);
+        SetupMapper(achievementModel, achievementEntity);
 
         //Act
         var result = await _achievementService.Create(AchievementData.AchievementModel, cancellationToken);
@@ -70,8 +71,7 @@ public class AchievementGenericServiceTests
     public async Task GetAll_GetAllAchievements_ReturnAchievementModelList()
     {
         //Arrange
-        var achievementEntityList = new List<AchievementEntity>();
-        achievementEntityList.Add(AchievementData.AchievementEntity);
+        var achievementEntityList = new List<AchievementEntity> { AchievementData.AchievementEntity };
 
         var achievementModelList = new List<AchievementModel>();
         var achievementModel = AchievementData.AchievementModel;
@@ -80,7 +80,7 @@ public class AchievementGenericServiceTests
         var cancellationToken = new CancellationToken();
 
         _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(achievementEntityList);
-        SetupMapper<List<AchievementModel>, List<AchievementEntity>>(achievementModelList);
+        SetupMapper(achievementModelList, achievementEntityList);
 
         //Act
         var result = await _achievementService.GetAll(cancellationToken);
@@ -107,7 +107,7 @@ public class AchievementGenericServiceTests
         var cancellationToken = new CancellationToken();
 
         _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync(achievementEntity);
-        SetupMapper<AchievementModel, AchievementEntity>(achievementModel);
+        SetupMapper(achievementModel, achievementEntity);
 
         //Act
         var result = await _achievementService.GetById(achievementId, cancellationToken);
@@ -145,28 +145,23 @@ public class AchievementGenericServiceTests
     {
         //Arrange
         var achievementModel = AchievementData.AchievementModel;
+        var achievementEntity = AchievementData.AchievementEntity;
 
-        var achievementEntityResult = new AchievementEntity
-        {
-            Id = 2,
-            Title = "default2",
-            Description = "default2"
-        };
+        var achievementEntityResult = new AchievementEntity { Id = 1, Title = "default2", Description = "default2" };
 
-        var achievementModelResult = new AchievementModel
-        {
-            Id = 2,
-            Title = "default2",
-            Description = "default2"
-        };
+        var achievementModelResult = new AchievementModel { Id = 1, Title = "default2", Description = "default2" };
 
         var cancellationToken = new CancellationToken();
 
-        SetupMapper<AchievementEntity, AchievementModel>(achievementEntityResult);
+        SetupMapper(achievementModel, achievementEntity);
+        SetupMapper(achievementEntity, achievementModel);
+        SetupMapper(achievementModelResult, achievementEntityResult);
+
+        _mockGenericRepository.Setup(x => x.GetById(achievementModel.Id, cancellationToken))
+            .ReturnsAsync(achievementEntity);
+
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))
             .ReturnsAsync(achievementEntityResult);
-
-        SetupMapper<AchievementModel, AchievementEntity>(achievementModelResult);
 
         //Act
         var result = await _achievementService.Update(achievementModel, cancellationToken);
@@ -180,42 +175,32 @@ public class AchievementGenericServiceTests
         result.Title.Should().Be(achievementModelResult.Title);
         result.Description.Should().Be(achievementModelResult.Description);
 
-        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Exactly(2));
     }
 
     [Fact]
-    public async Task Update_UpdateAchievementByIncorrectIdPass_ReturnNull()
+    public async Task Update_UpdateAchievementByIncorrectIdPass_ReturnNotFoundException()
     {
         //Arrange
         var achievementModel = AchievementData.AchievementModel;
-
-        var achievementEntityResult = new AchievementEntity
-        {
-            Id = 2,
-            Title = "default2",
-            Description = "default2"
-        };
+        var achievementEntity = AchievementData.AchievementEntity;
 
         var cancellationToken = new CancellationToken();
 
-        SetupMapper<AchievementEntity, AchievementModel>(achievementEntityResult);
+        SetupMapper(achievementEntity, achievementModel);
+
+        _mockGenericRepository.Setup(x => x.GetById(achievementModel.Id, cancellationToken))
+            .ReturnsAsync((AchievementEntity?)null);
+
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))
             .ReturnsAsync((AchievementEntity?)null!);
 
-        //Act
-        var result = await _achievementService.Update(achievementModel, cancellationToken);
-
-        //Assert
-        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once);
-        _mockGenericRepository.Verify(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
-
-        result.Should().Be(null);
-
-        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
+        ////Act & Assert
+        await Assert.ThrowsAsync<NotFoundException>(() =>_achievementService.Update(achievementModel, cancellationToken));
     }
 
-    private void SetupMapper<T1, T2>(T1 element)
+    private void SetupMapper<T1, T2>(T1 returnElement, T2 startElement)
     {
-        _mockMapper.Setup(x => x.Map<T1>(It.IsAny<T2>())).Returns(element);
+        _mockMapper.Setup(x => x.Map<T1>(startElement)).Returns(returnElement);
     }
 }

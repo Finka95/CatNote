@@ -4,6 +4,7 @@ using CatNote.API.DTO;
 using FluentAssertions;
 using System.Net.Http.Json;
 using AutoFixture.Xunit2;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
@@ -91,7 +92,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task GetById_UserNotFound_ReturnFalseSuccessStatusCode(int id)
+    public async Task GetById_UserNotFound_ReturnStatusCodeNoContent(int id)
     {
         //Arrange
 
@@ -99,7 +100,7 @@ public class IntegrationTests
         var result = await _client.GetAsync($"api/User/{id}");
 
         //Assert
-        result.IsSuccessStatusCode.Should().BeFalse();
+        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
     [Theory]
@@ -136,7 +137,7 @@ public class IntegrationTests
 
     [Theory]
     [AutoData]
-    public async Task Delete_UserById_ReturnSuccess(int id)
+    public async Task Delete_UserById_ReturnStatusCodeNoContent(int id)
     {
         //Arrange
 
@@ -146,6 +147,6 @@ public class IntegrationTests
         var result = await _client.GetAsync($"api/User/{id}");
 
         //Assert
-        result.IsSuccessStatusCode.Should().BeFalse();
+        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 }
