@@ -1,11 +1,9 @@
-using System.Net;
-using CatNote.API;
+using AutoFixture.Xunit2;
 using CatNote.API.DTO;
 using FluentAssertions;
-using System.Net.Http.Json;
-using AutoFixture.Xunit2;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
+using System.Net.Http.Json;
 using Xunit;
 
 namespace CatNote.IntegrationTests;
@@ -48,8 +46,6 @@ public class IntegrationTests
     [Fact]
     public async Task GetAll_UsersFound_ReturnListUserDTO()
     {
-        //Arrange
-
         //Act
         await _client.PostAsJsonAsync("api/User", new UserDTO{Id = 4, UserName = "name4"});
         await _client.PostAsJsonAsync("api/User", new UserDTO { Id = 5, UserName = "name5" });
@@ -94,8 +90,6 @@ public class IntegrationTests
     [AutoData]
     public async Task GetById_UserNotFound_ReturnStatusCodeNoContent(int id)
     {
-        //Arrange
-
         //Act
         var result = await _client.GetAsync($"api/User/{id}");
 
@@ -107,8 +101,6 @@ public class IntegrationTests
     [AutoData]
     public async Task Update_UserByInCorrectIdPass_ReturnFalseSuccessStatusCode(int id, string newName)
     {
-        //Arrange
-
         //Act
         var result = await _client.PutAsJsonAsync($"api/User", new UserDTO { Id = id, UserName = newName });
 
@@ -139,8 +131,6 @@ public class IntegrationTests
     [AutoData]
     public async Task Delete_UserById_ReturnStatusCodeNoContent(int id)
     {
-        //Arrange
-
         //Act
         await _client.PostAsJsonAsync("api/User", new UserDTO {Id = id, UserName = $"name{id}" });
         var resultDeleteAsync = await _client.DeleteAsync($"api/User/{id}");
