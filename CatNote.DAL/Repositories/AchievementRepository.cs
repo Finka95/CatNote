@@ -1,0 +1,33 @@
+﻿using CatNote.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using CatNote.DAL.Entities;
+
+namespace CatNote.DAL.Repositories;
+
+public class AchievementRepository : IAchievementRepository
+{
+    private readonly ApplicationDbContext _applicationDbContext;
+
+    public AchievementRepository(ApplicationDbContext applicationDbContext)
+    {
+        _applicationDbContext = applicationDbContext;
+    }
+
+    public async Task<List<AchievementEntity>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
+    {
+        var achievementEntity = await _applicationDbContext.Users.Include(x => x.Achievements)
+            .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+
+        return achievementEntity.Achievements.ToList();
+    }
+
+    public async Task AddConnection(int achievementId, int userId, CancellationToken cancellationToken)
+    {
+        var achievementEntity = await _applicationDbContext.Achievements
+            .Include(achievementEntity => achievementEntity.Users).FirstOrDefaultAsync(x => x.Id == achievementId, cancellationToken);
+        var userEntity = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+
+        //achievementEntity.Users.
+    }
+}
