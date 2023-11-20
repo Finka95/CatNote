@@ -20,9 +20,9 @@ public class AchievementService
 
     public async Task CheckAchievement(string name, int userId, CancellationToken cancellationToken)
     {
-        var includeAchievement = await _achievementRepository.CheckAchievement(name, userId, cancellationToken);
+        var achievements = await _achievementRepository.GetAchievementsByUserId(userId, cancellationToken);
 
-        if (!includeAchievement)
+        if (achievements.Where(x => x.Title == name) == null)
         {
             
         }

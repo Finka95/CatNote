@@ -34,7 +34,7 @@ namespace CatNote.DAL.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("AchievementEntityUserEntity");
+                    b.ToTable("AchievementEntityUserEntity", (string)null);
                 });
 
             modelBuilder.Entity("CatNote.DAL.Entities.AchievementEntity", b =>
@@ -53,7 +53,7 @@ namespace CatNote.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Achievements");
+                    b.ToTable("Achievements", (string)null);
                 });
 
             modelBuilder.Entity("CatNote.DAL.Entities.TaskEntity", b =>
@@ -80,7 +80,7 @@ namespace CatNote.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("CatNote.DAL.Entities.UserEntity", b =>
@@ -96,7 +96,7 @@ namespace CatNote.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("AchievementEntityUserEntity", b =>

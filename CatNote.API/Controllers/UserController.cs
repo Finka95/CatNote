@@ -14,5 +14,6 @@ public class UserController : GenericController<UserModel, UserDTO>
     public UserController(IMapper mapper, IGenericService<UserModel> service)
         : base(mapper, service)
     {
+
     }
 }

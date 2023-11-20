@@ -22,12 +22,15 @@ public class AchievementRepository : IAchievementRepository
         return achievementEntity.Achievements.ToList();
     }
 
-    public async Task AddConnection(int achievementId, int userId, CancellationToken cancellationToken)
+    public async Task AddConnection(string achievementName, int userId, CancellationToken cancellationToken)
     {
         var achievementEntity = await _applicationDbContext.Achievements
-            .Include(achievementEntity => achievementEntity.Users).FirstOrDefaultAsync(x => x.Id == achievementId, cancellationToken);
+            .Include(achievementEntity => achievementEntity.Users).FirstOrDefaultAsync(x => x.Title == achievementName, cancellationToken);
         var userEntity = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
 
-        //achievementEntity.Users.
+        achievementEntity.Users.Add(userEntity);
+        userEntity.Achievements.Add(achievementEntity);
+
+        _applicationDbContext.SaveChanges();
     }
 }
