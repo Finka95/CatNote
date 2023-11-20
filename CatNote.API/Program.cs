@@ -20,16 +20,12 @@ public class Program
 
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-        if (connection != null)
-        {
-            builder.Services.AddBusinessServices(connection);
-        }
+        builder.Services.AddBusinessServices(connection);
 
         builder.Services.AddAutoMapper(typeof(MapperApiProfile).Assembly, typeof(MapperBllProfile).Assembly);
 
         var app = builder.Build();
 
-        //добавить авто миграции
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
