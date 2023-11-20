@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CatNote.BLL.AchievementType;
+namespace CatNote.Domain.Enums;
 
 public enum AchievementType
 {

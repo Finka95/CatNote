@@ -18,7 +18,8 @@ namespace CatNote.DAL.Migrations
                 [Description])
             VALUES (
                 'New user',
-                'Add first task')
+                'Add first task'
+                0)
             END".Replace("'", "''");
 
             migrationBuilder.Sql($"EXECUTE('{script}')");

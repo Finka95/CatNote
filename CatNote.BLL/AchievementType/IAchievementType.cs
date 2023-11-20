@@ -1,4 +1,4 @@
-﻿namespace CatNote.BLL.AchievementType;
+﻿using CatNote.Domain.Enums;
 
 public class IAchievementType
 {
@@ -6,5 +6,4 @@ public class IAchievementType
     public string Title { get; set; }
     public string Description { get; set; }
     public AchievementType AchievementType { get; set; }
-
 }
