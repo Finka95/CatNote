@@ -24,14 +24,6 @@ public class TestingWebAppFactory : WebApplicationFactory<Program>
                 options.UseInMemoryDatabase("InMemoryEmployeeTest");
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
-
-            var sp = services.BuildServiceProvider();
-
-            using (var scope = sp.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
-                scopedServices.GetRequiredService<ApplicationDbContext>();
-            }
         });
     }
 }

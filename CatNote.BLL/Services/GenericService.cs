@@ -3,7 +3,6 @@ using CatNote.BLL.Interfaces;
 using CatNote.DAL.Entities.Abstractions;
 using CatNote.DAL.Interfaces;
 using CatNote.Domain.Exceptions;
-using System.Xml.Linq;
 
 namespace CatNote.BLL.Services;
 
