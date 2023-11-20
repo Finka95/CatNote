@@ -1,6 +1,6 @@
 ﻿using CatNote.Domain.Enums;
 
-public class IAchievementType
+public class Achievement
 {
     public int AchievementId { get; set; }
     public string Title { get; set; }

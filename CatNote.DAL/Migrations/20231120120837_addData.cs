@@ -15,7 +15,8 @@ namespace CatNote.DAL.Migrations
             BEGIN
             INSERT INTO [dbo].[Achievements] (
                 [Title],
-                [Description])
+                [Description],
+                [AchievementType])
             VALUES (
                 'New user',
                 'Add first task'

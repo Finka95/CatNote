@@ -11,7 +11,7 @@ using CatNote.DAL.Entities;
 
 namespace CatNote.BLL.Services;
 
-public class TaskService : GenericService<TaskModel, TaskEntity>
+public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
 {
     private readonly IMapper _mapper;
     private readonly IGenericRepository<TaskEntity> _genericRepository;
