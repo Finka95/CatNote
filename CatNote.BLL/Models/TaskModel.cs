@@ -1,4 +1,5 @@
 ﻿using CatNote.DAL.Entities;
+using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 
 namespace CatNote.BLL.Models;
 

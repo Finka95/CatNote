@@ -12,16 +12,16 @@ namespace CatNote.DAL.Migrations
         {
             var script =
                 @"IF (NOT EXISTS (SELECT 1 FROM [dbo].[Achievements] WHERE [Title] = 'New user'))
-            BEGIN
-            INSERT INTO [dbo].[Achievements] (
-                [Title],
-                [Description],
-                [AchievementType])
-            VALUES (
-                'New user',
-                'Add first task'
-                0)
-            END".Replace("'", "''");
+                BEGIN
+                INSERT INTO [dbo].[Achievements] (
+                    [Title],
+                    [Description],
+                    [AchievementTypeNum])
+                VALUES (
+                    'New user',
+                    'Add first task',
+                    0)
+                END".Replace("'", "''");
 
             migrationBuilder.Sql($"EXECUTE('{script}')");
         }
@@ -30,9 +30,9 @@ namespace CatNote.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             var script = @"IF (NOT EXISTS (SELECT 1 FROM [dbo].[Achievements] WHERE [Title] = 'New user'))
-                BEGIN
-                    DELETE FROM [dbo].[Achievements]  WHERE [Title] = 'New user'
-                END".Replace("'", "''");
+            BEGIN
+                DELETE FROM [dbo].[Achievements]  WHERE [Title] = 'New user'
+            END".Replace("'", "''");
 
             migrationBuilder.Sql($"EXECUTE('{script}')");
         }

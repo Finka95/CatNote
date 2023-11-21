@@ -19,6 +19,9 @@ public static class DependencyRegistration
         services.AddScoped<IGenericRepository<AchievementEntity>, GenericRepository<AchievementEntity>>();
         services.AddScoped<IGenericRepository<TaskEntity>, GenericRepository<TaskEntity>>();
 
+        services.AddScoped<IAchievementRepository, AchievementRepository>();
+        services.AddScoped<ITaskRepository, TaskRepository>();
+
         services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
     }
 }

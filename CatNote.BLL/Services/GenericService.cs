@@ -17,7 +17,7 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
         _genericRepository = genericRepository;
     }
 
-    public async Task<TModel> Create(TModel model, CancellationToken cancellationToken)
+    public virtual async Task<TModel> Create(TModel model, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<TEntity>(model);
 

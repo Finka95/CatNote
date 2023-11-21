@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CatNote.API.DTO;
+using CatNote.BLL.AchievementType;
 using CatNote.BLL.Models;
 
 namespace CatNote.API.Mappers;
@@ -10,6 +11,6 @@ public class MapperApiProfile : Profile
     {
         CreateMap<UserDTO, UserModel>().ReverseMap();
         CreateMap<TaskDTO, TaskModel>().ReverseMap();
-        CreateMap<AchievementDTO, AchievementModel>().ReverseMap();
+        CreateMap<AchievementDTO, Achievement>().ReverseMap();
     }
 }

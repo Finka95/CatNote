@@ -28,8 +28,8 @@ public class AchievementRepository : IAchievementRepository
             .Include(achievementEntity => achievementEntity.Users).FirstOrDefaultAsync(x => x.Title == achievementName, cancellationToken);
         var userEntity = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
 
-        achievementEntity.Users.Add(userEntity);
-        userEntity.Achievements.Add(achievementEntity);
+        achievementEntity?.Users?.Add(userEntity);
+        userEntity?.Achievements?.Add(achievementEntity);
 
         _applicationDbContext.SaveChangesAsync(cancellationToken);
     }

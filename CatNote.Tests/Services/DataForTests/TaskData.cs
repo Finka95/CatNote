@@ -1,5 +1,6 @@
 ﻿using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
+using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 
 namespace CatNote.Tests.Services.DataForTests;
 
@@ -10,7 +11,7 @@ public static class TaskData
         Id = 1,
         Title = "defaultTitle",
         Date = DateTime.Today,
-        Status = TaskStatus.Canceled
+        Status = TaskStatus.Done
     };
 
     public static TaskEntity GetTaskEntity() => new()
@@ -18,6 +19,6 @@ public static class TaskData
         Id = 1,
         Title = "defaultTitle",
         Date = DateTime.Today,
-        Status = TaskStatus.Canceled
+        Status = TaskStatus.Done
     };
 }

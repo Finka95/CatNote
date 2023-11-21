@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using CatNote.API.DTO;
+using CatNote.BLL.AchievementType;
 using CatNote.BLL.Interfaces;
 using CatNote.BLL.Models;
 
 namespace CatNote.API.Controllers;
 
-public class AchievementController : GenericController<AchievementModel, AchievementDTO>
+public class AchievementController : GenericController<Achievement, AchievementDTO>
 {
-    public AchievementController(IMapper mapper, IGenericService<AchievementModel> service)
+    public AchievementController(IMapper mapper, IGenericService<Achievement> service)
         : base(mapper, service)
     {
     }

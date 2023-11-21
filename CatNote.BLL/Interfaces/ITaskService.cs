@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace CatNote.BLL.Interfaces;
 
-public class ITaskService : IGenericService<TaskModel>
+public interface ITaskService : IGenericService<TaskModel>
 {
 }
