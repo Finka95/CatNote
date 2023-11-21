@@ -9,11 +9,8 @@ namespace CatNote.BLL.Mappers;
 
 public class MapperBllProfile : Profile
 {
-    private readonly ITaskRepository _taskRepository;
-
-    public MapperBllProfile(ITaskRepository taskRepository)
+    public MapperBllProfile()
     {
-        _taskRepository = taskRepository;
         CreateMap<UserEntity, UserModel>().ReverseMap();
         CreateMap<TaskEntity, TaskModel>().ReverseMap();
         //CreateMap<AchievementEntity, Achievement>().ReverseMap();
@@ -28,7 +25,7 @@ public class MapperBllProfile : Profile
         switch (achievementTypeNum)
         {
             case 0:
-                return new AchievementToAddFirstTask(_taskRepository);
+                return new AchievementToAddFirstTask();
 
             default: return null;
         }

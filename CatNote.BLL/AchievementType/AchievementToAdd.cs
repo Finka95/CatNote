@@ -9,9 +9,4 @@
 //public class AchievementToAdd : Achievement
 //{
 //    public int TasksCount { get; set; }
-
-//    public override Task<bool> Execute(int userId, CancellationToken cancellationToken)
-//    {
-//        throw new NotImplementedException();
-//    }
 //}

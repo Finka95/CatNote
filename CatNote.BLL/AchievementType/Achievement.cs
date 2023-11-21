@@ -8,5 +8,5 @@ public abstract class Achievement
     public string Description { get; set; }
     public AchievementType AchievementType { get; set; }
 
-    public abstract Task<bool> Execute(int userId, CancellationToken cancellationToken);
+    //public abstract Task<bool> Execute(int userId, CancellationToken cancellationToken);
 }
