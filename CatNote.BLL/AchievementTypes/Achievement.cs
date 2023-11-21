@@ -1,7 +1,8 @@
-﻿namespace CatNote.BLL.AchievementType;
-using AchievementType = CatNote.Domain.Enums.AchievementType;
+﻿using CatNote.Domain.Enums;
 
-public abstract class Achievement
+namespace CatNote.BLL.AchievementTypes;
+
+public class Achievement
 {
     public int AchievementId { get; set; }
     public string Title { get; set; }

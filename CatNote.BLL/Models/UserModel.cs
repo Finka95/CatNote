@@ -1,4 +1,4 @@
-﻿using CatNote.BLL.AchievementType;
+﻿using CatNote.BLL.AchievementTypes;
 
 namespace CatNote.BLL.Models;
 

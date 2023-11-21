@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CatNote.BLL.Interfaces;
 using AutoMapper;
-using CatNote.BLL.AchievementType;
+using CatNote.BLL.AchievementTypes;
+using CatNote.BLL.AchievementProcessors;
 
 namespace CatNote.BLL.Services;
 
@@ -17,13 +18,19 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
     private readonly IMapper _mapper;
     private readonly IGenericRepository<AchievementEntity> _genericRepository;
     private readonly IAchievementRepository _achievementRepository;
+    private readonly IEnumerable<IAchievementProcessor> _achievementProcessors;
 
-    public AchievementService(IMapper mapper, IGenericRepository<AchievementEntity> genericRepository, IAchievementRepository achievementRepository)
+    public AchievementService(
+        IMapper mapper, 
+        IGenericRepository<AchievementEntity> genericRepository, 
+        IAchievementRepository achievementRepository,
+        IEnumerable<IAchievementProcessor> achievementProcessors)
         :base(mapper, genericRepository)
     {
         _mapper = mapper;
         _genericRepository = genericRepository;
         _achievementRepository = achievementRepository;
+        _achievementProcessors = achievementProcessors;
     }
 
     public async Task CheckAchievement(int userId, CancellationToken cancellationToken)
@@ -35,16 +42,19 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
 
         var achievements = _mapper.Map<List<Achievement>>(exceptAchievementsEntities); //TODO раскинуть в 2 вида ачивок с маппером (временно без маппера)
 
-        //var achievementsToAdd = achievements.Where(x => x.AchievementType == Domain.Enums.AchievementType.ToAdd).Select(x => new )
-        //var achievementsToExecute = achievements.Where(x => x.AchievementType == Domain.Enums.AchievementType.ToExecute).ToList();
-
         foreach (var achievement in achievements)
         {
-            var result = await achievement.Execute(userId, cancellationToken); // проверка что условие для ачивки выполнено
-
-            if (result)
+            foreach (var processor in _achievementProcessors)
             {
-                await _achievementRepository.AddConnection(achievement.Title, userId, cancellationToken);
+                if (achievement.AchievementType == processor.AchievementType)
+                {
+                    var result = await processor.Execute(userId, cancellationToken);
+
+                    if (result)
+                    {
+                        await _achievementRepository.AddConnection(achievement.Title, userId, cancellationToken);
+                    }
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CatNote.API.DTO;
-using CatNote.BLL.AchievementType;
+using CatNote.BLL.AchievementTypes;
 using CatNote.BLL.Models;
 
 namespace CatNote.API.Mappers;

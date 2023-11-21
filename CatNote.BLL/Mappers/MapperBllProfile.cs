@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CatNote.BLL.AchievementType;
+using CatNote.BLL.AchievementTypes;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
@@ -15,19 +15,19 @@ public class MapperBllProfile : Profile
         CreateMap<TaskEntity, TaskModel>().ReverseMap();
         //CreateMap<AchievementEntity, Achievement>().ReverseMap();
 
-        CreateMap<AchievementEntity, Achievement>()
-            .ConstructUsing(src => ResolveAchievementType(src.AchievementTypeNum))
-            .ReverseMap();
+        CreateMap<AchievementEntity, Achievement>();
+            //.ConstructUsing(src => ResolveAchievementType(src.AchievementTypeNum))
+            //.ReverseMap();
     }
 
-    private Achievement ResolveAchievementType(int achievementTypeNum)
-    {
-        switch (achievementTypeNum)
-        {
-            case 0:
-                return new AchievementToAddFirstTask();
+    //private Achievement ResolveAchievementType(int achievementTypeNum)
+    //{
+    //    switch (achievementTypeNum)
+    //    {
+    //        case 0:
+    //            return new AchievementToAddFirstTask();
 
-            default: return null;
-        }
-    }
+    //        default: return null;
+    //    }
+    //}
 }
