@@ -66,7 +66,6 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
                     Description = source.Description,
                     AchievementId = source.Id
                 };
-                break;
             case AchievementType.ToAddFirstThree:
                 return new AchievementToAddFirstThreeTask
                 {
@@ -74,7 +73,6 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
                     Description = source.Description,
                     AchievementId = source.Id
                 };
-                break;
             case AchievementType.ToAddFirstFive:
                 return new AchievementToAddFirstFiveTask
                 {
@@ -82,7 +80,6 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
                     Description = source.Description,
                     AchievementId = source.Id
                 };
-                break;
             case AchievementType.CompletedFirstTask:
                 return new AchievementCompletedFirstTask
                 {
@@ -90,7 +87,6 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
                     Description = source.Description,
                     AchievementId = source.Id
                 };
-                break;
             case AchievementType.CompletedFirstThreeTasks:
                 return new AchievementCompletedFirstThreeTask
                 {
@@ -98,7 +94,8 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
                     Description = source.Description,
                     AchievementId = source.Id
                 };
-            default: return null;
+            default: 
+                throw new ArgumentOutOfRangeException();
         }
     }
 

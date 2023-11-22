@@ -8,5 +8,5 @@ public interface IGenericRepository<TEntity> where TEntity : IBaseEntity
     Task Delete(int id, CancellationToken cancellationToken);
     Task<IEnumerable<TEntity>> GetAll(CancellationToken cancellationToken);
     Task<TEntity> Update(TEntity element, CancellationToken cancellationToken);
-    Task<TEntity> GetById(int id, CancellationToken cancellationToken);
+    Task<TEntity?> GetById(int id, CancellationToken cancellationToken);
 }

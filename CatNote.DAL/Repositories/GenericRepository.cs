@@ -1,4 +1,4 @@
-using CatNote.DAL.Entities;
+﻿using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +39,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await dbSet.AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity> GetById(int id, CancellationToken cancellationToken)
+    public async Task<TEntity?> GetById(int id, CancellationToken cancellationToken)
     {
         return await dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }

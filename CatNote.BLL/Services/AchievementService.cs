@@ -46,6 +46,8 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         var userModel = _mapper.Map<UserModel>(user);
         var achievements = _mapper.Map<List<Achievement>>(exceptAchievementsEntities); //TODO раскинуть в 2 вида ачивок с маппером (временно без маппера)
 
+        var newAchievementsForConnection = new List<Achievement>();
+
         foreach (var achievement in achievements)
         {
 
@@ -53,7 +55,7 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
 
             if (result)
             {
-                await _achievementRepository.AddConnection(achievement.Title, userId, cancellationToken);
+                newAchievementsForConnection.Add(achievement);
             }
 
             //foreach (var processor in _achievementProcessors)
@@ -68,6 +70,11 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
             //        }
             //    }
             //}
+        }
+
+        if (newAchievementsForConnection.Count != 0)
+        {
+            await _achievementRepository.AddConnection(_mapper.Map<List<AchievementEntity>>(newAchievementsForConnection), userId, cancellationToken);
         }
     }
 }

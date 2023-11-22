@@ -4,6 +4,6 @@ namespace CatNote.DAL.Interfaces;
 
 public interface IAchievementRepository
 {
-    Task<IEnumerable<AchievementEntity>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken);
-    Task AddConnection(string achievementName, int userId, CancellationToken cancellationToken);
+    Task<IEnumerable<AchievementEntity>?> GetAchievementsByUserId(int userId, CancellationToken cancellationToken);
+    Task AddConnection(List<AchievementEntity> achievements, int userId, CancellationToken cancellationToken);
 }
