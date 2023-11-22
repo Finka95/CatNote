@@ -1,7 +1,8 @@
-﻿using CatNote.API.Mappers;
+using CatNote.API.Mappers;
 using CatNote.API.Middlewares;
 using CatNote.BLL.DI;
 using FluentValidation.AspNetCore;
+using CatNote.BLL.Mappers;
 
 namespace CatNote.API;
 
@@ -18,7 +19,6 @@ public class Program
         builder.Services.AddFluentValidationAutoValidation();
 
         var connection = builder.Configuration.GetConnectionString("DefaultConnection");
-
         builder.Services.AddBusinessServices(connection);
 
         builder.Services.AddAutoMapper(typeof(MapperApiProfile).Assembly, typeof(MapperBllProfile).Assembly);

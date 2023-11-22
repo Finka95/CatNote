@@ -1,6 +1,11 @@
 ﻿using CatNote.API.Mappers;
 using CatNote.API.Middlewares;
 using CatNote.BLL.DI;
+<<<<<<< HEAD
+using FluentValidation.AspNetCore;
+=======
+>>>>>>> main
+using CatNote.BLL.Mappers;
 using FluentValidation.AspNetCore;
 
 namespace CatNote.API;
