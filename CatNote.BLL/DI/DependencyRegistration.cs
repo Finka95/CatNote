@@ -1,4 +1,4 @@
-﻿using CatNote.BLL.AchievementProcessors;
+﻿//using CatNote.BLL.AchievementProcessors;
 using CatNote.BLL.AchievementTypes;
 using CatNote.BLL.Interfaces;
 using CatNote.BLL.Models;
@@ -18,11 +18,11 @@ public static class DependencyRegistration
         services.AddScoped<IGenericService<Achievement>, GenericService<Achievement, AchievementEntity>>();
         services.AddScoped<IGenericService<UserModel>, GenericService<UserModel, UserEntity>>();
 
-        services.AddScoped<IAchievementProcessor, AddFirstTaskAchievementProcessor>();
-        services.AddScoped<IAchievementProcessor, AddFirstThreeTaskAchievementProcessor>();
-        services.AddScoped<IAchievementProcessor, AddFirstFiveTaskAchievementProcessor>();
-        services.AddScoped<IAchievementProcessor, CompletedFirstTaskAchievementProcessor>();
-        services.AddScoped<IAchievementProcessor, CompletedFirstThreeTaskAchievementProcessor>();
+        //services.AddScoped<IAchievementProcessor, AddFirstTaskAchievementProcessor>();
+        //services.AddScoped<IAchievementProcessor, AddFirstThreeTaskAchievementProcessor>();
+        //services.AddScoped<IAchievementProcessor, AddFirstFiveTaskAchievementProcessor>();
+        //services.AddScoped<IAchievementProcessor, CompletedFirstTaskAchievementProcessor>();
+        //services.AddScoped<IAchievementProcessor, CompletedFirstThreeTaskAchievementProcessor>();
 
         //services.AddScoped<AchievementToAddFirstTaskService>();
 
