@@ -13,7 +13,7 @@ namespace CatNote.DAL.DI;
 
 public static class DependencyRegistration
 {
-    public static void AddDatabaseServices(this IServiceCollection services, string connectionString)
+    public static void AddDatabaseServices(this IServiceCollection services, string? connectionString)
     {
         services.AddScoped<IGenericRepository<UserEntity>, GenericRepository<UserEntity>>();
         services.AddScoped<IGenericRepository<AchievementEntity>, GenericRepository<AchievementEntity>>();

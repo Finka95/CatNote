@@ -1,4 +1,4 @@
-﻿namespace CatNote.BLL.Exceptions;
+﻿namespace CatNote.Domain.Exceptions;
 
 public class NotFoundException : Exception
 {

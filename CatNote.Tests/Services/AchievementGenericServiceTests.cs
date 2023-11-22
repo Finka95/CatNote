@@ -1,4 +1,4 @@
-﻿//using AutoMapper;
+//using AutoMapper;
 //using CatNote.BLL.AchievementTypes;
 //using CatNote.BLL.Models;
 //using CatNote.BLL.Services;
@@ -68,7 +68,6 @@
 //    //    var achievementId = 1;
 
 //    //    var cancellationToken = new CancellationToken();
-
 //    //    //Act
 //    //    await _achievementService.Delete(achievementId, cancellationToken);
 
@@ -91,6 +90,7 @@
 
 //    //    _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(achievementEntityList);
 //    //    SetupMapper<List<AchievementModel>, List<AchievementEntity>>(achievementModelList);
+
 
 //    //    //Act
 //    //    var result = await _achievementService.GetAll(cancellationToken);
@@ -139,10 +139,10 @@
 //        //Arrange
 //        var achievementId = 5;
 
+
 //        var cancellationToken = new CancellationToken();
 
 //        _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync((AchievementEntity)null);
-
 //        //Act
 //        var result = await _achievementService.GetById(achievementId, cancellationToken);
 
@@ -171,6 +171,7 @@
 //    //        };
 
 //    //        var cancellationToken = new CancellationToken();
+
 
 //    //        SetupMapper<AchievementEntity, AchievementModel>(achievementEntityResult);
 //    //        _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))

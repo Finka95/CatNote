@@ -3,6 +3,7 @@ using CatNote.BLL.Models;
 using CatNote.BLL.Services;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
+using CatNote.Domain.Exceptions;
 using CatNote.Tests.Services.DataForTests;
 using FluentAssertions;
 using Moq;
@@ -77,7 +78,6 @@ namespace CatNote.Tests.Services;
 //        var taskModelList = new List<TaskModel>();
 //        var taskModel = TaskData.GetTaskModel();
 //        taskModelList.Add(taskModel);
-
 //        var cancellationToken = new CancellationToken();
 
 //        _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(taskEntityList);
@@ -175,6 +175,7 @@ namespace CatNote.Tests.Services;
 //        //Act
 //        var result = await _taskService.Update(taskModel, cancellationToken);
 
+
 //        //Assert
 //        _mockMapper.Verify(x => x.Map<TaskEntity>(It.IsAny<TaskModel>()), Times.Once);
 //        _mockGenericRepository.Verify(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken), Times.Once);
@@ -225,3 +226,4 @@ namespace CatNote.Tests.Services;
 //        _mockMapper.Setup(x => x.Map<T1>(It.IsAny<T2>())).Returns(element);
 //    }
 //}
+

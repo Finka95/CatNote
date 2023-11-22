@@ -1,4 +1,4 @@
-﻿using CatNote.BLL.Exceptions;
+﻿using CatNote.Domain.Exceptions;
 
 namespace CatNote.API.Middlewares;
 
@@ -16,23 +16,28 @@ public class ExceptionHandlingMiddleware
         {
             await next.Invoke(context);
         }
-        catch (NotFoundException ex)
-        {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-
-            await context.Response.WriteAsync(ex.Message);
-        }
-        catch (BadRequestException ex)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            await context.Response.WriteAsync(ex.Message);
-        }
         catch (Exception ex)
         {
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await HandleException(context, ex);
+        }
+    }
 
-            await context.Response.WriteAsync("Internal Server Error. Please contact the administrator.");
+    private static async Task HandleException(HttpContext context, Exception exception)
+    {
+        switch (exception)
+        {
+            case NotFoundException ex:
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await context.Response.WriteAsync(ex.Message);
+                break;
+            case BadRequestException ex:
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsync(ex.Message);
+                break;
+            default:
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                await context.Response.WriteAsync("Internal Server Error. Please contact the administrator.");
+                break;
         }
     }
 }

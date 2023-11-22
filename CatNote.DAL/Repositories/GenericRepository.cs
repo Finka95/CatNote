@@ -1,6 +1,7 @@
 ﻿using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using CatNote.Domain.Exceptions;
 
 namespace CatNote.DAL.Repositories;
 
@@ -48,7 +49,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         dbContext.Entry(element).State = EntityState.Modified;
         await dbContext.SaveChangesAsync(cancellationToken);
-
         return element;
     }
 }
