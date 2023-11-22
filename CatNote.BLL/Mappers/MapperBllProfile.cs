@@ -19,18 +19,6 @@ public class MapperBllProfile : Profile
 
 public class AchievementEntityResolver : ITypeConverter<Achievement, AchievementEntity>
 {
-    public AchievementEntity Resolve(Achievement source, AchievementEntity destination, AchievementEntity destMember,
-        ResolutionContext context)
-    {
-        return new AchievementEntity
-        {
-            Id = source.AchievementId,
-            Title = source.Title,
-            Description = source.Description,
-            AchievementType = source.AchievementType
-        };
-    }
-
     public AchievementEntity Convert(Achievement source, AchievementEntity destination, ResolutionContext context)
     {
         return new AchievementEntity

@@ -1,232 +1,250 @@
-//using AutoMapper;
-//using CatNote.BLL.AchievementTypes;
-//using CatNote.BLL.Models;
-//using CatNote.BLL.Services;
-//using CatNote.DAL.Entities;
-//using CatNote.DAL.Interfaces;
-//using CatNote.Domain.Enums;
-//using CatNote.Tests.Services.DataForTests;
-//using FluentAssertions;
-//using Moq;
-//using Xunit;
+﻿using AutoMapper;
+using CatNote.BLL.AchievementTypes;
+using CatNote.BLL.Models;
+using CatNote.BLL.Services;
+using CatNote.DAL.Entities;
+using CatNote.DAL.Interfaces;
+using CatNote.Domain.Exceptions;
+using CatNote.Tests.Services.DataForTests;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
-//namespace CatNote.Tests.Services;
+namespace CatNote.Tests.Services;
 
-//public class AchievementGenericServiceTests
-//{
-//    private readonly Mock<IGenericRepository<AchievementEntity>> _mockGenericRepository;
-//    private readonly Mock<IMapper> _mockMapper;
-//    private readonly GenericService<Achievement, AchievementEntity> _achievementService;
+public class AchievementGenericServiceTests
+{
+    private readonly Mock<IGenericRepository<AchievementEntity>> _mockGenericRepository;
+    private readonly Mock<IMapper> _mockMapper;
+    private readonly GenericService<AchievementToAdd, AchievementEntity> _achievementService;
 
-//    public AchievementGenericServiceTests()
-//    {
-//        _mockGenericRepository = new Mock<IGenericRepository<AchievementEntity>>();
-//        _mockMapper = new Mock<IMapper>();
-//        _achievementService = new GenericService<Achievement, AchievementEntity>(_mockMapper.Object, _mockGenericRepository.Object);
-//    }
+    public AchievementGenericServiceTests()
+    {
+        _mockGenericRepository = new Mock<IGenericRepository<AchievementEntity>>();
+        _mockMapper = new Mock<IMapper>();
+        _achievementService = new GenericService<AchievementToAdd, AchievementEntity>(_mockMapper.Object, _mockGenericRepository.Object);
+    }
 
-//    [Fact]
-//    public async Task Create_CorrectModelPass_AchievementModel()
-//    {
-//        //Arrange
-//        var cancellationToken = new CancellationToken();
+    [Fact]
+    public async Task Create_CorrectModelToAddPass_AchievementModel()
+    {
+        //Arrange
+        var cancellationToken = new CancellationToken();
 
-//        var achievementToAddFirstTask = new AchievementToAddFirstTask
-//        {
-//            AchievementId = 1,
-//            Title = "DefaultTitle",
-//            Description = "DefaultDescription",
-//        };
+        var achievementToAddModel = new AchievementToAdd
+        {
+            AchievementId = 1,
+            Title = "DefaultTitle",
+            Description = "DefaultDescription",
+            TaskCount = 1
+        };
 
-//        var achievementEntity = new AchievementEntity
-//        {
-//            Id = 1,
-//            Title = "DefaultTitle",
-//            Description = "DefaultDescription",
-//            AchievementType = AchievementType.ToAddFirst
-//        };
+        var achievementEntity = new AchievementEntity
+        {
+            Id = 1,
+            Title = "DefaultTitle",
+            Description = "DefaultDescription",
+            TaskCount = 1,
+            AchievementType = 0
+        };
 
-//        SetupMapper(achievementEntity, achievementToAddFirstTask);
-//        _mockGenericRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(achievementEntity);
-//        SetupMapper(achievementToAddFirstTask, achievementEntity);
+        SetupMapper(achievementEntity, achievementToAddModel);
+        _mockGenericRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(achievementEntity);
+        SetupMapper(achievementToAddModel, achievementEntity);
 
-//        //Act
-//        var result = await _achievementService.Create(achievementToAddFirstTask, cancellationToken);
+        //Act
+        var result = await _achievementService.Create(achievementToAddModel, cancellationToken);
 
-//        //Assert
-//        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once());
-//        result.AchievementId.Should().Be(achievementEntity.Id);
-//        result.AchievementType.Should().Be(AchievementType.ToAddFirst);
-//        result.Title.Should().Be(achievementEntity.Title);
-//        result.Description.Should().Be(achievementEntity.Description);
-//    }
+        //Assert
+        _mockMapper.Verify(x => x.Map<AchievementEntity>(achievementToAddModel), Times.Once());
 
-//    //[Fact]
-//    //public async Task Delete_AchievementByCorrectId_ReturnSuccess()
-//    //{
-//    //    //Arrange
-//    //    var achievementId = 1;
+        result.AchievementId.Should().Be(achievementEntity.Id);
+        result.Title.Should().Be(achievementEntity.Title);
+        result.Description.Should().Be(achievementEntity.Description);
+        result.AchievementType.Should().Be(achievementEntity.AchievementType);
+        result.TaskCount.Should().Be(achievementEntity.TaskCount);
 
-//    //    var cancellationToken = new CancellationToken();
-//    //    //Act
-//    //    await _achievementService.Delete(achievementId, cancellationToken);
+        _mockGenericRepository.Verify(x => x.Create(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementToAdd>(It.IsAny<AchievementEntity>()), Times.Once());
+    }
 
-//    //    //Assert
-//    //    _mockGenericRepository.Verify(x => x.Delete(achievementId, cancellationToken), Times.Once);
-//    //}
+    //[Fact]
+    //public async Task Create_CorrectModelPass_AchievementModel()
+    //{
+    //    //Arrange
+    //    var cancellationToken = new CancellationToken();
 
-//    //[Fact]
-//    //public async Task GetAll_GetAllAchievements_ReturnAchievementModelList()
-//    //{
-//    //    //Arrange
-//    //    var achievementEntityList = new List<AchievementEntity>();
-//    //    achievementEntityList.Add(AchievementData.GetAchievementEntity());
+    //    var achievementModel = AchievementData.AchievementModel;
+    //    var achievementEntity = AchievementData.AchievementEntity;
 
-//    //    var achievementModelList = new List<AchievementModel>();
-//    //    var achievementModel = AchievementData.GetAchievementModel();
-//    //    achievementModelList.Add(achievementModel);
+    //    SetupMapper(achievementEntity, achievementModel);
+    //    _mockGenericRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(value: AchievementData.AchievementEntity);
+    //    SetupMapper(achievementModel, achievementEntity);
 
-//    //    var cancellationToken = new CancellationToken();
+    //    //Act
+    //    var result = await _achievementService.Create(AchievementData.AchievementModel, cancellationToken);
 
-//    //    _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(achievementEntityList);
-//    //    SetupMapper<List<AchievementModel>, List<AchievementEntity>>(achievementModelList);
+    //    //Assert
+    //    _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once());
 
+    //    result.Should().BeOfType<AchievementModel>();
+    //    result.Id.Should().Be(achievementEntity.Id);
+    //    result.Title.Should().Be(achievementEntity.Title);
+    //    result.Description.Should().Be(achievementEntity.Description);
 
-//    //    //Act
-//    //    var result = await _achievementService.GetAll(cancellationToken);
+    //    _mockGenericRepository.Verify(x => x.Create(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
+    //    _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once());
+    //}
 
-//    //    //Assert
-//    //    _mockGenericRepository.Verify(x => x.GetAll(cancellationToken), Times.Once);
+    [Fact]
+    public async Task Delete_AchievementByCorrectId_Success()
+    {
+        //Arrange
+        var achievementId = 1;
 
-//    //    result.Should().BeOfType<List<AchievementModel>>()
-//    //        .And.Contain(achievementModel);
+        var cancellationToken = new CancellationToken();
 
-//    //    _mockMapper.Verify(x => x.Map<List<AchievementModel>>(It.IsAny<List<AchievementEntity>>()), Times.Exactly(achievementModelList.Count));
-//    //}
+        //Act
+        await _achievementService.Delete(achievementId, cancellationToken);
 
-//    //[Fact]
-//    //public async Task GetById_GetAchievementByCorrectIdPass_ReturnAchievementModel()
-//    //{
-//    //    //Arrange
-//    //    var achievementId = 1;
+        //Assert
+        _mockGenericRepository.Verify(x => x.Delete(achievementId, cancellationToken), Times.Once);
+    }
 
-//    //    var achievementEntity = AchievementData.GetAchievementEntity();
+    //[Fact]
+    //public async Task GetAll_GetAllAchievements_AchievementModelList()
+    //{
+    //    //Arrange
+    //    var achievementEntityList = new List<AchievementEntity> { AchievementData.AchievementEntity };
 
-//    //    var achievementModel = AchievementData.GetAchievementModel();
+    //    var achievementModelList = new List<AchievementModel>();
+    //    var achievementModel = AchievementData.AchievementModel;
+    //    achievementModelList.Add(achievementModel);
 
-//    //    var cancellationToken = new CancellationToken();
+    //    var cancellationToken = new CancellationToken();
 
-//    //    _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync(achievementEntity);
-//    //    SetupMapper<AchievementModel, AchievementEntity>(achievementModel);
+    //    _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(achievementEntityList);
+    //    SetupMapper(achievementModelList, achievementEntityList);
 
-//    //    //Act
-//    //    var result = await _achievementService.GetById(achievementId, cancellationToken);
+    //    //Act
+    //    var result = await _achievementService.GetAll(cancellationToken);
 
-//    //    //Assert
-//    //    _mockGenericRepository.Verify(x => x.GetById(achievementId, cancellationToken), Times.Once);
+    //    //Assert
+    //    _mockGenericRepository.Verify(x => x.GetAll(cancellationToken), Times.Once);
 
-//    //    result.Should().BeOfType<AchievementModel>();
-//    //    result.Id.Should().Be(achievementModel.Id);
-//    //    result.Title.Should().Be(achievementModel.Title);
-//    //    result.Description.Should().Be(achievementModel.Description);
+    //    result.Should().BeOfType<List<AchievementModel>>()
+    //        .And.Contain(achievementModel);
 
-//    //    _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
-//    //}
+    //    _mockMapper.Verify(x => x.Map<List<AchievementModel>>(It.IsAny<List<AchievementEntity>>()), Times.Exactly(achievementModelList.Count));
+    //}
 
-//    [Fact]
-//    public async Task GetById_GetAchievementByIncorrectId_ReturnNull()
-//    {
-//        //Arrange
-//        var achievementId = 5;
+    //[Fact]
+    //public async Task GetById_GetAchievementByCorrectIdPass_AchievementModel()
+    //{
+    //    //Arrange
+    //    var achievementId = 1;
 
+    //    var achievementEntity = AchievementData.AchievementEntity;
 
-//        var cancellationToken = new CancellationToken();
+    //    var achievementModel = AchievementData.AchievementModel;
 
-//        _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync((AchievementEntity)null);
-//        //Act
-//        var result = await _achievementService.GetById(achievementId, cancellationToken);
+    //    var cancellationToken = new CancellationToken();
 
-//        //Assert
-//        result.Should().BeNull();
-//    }
+    //    _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync(achievementEntity);
+    //    SetupMapper(achievementModel, achievementEntity);
 
-//    //    [Fact]
-//    //    public async Task Update_UpdateAchievementByCorrectIdPass_ReturnAchievementModel()
-//    //    {
-//    //        //Arrange
-//    //        var achievementModel = AchievementData.GetAchievementModel();
+    //    //Act
+    //    var result = await _achievementService.GetById(achievementId, cancellationToken);
 
-//    //        var achievementEntityResult = new AchievementEntity
-//    //        {
-//    //            Id = 2,
-//    //            Title = "default2",
-//    //            Description = "default2"
-//    //        };
+    //    //Assert
+    //    _mockGenericRepository.Verify(x => x.GetById(achievementId, cancellationToken), Times.Once);
 
-//    //        var achievementModelResult = new AchievementModel
-//    //        {
-//    //            Id = 2,
-//    //            Title = "default2",
-//    //            Description = "default2"
-//    //        };
+    //    result.Should().BeOfType<AchievementModel>();
+    //    result.Id.Should().Be(achievementModel.Id);
+    //    result.Title.Should().Be(achievementModel.Title);
+    //    result.Description.Should().Be(achievementModel.Description);
 
-//    //        var cancellationToken = new CancellationToken();
+    //    _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
+    //}
 
+    //[Fact]
+    //public async Task GetById_GetAchievementByIncorrectId_Null()
+    //{
+    //    //Arrange
+    //    var achievementId = 5;
 
-//    //        SetupMapper<AchievementEntity, AchievementModel>(achievementEntityResult);
-//    //        _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))
-//    //            .ReturnsAsync(achievementEntityResult);
+    //    var cancellationToken = new CancellationToken();
 
-//    //        SetupMapper<AchievementModel, AchievementEntity>(achievementModelResult);
+    //    _mockGenericRepository.Setup(x => x.GetById(achievementId, cancellationToken)).ReturnsAsync((AchievementEntity?)null!);
 
-//    //        //Act
-//    //        var result = await _achievementService.Update(achievementModel, cancellationToken);
+    //    //Act
+    //    var result = await _achievementService.GetById(achievementId, cancellationToken);
 
-//    //        //Assert
-//    //        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once);
-//    //        _mockGenericRepository.Verify(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
+    //    //Assert
+    //    result.Should().BeNull();
+    //}
 
-//    //        result.Should().BeOfType<AchievementModel>();
-//    //        result.Id.Should().Be(achievementModelResult.Id);
-//    //        result.Title.Should().Be(achievementModelResult.Title);
-//    //        result.Description.Should().Be(achievementModelResult.Description);
+    //[Fact]
+    //public async Task Update_UpdateAchievementByCorrectIdPass_AchievementModel()
+    //{
+    //    //Arrange
+    //    var achievementModel = AchievementData.AchievementModel;
+    //    var achievementEntity = AchievementData.AchievementEntity;
 
-//    //        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
-//    //    }
+    //    var achievementEntityResult = new AchievementEntity { Id = 1, Title = "default2", Description = "default2" };
 
-//    //    [Fact]
-//    //    public async Task Update_UpdateAchievementByIncorrectIdPass_ReturnNull()
-//    //    {
-//    //        //Arrange
-//    //        var achievementModel = AchievementData.GetAchievementModel();
+    //    var achievementModelResult = new AchievementModel { Id = 1, Title = "default2", Description = "default2" };
 
-//    //        var achievementEntityResult = new AchievementEntity
-//    //        {
-//    //            Id = 2,
-//    //            Title = "default2",
-//    //            Description = "default2"
-//    //        };
+    //    var cancellationToken = new CancellationToken();
 
-//    //        var cancellationToken = new CancellationToken();
+    //    SetupMapper(achievementModel, achievementEntity);
+    //    SetupMapper(achievementEntity, achievementModel);
+    //    SetupMapper(achievementModelResult, achievementEntityResult);
 
-//    //        SetupMapper<AchievementEntity, AchievementModel>(achievementEntityResult);
-//    //        _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))
-//    //            .ReturnsAsync((AchievementEntity)null);
+    //    _mockGenericRepository.Setup(x => x.GetById(achievementModel.Id, cancellationToken))
+    //        .ReturnsAsync(achievementEntity);
 
-//    //        //Act
-//    //        var result = await _achievementService.Update(achievementModel, cancellationToken);
+    //    _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))
+    //        .ReturnsAsync(achievementEntityResult);
 
-//    //        //Assert
-//    //        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once);
-//    //        _mockGenericRepository.Verify(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
+    //    //Act
+    //    var result = await _achievementService.Update(achievementModel, cancellationToken);
 
-//    //        result.Should().Be(null);
+    //    //Assert
+    //    _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once);
+    //    _mockGenericRepository.Verify(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
 
-//    //        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
-//    //    }
+    //    result.Should().BeOfType<AchievementModel>();
+    //    result.Id.Should().Be(achievementModelResult.Id);
+    //    result.Title.Should().Be(achievementModelResult.Title);
+    //    result.Description.Should().Be(achievementModelResult.Description);
 
-//    private void SetupMapper<T1, T2>(T1 returnElement, T2 startElement)
-//    {
-//        _mockMapper.Setup(x => x.Map<T1>(startElement)).Returns(returnElement);
-//    }
-//}
+    //    _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Exactly(2));
+    //}
+
+    //[Fact]
+    //public async Task Update_UpdateAchievementByIncorrectIdPass_NotFoundException()
+    //{
+    //    //Arrange
+    //    var achievementModel = AchievementData.AchievementModel;
+    //    var achievementEntity = AchievementData.AchievementEntity;
+
+    //    var cancellationToken = new CancellationToken();
+
+    //    SetupMapper(achievementEntity, achievementModel);
+
+    //    _mockGenericRepository.Setup(x => x.GetById(achievementModel.Id, cancellationToken))
+    //        .ReturnsAsync((AchievementEntity?)null);
+
+    //    _mockGenericRepository.Setup(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken))
+    //        .ReturnsAsync((AchievementEntity?)null!);
+
+    //    ////Act & Assert
+    //    await Assert.ThrowsAsync<NotFoundException>(() => _achievementService.Update(achievementModel, cancellationToken));
+    //}
+
+    private void SetupMapper<T1, T2>(T1 returnElement, T2 startElement)
+    {
+        _mockMapper.Setup(x => x.Map<T1>(startElement)).Returns(returnElement);
+    }
+}

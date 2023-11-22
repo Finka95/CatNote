@@ -8,8 +8,8 @@ internal static class TaskData
 {
 
     internal static TaskModel TaskModel =
-        new() { Id = 1, Title = "defaultTitle", Date = DateTime.Today, Status = TaskStatus.Canceled };
+        new() { Id = 1, Title = "defaultTitle", Date = DateTime.Today, Status = TaskStatus.Done };
 
     internal static TaskEntity TaskEntity =
-        new() { Id = 1, Title = "defaultTitle", Date = DateTime.Today, Status = TaskStatus.Canceled };
+        new() { Id = 1, Title = "defaultTitle", Date = DateTime.Today, Status = TaskStatus.Done };
 }
