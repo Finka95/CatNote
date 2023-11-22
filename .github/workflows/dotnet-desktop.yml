@@ -28,6 +28,9 @@ jobs:
     - name: Build the application
       run: dotnet build --no-restore --configuration release
 
-    # Execute all unit tests in the solution
+     # Execute all unit tests in the solution
     - name: Execute unit tests
       run: dotnet test --no-restore --verbosity detailed CatNote.Tests/CatNote.Tests.csproj
+
+    - name: Execute integration tests
+      run: dotnet test --no-restore --verbosity detailed CatNote.IntegrationTests/CatNote.IntegrationTests.csproj

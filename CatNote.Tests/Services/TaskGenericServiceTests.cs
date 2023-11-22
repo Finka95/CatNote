@@ -3,6 +3,7 @@ using CatNote.BLL.Models;
 using CatNote.BLL.Services;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
+using CatNote.Domain.Exceptions;
 using CatNote.Tests.Services.DataForTests;
 using FluentAssertions;
 using Moq;
@@ -24,20 +25,20 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_ReturnTaskModel()
+    public async Task Create_CorrectModelPass_TaskModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
 
-        var taskModel = TaskData.GetTaskModel();
-        var taskEntity = TaskData.GetTaskEntity();
+        var taskModel = TaskData.TaskModel;
+        var taskEntity = TaskData.TaskEntity;
 
-        SetupMapper<TaskEntity, TaskModel>(taskEntity);
-        _mockGenericRepository.Setup(x => x.Create(It.IsAny<TaskEntity>(), CancellationToken.None)).ReturnsAsync(value: TaskData.GetTaskEntity());
-        SetupMapper<TaskModel, TaskEntity>(taskModel);
+        SetupMapper(taskEntity, taskModel);
+        _mockGenericRepository.Setup(x => x.Create(It.IsAny<TaskEntity>(), CancellationToken.None)).ReturnsAsync(value: TaskData.TaskEntity);
+        SetupMapper(taskModel, taskEntity);
 
         //Act
-        var result = await _taskService.Create(TaskData.GetTaskModel(), cancellationToken);
+        var result = await _taskService.Create(TaskData.TaskModel, cancellationToken);
 
         //Assert
         _mockMapper.Verify(x => x.Map<TaskEntity>(It.IsAny<TaskModel>()), Times.Once());
@@ -53,7 +54,7 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_TaskByCorrectId_ReturnSuccess()
+    public async Task Delete_TaskByCorrectId_Success()
     {
         //Arrange
         var taskId = 1;
@@ -68,20 +69,18 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllTasks_ReturnTaskModelList()
+    public async Task GetAll_GetAllTasks_TaskModelList()
     {
         //Arrange
-        var taskEntityList = new List<TaskEntity>();
-        taskEntityList.Add(TaskData.GetTaskEntity());
-
+        var taskEntityList = new List<TaskEntity> { TaskData.TaskEntity };
         var taskModelList = new List<TaskModel>();
-        var taskModel = TaskData.GetTaskModel();
+        var taskModel = TaskData.TaskModel;
         taskModelList.Add(taskModel);
 
         var cancellationToken = new CancellationToken();
 
         _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(taskEntityList);
-        SetupMapper<List<TaskModel>, List<TaskEntity>>(taskModelList);
+        SetupMapper(taskModelList, taskEntityList);
 
         //Act
         var result = await _taskService.GetAll(cancellationToken);
@@ -96,19 +95,19 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetTaskByCorrectIdPass_ReturnTaskModel()
+    public async Task GetById_GetTaskByCorrectIdPass_TaskModel()
     {
         //Arrange
         var taskId = 1;
 
-        var taskEntity = TaskData.GetTaskEntity();
+        var taskEntity = TaskData.TaskEntity;
 
-        var taskModel = TaskData.GetTaskModel();
+        var taskModel = TaskData.TaskModel;
 
         var cancellationToken = new CancellationToken();
 
         _mockGenericRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync(taskEntity);
-        SetupMapper<TaskModel, TaskEntity>(taskModel);
+        SetupMapper(taskModel, taskEntity);
 
         //Act
         var result = await _taskService.GetById(taskId, cancellationToken);
@@ -126,14 +125,14 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetTaskByIncorrectId_ReturnNull()
+    public async Task GetById_GetTaskByIncorrectId_Null()
     {
         //Arrange
         var taskId = 5;
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync((TaskEntity)null);
+        _mockGenericRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync((TaskEntity?)null!);
 
         //Act
         var result = await _taskService.GetById(taskId, cancellationToken);
@@ -143,34 +142,24 @@ public class TaskGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateTaskByCorrectIdPass_ReturnTaskModel()
+    public async Task Update_UpdateTaskByCorrectIdPass_TaskModel()
     {
         //Arrange
-        var taskModel = TaskData.GetTaskModel();
-
-        var taskEntityResult = new TaskEntity
-        {
-            Id = 2,
-            Title = "default2",
-            Date = DateTime.UtcNow,
-            Status = TaskStatus.Created
-        };
-
-        var taskModelResult = new TaskModel
-        {
-            Id = 2,
-            Title = "default2",
-            Date = DateTime.UtcNow,
-            Status = TaskStatus.Created
-        };
-
+        var taskModel = TaskData.TaskModel;
+        var taskEntity = TaskData.TaskEntity;
+        var taskEntityResult = new TaskEntity { Id = 1, Title = "default2", Date = DateTime.UtcNow, Status = TaskStatus.Created };
+        var taskModelResult = new TaskModel { Id = 1, Title = "default2", Date = DateTime.UtcNow, Status = TaskStatus.Created };
         var cancellationToken = new CancellationToken();
 
-        SetupMapper<TaskEntity, TaskModel>(taskEntityResult);
+        SetupMapper(taskModel, taskEntity);
+        SetupMapper(taskEntity, taskModel);
+        SetupMapper(taskModelResult, taskEntityResult); ;
+
+        _mockGenericRepository.Setup(x => x.GetById(taskModel.Id, cancellationToken))
+            .ReturnsAsync(taskEntity);
+
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken))
             .ReturnsAsync(taskEntityResult);
-
-        SetupMapper<TaskModel, TaskEntity>(taskModelResult);
 
         //Act
         var result = await _taskService.Update(taskModel, cancellationToken);
@@ -185,43 +174,32 @@ public class TaskGenericServiceTests
         result.Date.Should().Be(taskModelResult.Date);
         result.Status.Should().Be(taskModelResult.Status);
 
-        _mockMapper.Verify(x => x.Map<TaskModel>(It.IsAny<TaskEntity>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<TaskModel>(It.IsAny<TaskEntity>()), Times.Exactly(2));
     }
 
     [Fact]
-    public async Task Update_UpdateTaskByIncorrectIdPass_ReturnNull()
+    public async Task Update_UpdateTaskByIncorrectIdPass_NotFoundException()
     {
         //Arrange
-        var taskModel = TaskData.GetTaskModel();
-
-        var taskEntityResult = new TaskEntity
-        {
-            Id = 2,
-            Title = "default2",
-            Date = DateTime.UtcNow,
-            Status = TaskStatus.Created
-        };
+        var taskModel = TaskData.TaskModel;
+        var taskEntity = TaskData.TaskEntity;
 
         var cancellationToken = new CancellationToken();
 
-        SetupMapper<TaskEntity, TaskModel>(taskEntityResult);
+        SetupMapper(taskEntity, taskModel);
+
+        _mockGenericRepository.Setup(x => x.GetById(taskModel.Id, cancellationToken))
+            .ReturnsAsync((TaskEntity?)null!);
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken))
-            .ReturnsAsync((TaskEntity)null);
+            .ReturnsAsync((TaskEntity?)null!);
 
-        //Act
-        var result = await _taskService.Update(taskModel, cancellationToken);
+        //Act & Assert
+        await Assert.ThrowsAsync<NotFoundException>(() => _taskService.Update(taskModel, cancellationToken));
 
-        //Assert
-        _mockMapper.Verify(x => x.Map<TaskEntity>(It.IsAny<TaskModel>()), Times.Once);
-        _mockGenericRepository.Verify(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken), Times.Once);
-
-        result.Should().Be(null);
-
-        _mockMapper.Verify(x => x.Map<TaskModel>(It.IsAny<TaskEntity>()), Times.Once);
     }
 
-    private void SetupMapper<T1, T2>(T1 element)
+    private void SetupMapper<T1, T2>(T1 returnElement, T2 startElement)
     {
-        _mockMapper.Setup(x => x.Map<T1>(It.IsAny<T2>())).Returns(element);
+        _mockMapper.Setup(x => x.Map<T1>(startElement)).Returns(returnElement);
     }
 }

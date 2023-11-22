@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CatNote.Domain\CatNote.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -3,6 +3,7 @@ using CatNote.BLL.Models;
 using CatNote.BLL.Services;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
+using CatNote.Domain.Exceptions;
 using CatNote.Tests.Services.DataForTests;
 using FluentAssertions;
 using Moq;
@@ -24,20 +25,20 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Create_CorrectModelPass_ReturnUserModel()
+    public async Task Create_CorrectModelPass_UserModel()
     {
         //Arrange
         var cancellationToken = new CancellationToken();
 
-        var userModel = UserData.GetUserModel();
-        var userEntity = UserData.GetUserEntity();
+        var userModel = UserData.UserModel;
+        var userEntity = UserData.UserEntity;
 
-        SetupMapper<UserEntity, UserModel>(userEntity);
-        _mockGenericRepository.Setup(x => x.Create(It.IsAny<UserEntity>(), CancellationToken.None)).ReturnsAsync(value: UserData.GetUserEntity());
-        SetupMapper<UserModel, UserEntity>(userModel);
+        SetupMapper(userEntity, userModel);
+        _mockGenericRepository.Setup(x => x.Create(It.IsAny<UserEntity>(), CancellationToken.None)).ReturnsAsync(value: UserData.UserEntity);
+        SetupMapper(userModel, userEntity);
         
         //Act
-        var result = await _userService.Create(UserData.GetUserModel(), cancellationToken);
+        var result = await _userService.Create(UserData.UserModel, cancellationToken);
 
         //Assert
         _mockMapper.Verify(x => x.Map<UserEntity>(It.IsAny<UserModel>()), Times.Once());
@@ -51,7 +52,7 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Delete_UserById_ReturnSuccess()
+    public async Task Delete_UserById_Success()
     {
         //Arrange
         var userId = 1;
@@ -66,20 +67,19 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetAll_GetAllUsers_ReturnUserModelList()
+    public async Task GetAll_GetAllUsers_UserModelList()
     {
         //Arrange
-        var userEntityList = new List<UserEntity>();
-        userEntityList.Add(UserData.GetUserEntity());
+        var userEntityList = new List<UserEntity> { UserData.UserEntity };
 
         var userModelList = new List<UserModel>();
-        var userModel = UserData.GetUserModel();
+        var userModel = UserData.UserModel;
         userModelList.Add(userModel);
 
         var cancellationToken = new CancellationToken();
 
         _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(userEntityList);
-        SetupMapper<List<UserModel>, List<UserEntity>>(userModelList);
+        SetupMapper(userModelList, userEntityList);
 
         //Act
         var result = await _userService.GetAll(cancellationToken);
@@ -94,19 +94,19 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByCorrectIdPass_ReturnUserModel()
+    public async Task GetById_GetUserByCorrectIdPass_UserModel()
     {
         //Arrange
         var userId = 1;
 
-        var userEntity = UserData.GetUserEntity();
+        var userEntity = UserData.UserEntity;
 
-        var userModel = UserData.GetUserModel();
+        var userModel = UserData.UserModel;
 
         var cancellationToken = new CancellationToken();
 
         _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync(userEntity);
-        SetupMapper<UserModel, UserEntity>(userModel);
+        SetupMapper(userModel, userEntity);
 
         //Act
         var result = await _userService.GetById(userId, cancellationToken);
@@ -122,14 +122,14 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task GetById_GetUserByIncorrectId_ReturnNull()
+    public async Task GetById_GetUserByIncorrectId_Null()
     {
         //Arrange
         var userId = 5;
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity)null);
+        _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity?)null!);
 
         //Act
         var result = await _userService.GetById(userId, cancellationToken);
@@ -139,30 +139,24 @@ public class UserGenericServiceTests
     }
 
     [Fact]
-    public async Task Update_UpdateUserByCorrectIdPass_ReturnUserModel()
+    public async Task Update_UserModelWithCorrectId_UpdatedUserModel()
     {
         //Arrange
-        var userModel = UserData.GetUserModel();
-
-        var userEntityResult = new UserEntity
-        {
-            Id = 2,
-            UserName = "name2"
-        };
-
-        var userModelResult = new UserModel
-        {
-            Id = 2,
-            UserName = "name2"
-        };
-
+        var userModel = UserData.UserModel;
+        var userEntity = UserData.UserEntity;
+        var userEntityResult = new UserEntity { Id = 1, UserName = "name2" };
+        var userModelResult = new UserModel { Id = 1, UserName = "name2" };
         var cancellationToken = new CancellationToken();
 
-        SetupMapper<UserEntity, UserModel>(userEntityResult);
-        _mockGenericRepository.Setup(x => x.Update(It.IsAny<UserEntity>(), cancellationToken))
-            .ReturnsAsync(userEntityResult);
+        SetupMapper(userModel, userEntity);
+        SetupMapper(userEntity, userModel);
+        SetupMapper(userModelResult, userEntityResult);
 
-        SetupMapper<UserModel, UserEntity>(userModelResult);
+        _mockGenericRepository.Setup(x => x.GetById(userModel.Id, cancellationToken))
+            .ReturnsAsync(userEntity);
+
+        _mockGenericRepository.Setup(x => x.Update(userEntity, cancellationToken))
+            .ReturnsAsync(userEntityResult);
 
         //Act
         var result = await _userService.Update(userModel, cancellationToken);
@@ -170,46 +164,36 @@ public class UserGenericServiceTests
         //Assert
         _mockMapper.Verify(x => x.Map<UserEntity>(It.IsAny<UserModel>()), Times.Once);
         _mockGenericRepository.Verify(x => x.Update(It.IsAny<UserEntity>(), cancellationToken), Times.Once);
-
         result.Should().BeOfType<UserModel>();
         result.Id.Should().Be(userModelResult.Id);
         result.UserName.Should().Be(userModelResult.UserName);
-        
-        _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
+
+        _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Exactly(2));
     }
 
     [Fact]
-    public async Task Update_UpdateUserByIncorrectIdPass_ReturnNull()
+    public async Task Update_UpdateUserByIncorrectIdPass_NotFoundException()
     {
         //Arrange
-        var userModel = UserData.GetUserModel();
-
-        var userEntityResult = new UserEntity
-        {
-            Id = 2,
-            UserName = "name2"
-        };
+        var userModel = UserData.UserModel;
+        var userEntity = UserData.UserEntity;
 
         var cancellationToken = new CancellationToken();
 
-        SetupMapper<UserEntity, UserModel>(userEntityResult);
+        SetupMapper(userEntity, userModel);
+
+        _mockGenericRepository.Setup(x => x.GetById(userModel.Id, cancellationToken))
+            .ReturnsAsync((UserEntity?)null);
+
         _mockGenericRepository.Setup(x => x.Update(It.IsAny<UserEntity>(), cancellationToken))
-            .ReturnsAsync((UserEntity)null);
+            .ReturnsAsync((UserEntity?)null!);
 
-        //Act
-        var result = await _userService.Update(userModel, cancellationToken);
-
-        //Assert
-        _mockMapper.Verify(x => x.Map<UserEntity>(It.IsAny<UserModel>()), Times.Once);
-        _mockGenericRepository.Verify(x => x.Update(It.IsAny<UserEntity>(), cancellationToken), Times.Once);
-
-        result.Should().Be(null);
-
-        _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
+        //Act & Assert
+        await Assert.ThrowsAsync<NotFoundException>(() => _userService.Update(userModel, cancellationToken));
     }
 
-    private void SetupMapper<T1, T2>(T1 element)
+    private void SetupMapper<T1, T2>(T1 returnElement, T2 startElement)
     {
-        _mockMapper.Setup(x => x.Map<T1>(It.IsAny<T2>())).Returns(element);
+        _mockMapper.Setup(x => x.Map<T1>(startElement)).Returns(returnElement);
     }
 }
