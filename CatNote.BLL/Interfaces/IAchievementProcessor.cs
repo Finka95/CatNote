@@ -1,6 +1,6 @@
 ﻿using CatNote.Domain.Enums;
 
-namespace CatNote.BLL.AchievementProcessors;
+namespace CatNote.BLL.Interfaces;
 
 public interface IAchievementProcessor
 {

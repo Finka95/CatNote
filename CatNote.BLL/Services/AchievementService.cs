@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using CatNote.BLL.Interfaces;
 using AutoMapper;
 using CatNote.BLL.AchievementTypes;
-using CatNote.BLL.AchievementProcessors;
 
 namespace CatNote.BLL.Services;
 
@@ -38,7 +37,9 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         var achievementsEntities = await _genericRepository.GetAll(cancellationToken);
         var userAchievementsEntities = await _achievementRepository.GetAchievementsByUserId(userId, cancellationToken);
 
-        var exceptAchievementsEntities = achievementsEntities.Except(userAchievementsEntities).ToList();
+        //var exceptAchievementsEntities = achievementsEntities.ExceptBy(userAchievementsEntities, x => x.Id);
+
+        var exceptAchievementsEntities = achievementsEntities.ExceptBy(userAchievementsEntities.Select(x => x.AchievementType), x => x.AchievementType);
 
         var achievements = _mapper.Map<List<Achievement>>(exceptAchievementsEntities); //TODO раскинуть в 2 вида ачивок с маппером (временно без маппера)
 

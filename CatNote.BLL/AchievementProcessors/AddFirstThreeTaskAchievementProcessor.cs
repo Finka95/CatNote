@@ -4,22 +4,22 @@ using CatNote.Domain.Enums;
 
 namespace CatNote.BLL.AchievementProcessors;
 
-internal class AddFirstTaskAchievementProcessor : IAchievementProcessor
+public class AddFirstThreeTaskAchievementProcessor : IAchievementProcessor
 {
     private readonly ITaskRepository _taskRepository;
 
-    public AddFirstTaskAchievementProcessor(ITaskRepository taskRepository)
+    public AddFirstThreeTaskAchievementProcessor(ITaskRepository taskRepository)
     {
         _taskRepository = taskRepository;
     }
 
-    public AchievementType AchievementType => AchievementType.ToAddFirst;
+    public AchievementType AchievementType => AchievementType.ToAddFirstThree;
 
     public async Task<bool> Execute(int userId, CancellationToken cancellationToken)
     {
         var userTasks = await _taskRepository.GetTasksByUserId(userId, cancellationToken);
 
-        if (userTasks.Count == 1)
+        if (userTasks.Count == 3)
         {
             return true;
         }

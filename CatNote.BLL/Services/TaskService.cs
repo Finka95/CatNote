@@ -30,4 +30,15 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
 
         return _mapper.Map<TaskModel>(resultEntity);
     }
+
+    public override async Task<TaskModel> Update(TaskModel model, CancellationToken cancellationToken)
+    {
+        var entity = _mapper.Map<TaskEntity>(model);
+
+        var resultEntity = await _genericRepository.Update(entity, cancellationToken);
+
+        await _achievementService.CheckAchievement(model.UserId, cancellationToken);
+
+        return _mapper.Map<TaskModel>(resultEntity);
+    }
 }

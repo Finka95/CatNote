@@ -14,7 +14,7 @@ public class AchievementRepository : IAchievementRepository
         _applicationDbContext = applicationDbContext;
     }
 
-    public async Task<List<AchievementEntity>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<AchievementEntity>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
     {
         var achievementEntity = await _applicationDbContext.Users.Include(x => x.Achievements)
             .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);

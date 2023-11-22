@@ -35,7 +35,7 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
         return _mapper.Map<List<TModel>>(resultEntity);
     }
 
-    public async Task<TModel> Update(TModel model, CancellationToken cancellationToken)
+    public virtual async Task<TModel> Update(TModel model, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<TEntity>(model);
 

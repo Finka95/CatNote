@@ -19,6 +19,10 @@ public static class DependencyRegistration
         services.AddScoped<IGenericService<UserModel>, GenericService<UserModel, UserEntity>>();
 
         services.AddScoped<IAchievementProcessor, AddFirstTaskAchievementProcessor>();
+        services.AddScoped<IAchievementProcessor, AddFirstThreeTaskAchievementProcessor>();
+        services.AddScoped<IAchievementProcessor, AddFirstFiveTaskAchievementProcessor>();
+        services.AddScoped<IAchievementProcessor, CompletedFirstTaskAchievementProcessor>();
+        services.AddScoped<IAchievementProcessor, CompletedFirstThreeTaskAchievementProcessor>();
 
         //services.AddScoped<AchievementToAddFirstTaskService>();
 

@@ -7,5 +7,7 @@ public enum AchievementType
 
     ToAddFirst = 0,
     ToAddFirstThree,
-    CompletedFirstTask
+    ToAddFirstFive,
+    CompletedFirstTask,
+    CompletedFirstThreeTasks
 }
