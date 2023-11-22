@@ -1,20 +1,24 @@
-﻿//using CatNote.DAL.Interfaces;
-//using CatNote.DAL.Repositories;
+﻿using CatNote.BLL.Interfaces;
+using CatNote.BLL.Models;
+using CatNote.DAL.Interfaces;
+using CatNote.DAL.Repositories;
+using CatNote.Domain.Enums;
 
-//namespace CatNote.BLL.AchievementTypes;
+namespace CatNote.BLL.AchievementTypes;
 
-//public class AchievementToAddFirstTask : Achievement
-//{
-//    public int TasksCount { get; set; }
-//    //public override async Task<bool> Execute(int userId, CancellationToken cancellationToken)
-//    //{
-//    //    var userTasks = await _taskRepository.GetTasksByUserId(userId, cancellationToken);
+public class AchievementToAddFirstTask : Achievement
+{
+    public AchievementType AchievementType { get; } = AchievementType.ToAddFirst;
 
-//    //    if (userTasks.Count == 1)
-//    //    {
-//    //        return true;
-//    //    }
+    public override bool Execute(UserModel user)
+    {
+        var userTasks = user.Tasks?.ToList();
 
-//    //    return false;
-//    //}
-//}
+        if (userTasks?.Count == 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}

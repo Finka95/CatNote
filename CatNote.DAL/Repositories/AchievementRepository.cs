@@ -31,6 +31,6 @@ public class AchievementRepository : IAchievementRepository
         achievementEntity?.Users?.Add(userEntity);
         userEntity?.Achievements?.Add(achievementEntity);
 
-        _applicationDbContext.SaveChangesAsync(cancellationToken);
+        _applicationDbContext.SaveChangesAsync(cancellationToken); //настроить маппер, рэндж, поменять на юзера
     }
 }

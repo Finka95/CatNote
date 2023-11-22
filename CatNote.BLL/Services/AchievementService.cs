@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using CatNote.BLL.Interfaces;
 using AutoMapper;
 using CatNote.BLL.AchievementTypes;
+using System.Diagnostics;
+using CatNote.DAL.Repositories;
 
 namespace CatNote.BLL.Services;
 
@@ -17,19 +19,19 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
     private readonly IMapper _mapper;
     private readonly IGenericRepository<AchievementEntity> _genericRepository;
     private readonly IAchievementRepository _achievementRepository;
-    private readonly IEnumerable<IAchievementProcessor> _achievementProcessors;
+    private readonly IUserRepository _userRepository;
 
     public AchievementService(
         IMapper mapper, 
         IGenericRepository<AchievementEntity> genericRepository, 
         IAchievementRepository achievementRepository,
-        IEnumerable<IAchievementProcessor> achievementProcessors)
+        IUserRepository userRepository)
         :base(mapper, genericRepository)
     {
         _mapper = mapper;
         _genericRepository = genericRepository;
         _achievementRepository = achievementRepository;
-        _achievementProcessors = achievementProcessors;
+        _userRepository = userRepository;
     }
 
     public async Task CheckAchievement(int userId, CancellationToken cancellationToken)
@@ -37,31 +39,35 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         var achievementsEntities = await _genericRepository.GetAll(cancellationToken);
         var userAchievementsEntities = await _achievementRepository.GetAchievementsByUserId(userId, cancellationToken);
 
-        //var exceptAchievementsEntities = achievementsEntities.ExceptBy(userAchievementsEntities, x => x.Id);
-
         var exceptAchievementsEntities = achievementsEntities.ExceptBy(userAchievementsEntities.Select(x => x.AchievementType), x => x.AchievementType);
 
+        var user = await _userRepository.GetUserByIdWithTasksAchievements(userId, cancellationToken);
+
+        var userModel = _mapper.Map<UserModel>(user);
         var achievements = _mapper.Map<List<Achievement>>(exceptAchievementsEntities); //TODO раскинуть в 2 вида ачивок с маппером (временно без маппера)
 
         foreach (var achievement in achievements)
         {
-            foreach (var processor in _achievementProcessors)
+
+            var result = achievement.Execute(userModel);
+
+            if (result)
             {
-                if (achievement.AchievementType == processor.AchievementType)
-                {
-                    var result = await processor.Execute(userId, cancellationToken);
-
-                    if (result)
-                    {
-                        await _achievementRepository.AddConnection(achievement.Title, userId, cancellationToken);
-                    }
-                }
+                await _achievementRepository.AddConnection(achievement.Title, userId, cancellationToken);
             }
-        }
 
-        //if (achievements.Where(x => x.Title == name) == null)
-        //{
-        //    await _achievementRepository.AddConnection(name, userId, cancellationToken);
-        //}
+            //foreach (var processor in _achievementProcessors)
+            //{
+            //    if (achievement.AchievementType == processor.AchievementType)
+            //    {
+            //        var result = await processor.Execute(userId, cancellationToken);
+
+            //        if (result)
+            //        {
+            //            await _achievementRepository.AddConnection(achievement.Title, userId, cancellationToken);
+            //        }
+            //    }
+            //}
+        }
     }
 }

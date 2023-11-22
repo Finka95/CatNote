@@ -21,6 +21,7 @@ public static class DependencyRegistration
 
         services.AddScoped<IAchievementRepository, AchievementRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
     }
