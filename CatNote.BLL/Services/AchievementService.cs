@@ -39,12 +39,12 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         var achievementsEntities = await _genericRepository.GetAll(cancellationToken);
         var userAchievementsEntities = await _achievementRepository.GetAchievementsByUserId(userId, cancellationToken);
 
-        var exceptAchievementsEntities = achievementsEntities.ExceptBy(userAchievementsEntities.Select(x => x.AchievementType), x => x.AchievementType);
+        var exceptAchievementsEntities = achievementsEntities.ExceptBy(userAchievementsEntities.Select(x => x.Id), x => x.Id);
 
         var user = await _userRepository.GetUserByIdWithTasksAchievements(userId, cancellationToken);
 
         var userModel = _mapper.Map<UserModel>(user);
-        var achievements = _mapper.Map<List<Achievement>>(exceptAchievementsEntities); //TODO раскинуть в 2 вида ачивок с маппером (временно без маппера)
+        var achievements = _mapper.Map<List<Achievement>>(exceptAchievementsEntities);
 
         var newAchievementsForConnection = new List<Achievement>();
 
@@ -57,19 +57,6 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
             {
                 newAchievementsForConnection.Add(achievement);
             }
-
-            //foreach (var processor in _achievementProcessors)
-            //{
-            //    if (achievement.AchievementType == processor.AchievementType)
-            //    {
-            //        var result = await processor.Execute(userId, cancellationToken);
-
-            //        if (result)
-            //        {
-            //            await _achievementRepository.AddConnection(achievement.Title, userId, cancellationToken);
-            //        }
-            //    }
-            //}
         }
 
         if (newAchievementsForConnection.Count != 0)

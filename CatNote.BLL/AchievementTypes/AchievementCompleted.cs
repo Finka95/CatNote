@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using CatNote.BLL.Models;
 using CatNote.Domain.Enums;
+using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 
 namespace CatNote.BLL.AchievementTypes;
 
-public class AchievementToAddFirstThreeTask : Achievement
+public class AchievementCompleted : Achievement
 {
-    public AchievementType AchievementType { get; } = AchievementType.ToAddFirstThree;
+    public AchievementType AchievementType => AchievementType.CompletedTask;
 
     public override bool Execute(UserModel user)
     {
-        var userTasks = user.Tasks?.ToList();
+        var completeTasksCount = user.Tasks?.Where(x => x.Status == TaskStatus.Done)?.Count();
 
-        if (userTasks?.Count == 3)
+        if (completeTasksCount == TaskCount)
         {
             return true;
         }

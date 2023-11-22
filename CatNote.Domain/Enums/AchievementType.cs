@@ -2,12 +2,12 @@
 
 public enum AchievementType
 {
-    //ToAdd = 0,
-    //CompletedTask
+    ToAdd = 0,
+    CompletedTask
 
-    ToAddFirst = 0,
-    ToAddFirstThree,
-    ToAddFirstFive,
-    CompletedFirstTask,
-    CompletedFirstThreeTasks
+    //ToAddFirst = 0,
+    //ToAddFirstThree,
+    //ToAddFirstFive,
+    //CompletedFirstTask,
+    //CompletedFirstThreeTasks
 }

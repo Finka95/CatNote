@@ -1,14 +1,14 @@
-﻿//using AutoMapper;
-//using CatNote.BLL.Models;
-//using CatNote.BLL.Services;
-//using CatNote.DAL.Entities;
-//using CatNote.DAL.Interfaces;
-//using CatNote.Tests.Services.DataForTests;
-//using FluentAssertions;
-//using Moq;
-//using Xunit;
+﻿using AutoMapper;
+using CatNote.BLL.Models;
+using CatNote.BLL.Services;
+using CatNote.DAL.Entities;
+using CatNote.DAL.Interfaces;
+using CatNote.Tests.Services.DataForTests;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
-//namespace CatNote.Tests.Services;
+namespace CatNote.Tests.Services;
 
 //public class TaskGenericServiceTests
 //{
@@ -153,7 +153,7 @@
 //            Id = 2,
 //            Title = "default2",
 //            Date = DateTime.UtcNow,
-//            Status = TaskStatus.Created
+//            Status = Domain.Enums.TaskStatus.Done
 //        };
 
 //        var taskModelResult = new TaskModel
@@ -161,7 +161,7 @@
 //            Id = 2,
 //            Title = "default2",
 //            Date = DateTime.UtcNow,
-//            Status = TaskStatus.Created
+//            Status = Domain.Enums.TaskStatus.Done
 //        };
 
 //        var cancellationToken = new CancellationToken();
@@ -199,7 +199,7 @@
 //            Id = 2,
 //            Title = "default2",
 //            Date = DateTime.UtcNow,
-//            Status = TaskStatus
+//            Status = Domain.Enums.TaskStatus.Done
 //        };
 
 //        var cancellationToken = new CancellationToken();
