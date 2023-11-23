@@ -23,11 +23,11 @@ public class AchievementEntityResolver : ITypeConverter<Achievement, Achievement
     {
         return new AchievementEntity
         {
-            Id = source.AchievementId,
+            Id = source.Id,
             Title = source.Title,
             Description = source.Description,
             TaskCount = source.TaskCount,
-            AchievementType = source.AchievementType
+            Type = source.Type
         };
     }
 }
@@ -38,11 +38,11 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
     {
         return new Achievement
         {
-            AchievementId = source.Id,
+            Id = source.Id,
             Title = source.Title,
             Description = source.Description,
             TaskCount = source.TaskCount,
-            AchievementType = source.AchievementType
+            Type = source.Type
         };
     }
 }

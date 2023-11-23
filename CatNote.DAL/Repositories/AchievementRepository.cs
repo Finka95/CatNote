@@ -18,13 +18,8 @@ public class AchievementRepository : GenericRepository<AchievementEntity>, IAchi
 
     public async Task AddConnectionBetweenUserAndAchievement(int achievementId, int userId, CancellationToken cancellationToken)
     {
-        var userTask = _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
-        var achievementTask = _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.Id == achievementId, cancellationToken);
-
-        await Task.WhenAll(userTask, achievementTask);
-
-        var userEntity = await userTask;
-        var achievementEntities = await achievementTask;
+        var userEntity = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        var achievementEntities = await _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.Id == achievementId, cancellationToken);
 
         if (userEntity != null && achievementEntities != null)
         {
@@ -39,7 +34,7 @@ public class AchievementRepository : GenericRepository<AchievementEntity>, IAchi
     public async Task<AchievementEntity?> GetAchievementByTaskCountAchievementType(int taskCount, AchievementType achievementType,
         CancellationToken cancellationToken)
     {
-        var achievement = await _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.AchievementType == achievementType && x.TaskCount == taskCount, cancellationToken);
+        var achievement = await _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.Type == achievementType && x.TaskCount == taskCount, cancellationToken);
 
         return achievement;
     }

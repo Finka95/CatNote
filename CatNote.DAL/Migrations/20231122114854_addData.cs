@@ -14,27 +14,27 @@ namespace CatNote.DAL.Migrations
                 @"IF (NOT EXISTS (SELECT 1 FROM [dbo].[Achievements] WHERE [Title] = 'First task'))
             BEGIN
             INSERT INTO [dbo].[Achievements] ([Title],[Description],[AchievementType], [TaskCount])
-            VALUES ('First task','Add first task',0, 1)
+            VALUES ('First task','Add first task',1, 1)
             END
             IF(NOT EXISTS (SELECT 1 FROM [dbo].[Achievements] WHERE [Title] = 'First three tasks'))
             BEGIN
             INSERT INTO [dbo].[Achievements] ([Title],[Description],[AchievementType], [TaskCount])
-            VALUES ('First three task','Add first three tasks',0, 3)
+            VALUES ('First three task','Add first three tasks',1, 3)
             END
             IF(NOT EXISTS (SELECT 1 FROM [dbo].[Achievements] WHERE [Title] = 'First five tasks'))
             BEGIN
             INSERT INTO [dbo].[Achievements] ([Title],[Description],[AchievementType], [TaskCount])
-            VALUES ('First five task','Add first five tasks',0, 5)
+            VALUES ('First five task','Add first five tasks',1, 5)
             END
             IF(NOT EXISTS (SELECT 1 FROM [dbo].[Achievements] WHERE [Title] = 'Completed first task'))
             BEGIN
             INSERT INTO [dbo].[Achievements] ([Title],[Description],[AchievementType], [TaskCount])
-            VALUES ('Completed first task','Completed first task',1, 1)
+            VALUES ('Completed first task','Completed first task',2, 1)
             END
             IF(NOT EXISTS (SELECT 1 FROM [dbo].[Achievements] WHERE [Title] = 'Completed first three tasks'))
             BEGIN
             INSERT INTO [dbo].[Achievements] ([Title],[Description],[AchievementType], [TaskCount])
-            VALUES ('Completed first three tasks','Completed first three tasks',1, 3)
+            VALUES ('Completed first three tasks','Completed first three tasks',2, 3)
             END
             ".Replace("'", "''");
 

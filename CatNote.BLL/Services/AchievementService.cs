@@ -35,62 +35,44 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
 
     public async Task CheckAchievementToAdd(int userId, CancellationToken cancellationToken)
     {
-        var userModel = await GetUserModel(userId, cancellationToken);
+        var user = await GetUserModelById(userId, cancellationToken);
 
-        if (userModel == null)
+        var achievement = await GetAchievementByParameters(user.Tasks!.Count(), AchievementType.Add, cancellationToken);
+
+        if (user == null || achievement == null || user.Achievements.Contains(achievement))
             return;
 
-        var achievement = await GetAchievementModel(userModel.Tasks!.Count(), AchievementType.ToAdd, cancellationToken);
-
-        if (achievement == null || userModel.Achievements.Contains(achievement))
-            return;
-
-        await AddAchievementToUser(achievement.AchievementId, userId, cancellationToken);
+        await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievement.Id, userId, cancellationToken);
     }
 
     public async Task CheckAchievementToComplete(int userId, CancellationToken cancellationToken)
     {
-        var userModel = await GetUserModel(userId, cancellationToken);
+        var user = await GetUserModelById(userId, cancellationToken);
+        var completedTaskCount = user!.Tasks!.Count(x => x.Status == TaskStatus.Done);
+        var achievement = await GetAchievementByParameters(completedTaskCount, AchievementType.Completed, cancellationToken);
 
-        if (userModel == null)
-            return;
-        
-        var completedTaskCount = userModel!.Tasks!.Count(x => x.Status == TaskStatus.Done);
-
-        var achievement =
-            await GetAchievementModel(completedTaskCount, AchievementType.CompletedTask, cancellationToken);
-
-        if (achievement == null || userModel.Achievements.Contains(achievement))
+        if (user == null || completedTaskCount == 0 || achievement == null || user.Achievements.Contains(achievement))
             return;
 
-        await AddAchievementToUser(achievement.AchievementId, userId, cancellationToken);
+        await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievement.Id, userId, cancellationToken);
     }
 
-    private async Task<UserModel?> GetUserModel(int userId, CancellationToken cancellationToken)
+    private async Task<UserModel?> GetUserModelById(int userId, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserByIdWithTasksAchievements(userId, cancellationToken);
-        var userModel = _mapper.Map<UserModel>(user);
+        var userEntity = await _userRepository.GetUserByIdWithTasksAchievements(userId, cancellationToken);
+        var user = _mapper.Map<UserModel>(userEntity);
 
-        if (userModel?.Tasks == null) //нужно ли тут
-            return null;
-
-        return userModel;
+        return user;
     }
 
-    private async Task<Achievement?> GetAchievementModel(int taskCount, AchievementType achievementType,
+    private async Task<Achievement?> GetAchievementByParameters(int taskCount, AchievementType achievementType,
         CancellationToken cancellationToken)
     {
-        var achievementsEntity =
+        var achievementEntity =
             await _achievementRepository.GetAchievementByTaskCountAchievementType(taskCount, achievementType, cancellationToken);
 
-        var achievement = _mapper.Map<Achievement>(achievementsEntity);
+        var achievement = _mapper.Map<Achievement>(achievementEntity);
 
         return achievement;
-    }
-
-    private async Task AddAchievementToUser(int achievementId, int userId,
-        CancellationToken cancellationToken)
-    {
-        await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievementId, userId, cancellationToken);
     }
 }

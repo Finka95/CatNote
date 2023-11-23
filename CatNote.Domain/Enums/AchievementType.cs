@@ -2,6 +2,7 @@
 
 public enum AchievementType
 {
-    ToAdd = 0,
-    CompletedTask
+    None,
+    Add,
+    Completed
 }
