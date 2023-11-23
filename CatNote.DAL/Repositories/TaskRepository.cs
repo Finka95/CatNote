@@ -18,9 +18,4 @@ public class TaskRepository :GenericRepository<TaskEntity>, ITaskRepository
     {
         _applicationDbContext = applicationDbContext;
     }
-
-    public async Task<List<TaskEntity>> GetTasksByUserId(int userId, CancellationToken cancellationToken)
-    {
-        return await _applicationDbContext.Tasks.Where(x => x.UserId == userId).ToListAsync(cancellationToken);
-    }
 }

@@ -10,13 +10,13 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
 {
     private readonly IAchievementService _achievementService;
     private readonly IMapper _mapper;
-    private readonly IGenericRepository<TaskEntity> _genericRepository;
+    private readonly ITaskRepository _taskRepository;
 
-    public TaskService(IMapper mapper, IGenericRepository<TaskEntity> genericRepository, IAchievementService achievementService)
-        :base(mapper, genericRepository)
+    public TaskService(IMapper mapper, ITaskRepository taskRepository, IAchievementService achievementService)
+        :base(mapper, taskRepository)
     {
         _mapper = mapper;
-        _genericRepository = genericRepository;
+        _taskRepository = taskRepository;
         _achievementService = achievementService;
     }
 
@@ -24,7 +24,7 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
     {
         var entity = _mapper.Map<TaskEntity>(model);
 
-        var resultEntity = await _genericRepository.Create(entity, cancellationToken);
+        var resultEntity = await _taskRepository.Create(entity, cancellationToken);
 
         await _achievementService.CheckAchievementToAdd(model.UserId, cancellationToken);
 
@@ -35,7 +35,7 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
     {
         var entity = _mapper.Map<TaskEntity>(model);
 
-        var resultEntity = await _genericRepository.Update(entity, cancellationToken);
+        var resultEntity = await _taskRepository.Update(entity, cancellationToken);
 
         await _achievementService.CheckAchievementToComplete(model.UserId, cancellationToken);
 

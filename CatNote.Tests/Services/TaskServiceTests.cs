@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CatNote.BLL.Interfaces;
 using CatNote.BLL.Models;
 using CatNote.BLL.Services;
 using CatNote.DAL.Entities;
@@ -11,17 +12,21 @@ using Xunit;
 
 namespace CatNote.Tests.Services;
 
-public class TaskGenericServiceTests
+public class TaskServiceTests
 {
     private readonly Mock<IGenericRepository<TaskEntity>> _mockGenericRepository;
     private readonly Mock<IMapper> _mockMapper;
     private readonly GenericService<TaskModel, TaskEntity> _taskService;
+    private readonly Mock<ITaskRepository> _mockTaskRepository;
+    private readonly Mock<IAchievementService> _mockAchievementRepository;
 
-    public TaskGenericServiceTests()
+    public TaskServiceTests()
     {
-        _mockGenericRepository = new Mock<IGenericRepository<TaskEntity>>();
+        _mockTaskRepository = new Mock<ITaskRepository>();
+        _mockAchievementRepository = new Mock<IAchievementService>();
         _mockMapper = new Mock<IMapper>();
-        _taskService = new GenericService<TaskModel, TaskEntity>(_mockMapper.Object, _mockGenericRepository.Object);//переделать в task service
+        //_taskService = new GenericService<TaskModel, TaskEntity>(_mockMapper.Object, _mockGenericRepository.Object);//переделать в task service
+        _taskService = new TaskService(_mockMapper.Object, _mockTaskRepository.Object, _mockAchievementRepository.Object);
     }
 
     [Fact]
