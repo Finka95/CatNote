@@ -26,7 +26,7 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
 
         var resultEntity = await _genericRepository.Create(entity, cancellationToken);
 
-        await _achievementService.CheckAchievement(model.UserId, cancellationToken);
+        await _achievementService.CheckAchievementToAdd(model.UserId, cancellationToken);
 
         return _mapper.Map<TaskModel>(resultEntity);
     }
@@ -37,7 +37,7 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
 
         var resultEntity = await _genericRepository.Update(entity, cancellationToken);
 
-        await _achievementService.CheckAchievement(model.UserId, cancellationToken);
+        await _achievementService.CheckAchievementToComplete(model.UserId, cancellationToken);
 
         return _mapper.Map<TaskModel>(resultEntity);
     }

@@ -9,11 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CatNote.DAL.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository : GenericRepository<UserEntity>, IUserRepository
 {
     private readonly ApplicationDbContext _applicationDbContext;
 
     public UserRepository(ApplicationDbContext applicationDbContext)
+    : base(applicationDbContext)
     {
         _applicationDbContext = applicationDbContext;
     }

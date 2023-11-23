@@ -36,25 +36,13 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
 {
     public Achievement Convert(AchievementEntity source, Achievement destination, ResolutionContext context)
     {
-        switch (source.AchievementType)
+        return new Achievement
         {
-            case AchievementType.ToAdd:
-                return new AchievementToAdd
-                {
-                    AchievementId = source.Id,
-                    Title = source.Title,
-                    Description = source.Description,
-                    TaskCount = source.TaskCount,
-                };
-            case AchievementType.CompletedTask:
-                return new AchievementCompleted
-                {
-                    AchievementId = source.Id,
-                    Title = source.Title,
-                    Description = source.Description,
-                    TaskCount = source.TaskCount
-                };
-            default: throw new ArgumentOutOfRangeException();
-        }
+            AchievementId = source.Id,
+            Title = source.Title,
+            Description = source.Description,
+            TaskCount = source.TaskCount,
+            AchievementType = source.AchievementType
+        };
     }
 }

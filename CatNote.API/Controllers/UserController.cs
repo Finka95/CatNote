@@ -16,12 +16,4 @@ public class UserController : GenericController<UserModel, UserDTO>
     {
 
     }
-
-    //[HttpGet("{id}")]
-    //public async Task<> GetById(int id, CancellationToken cancellationToken)
-    //{
-    //    var resultModel = await _service.GetById(id, cancellationToken);
-
-    //    return _mapper.Map<TDTO>(resultModel);
-    //}
 }

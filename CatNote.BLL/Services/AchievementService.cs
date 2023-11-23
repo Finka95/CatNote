@@ -8,60 +8,89 @@ using System.Text;
 using System.Threading.Tasks;
 using CatNote.BLL.Interfaces;
 using AutoMapper;
-using CatNote.BLL.AchievementTypes;
 using System.Diagnostics;
+using CatNote.BLL.AchievementTypes;
 using CatNote.DAL.Repositories;
+using CatNote.Domain.Enums;
+using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 
 namespace CatNote.BLL.Services;
 
 public class AchievementService : GenericService<Achievement, AchievementEntity>, IAchievementService
 {
     private readonly IMapper _mapper;
-    private readonly IGenericRepository<AchievementEntity> _genericRepository;
     private readonly IAchievementRepository _achievementRepository;
     private readonly IUserRepository _userRepository;
 
     public AchievementService(
         IMapper mapper, 
-        IGenericRepository<AchievementEntity> genericRepository, 
         IAchievementRepository achievementRepository,
         IUserRepository userRepository)
-        :base(mapper, genericRepository)
+        :base(mapper, achievementRepository)
     {
         _mapper = mapper;
-        _genericRepository = genericRepository;
         _achievementRepository = achievementRepository;
         _userRepository = userRepository;
     }
 
-    public async Task CheckAchievement(int userId, CancellationToken cancellationToken)
+    public async Task CheckAchievementToAdd(int userId, CancellationToken cancellationToken)
     {
-        var achievementsEntities = await _genericRepository.GetAll(cancellationToken);
-        var userAchievementsEntities = await _achievementRepository.GetAchievementsByUserId(userId, cancellationToken);
+        var userModel = await GetUserModel(userId, cancellationToken);
 
-        var exceptAchievementsEntities = achievementsEntities.ExceptBy(userAchievementsEntities.Select(x => x.Id), x => x.Id);
+        if (userModel == null)
+            return;
 
+        var achievement = await GetAchievementModel(userModel.Tasks!.Count(), AchievementType.ToAdd, cancellationToken);
+
+        if (achievement == null || userModel.Achievements.Contains(achievement))
+            return;
+
+        await AddAchievementToUser(achievement.AchievementId, userId, cancellationToken);
+    }
+
+    public async Task CheckAchievementToComplete(int userId, CancellationToken cancellationToken)
+    {
+        var userModel = await GetUserModel(userId, cancellationToken);
+
+        if (userModel == null)
+            return;
+        
+        var completedTaskCount = userModel!.Tasks!.Count(x => x.Status == TaskStatus.Done);
+
+        var achievement =
+            await GetAchievementModel(completedTaskCount, AchievementType.CompletedTask, cancellationToken);
+
+        if (achievement == null || userModel.Achievements.Contains(achievement))
+            return;
+
+        await AddAchievementToUser(achievement.AchievementId, userId, cancellationToken);
+    }
+
+    private async Task<UserModel?> GetUserModel(int userId, CancellationToken cancellationToken)
+    {
         var user = await _userRepository.GetUserByIdWithTasksAchievements(userId, cancellationToken);
-
         var userModel = _mapper.Map<UserModel>(user);
-        var achievements = _mapper.Map<List<Achievement>>(exceptAchievementsEntities);
 
-        var newAchievementsForConnection = new List<Achievement>();
+        if (userModel?.Tasks == null) //нужно ли тут
+            return null;
 
-        foreach (var achievement in achievements)
-        {
+        return userModel;
+    }
 
-            var result = achievement.Execute(userModel);
+    private async Task<Achievement?> GetAchievementModel(int taskCount, AchievementType achievementType,
+        CancellationToken cancellationToken)
+    {
+        var achievementsEntity =
+            await _achievementRepository.GetAchievementByTaskCountAchievementType(taskCount, achievementType, cancellationToken);
 
-            if (result)
-            {
-                newAchievementsForConnection.Add(achievement);
-            }
-        }
+        var achievement = _mapper.Map<Achievement>(achievementsEntity);
 
-        if (newAchievementsForConnection.Count != 0)
-        {
-            await _achievementRepository.AddConnection(_mapper.Map<List<AchievementEntity>>(newAchievementsForConnection), userId, cancellationToken);
-        }
+        return achievement;
+    }
+
+    private async Task AddAchievementToUser(int achievementId, int userId,
+        CancellationToken cancellationToken)
+    {
+        await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievementId, userId, cancellationToken);
     }
 }

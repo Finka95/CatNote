@@ -2,40 +2,45 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using CatNote.DAL.Entities;
+using CatNote.Domain.Enums;
 
 namespace CatNote.DAL.Repositories;
 
-public class AchievementRepository : IAchievementRepository
+public class AchievementRepository : GenericRepository<AchievementEntity>, IAchievementRepository
 {
     private readonly ApplicationDbContext _applicationDbContext;
 
     public AchievementRepository(ApplicationDbContext applicationDbContext)
+    : base(applicationDbContext)
     {
         _applicationDbContext = applicationDbContext;
     }
 
-    public async Task<IEnumerable<AchievementEntity>?> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
+    public async Task AddConnectionBetweenUserAndAchievement(int achievementId, int userId, CancellationToken cancellationToken)
     {
-        var achievementEntity = await _applicationDbContext.Users.Include(x => x.Achievements)
-            .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        var userTask = _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        var achievementTask = _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.Id == achievementId, cancellationToken);
 
-        return achievementEntity?.Achievements?.ToList();
-    }
+        await Task.WhenAll(userTask, achievementTask);
 
-    public async Task AddConnection(List<AchievementEntity> achievementEntities, int userId, CancellationToken cancellationToken)
-    {
-        var userEntity = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        var userEntity = await userTask;
+        var achievementEntities = await achievementTask;
 
-        if (userEntity != null)
+        if (userEntity != null && achievementEntities != null)
         {
-            foreach (var entity in achievementEntities)
-            {
-                userEntity.Achievements?.Add(entity);
-                entity.Users?.Add(userEntity);
-            }
+            userEntity.Achievements?.Add(achievementEntities);
+            achievementEntities.Users?.Add(userEntity);
         }
         
 
         _applicationDbContext?.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<AchievementEntity?> GetAchievementByTaskCountAchievementType(int taskCount, AchievementType achievementType,
+        CancellationToken cancellationToken)
+    {
+        var achievement = await _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.AchievementType == achievementType && x.TaskCount == taskCount, cancellationToken);
+
+        return achievement;
     }
 }

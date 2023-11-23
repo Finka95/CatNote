@@ -1,9 +1,12 @@
 ﻿using CatNote.DAL.Entities;
+using CatNote.Domain.Enums;
 
 namespace CatNote.DAL.Interfaces;
 
-public interface IAchievementRepository
+public interface IAchievementRepository : IGenericRepository<AchievementEntity>
 {
-    Task<IEnumerable<AchievementEntity>?> GetAchievementsByUserId(int userId, CancellationToken cancellationToken);
-    Task AddConnection(List<AchievementEntity> achievements, int userId, CancellationToken cancellationToken);
+    Task AddConnectionBetweenUserAndAchievement(int achievementId, int userId, CancellationToken cancellationToken);
+
+    Task<AchievementEntity?> GetAchievementByTaskCountAchievementType(int taskCount, AchievementType achievementType,
+        CancellationToken cancellationToken);
 }
