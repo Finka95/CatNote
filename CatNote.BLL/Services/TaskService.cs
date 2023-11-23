@@ -12,7 +12,10 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
     private readonly IMapper _mapper;
     private readonly ITaskRepository _taskRepository;
 
-    public TaskService(IMapper mapper, ITaskRepository taskRepository, IAchievementService achievementService)
+    public TaskService(
+        IMapper mapper,
+        ITaskRepository taskRepository,
+        IAchievementService achievementService)
         :base(mapper, taskRepository)
     {
         _mapper = mapper;
