@@ -14,19 +14,17 @@ namespace CatNote.Tests.Services;
 
 public class TaskServiceTests
 {
-    private readonly Mock<IGenericRepository<TaskEntity>> _mockGenericRepository;
     private readonly Mock<IMapper> _mockMapper;
-    private readonly GenericService<TaskModel, TaskEntity> _taskService;
+    private readonly TaskService _taskService;
     private readonly Mock<ITaskRepository> _mockTaskRepository;
-    private readonly Mock<IAchievementService> _mockAchievementRepository;
+    private readonly Mock<IAchievementService> _mockAchievementService;
 
     public TaskServiceTests()
     {
         _mockTaskRepository = new Mock<ITaskRepository>();
-        _mockAchievementRepository = new Mock<IAchievementService>();
+        _mockAchievementService = new Mock<IAchievementService>();
         _mockMapper = new Mock<IMapper>();
-        //_taskService = new GenericService<TaskModel, TaskEntity>(_mockMapper.Object, _mockGenericRepository.Object);//переделать в task service
-        _taskService = new TaskService(_mockMapper.Object, _mockTaskRepository.Object, _mockAchievementRepository.Object);
+        _taskService = new TaskService(_mockMapper.Object, _mockTaskRepository.Object, _mockAchievementService.Object);
     }
 
     [Fact]
@@ -39,7 +37,7 @@ public class TaskServiceTests
         var taskEntity = TaskData.TaskEntity;
 
         SetupMapper(taskEntity, taskModel);
-        _mockGenericRepository.Setup(x => x.Create(It.IsAny<TaskEntity>(), CancellationToken.None)).ReturnsAsync(value: TaskData.TaskEntity);
+        _mockTaskRepository.Setup(x => x.Create(It.IsAny<TaskEntity>(), CancellationToken.None)).ReturnsAsync(value: TaskData.TaskEntity);
         SetupMapper(taskModel, taskEntity);
 
         //Act
@@ -54,7 +52,7 @@ public class TaskServiceTests
         result.Date.Should().Be(taskEntity.Date);
         result.Status.Should().Be(taskEntity.Status);
 
-        _mockGenericRepository.Verify(x => x.Create(It.IsAny<TaskEntity>(), cancellationToken), Times.Once);
+        _mockTaskRepository.Verify(x => x.Create(It.IsAny<TaskEntity>(), cancellationToken), Times.Once);
         _mockMapper.Verify(x => x.Map<TaskModel>(It.IsAny<TaskEntity>()), Times.Once());
     }
 
@@ -70,7 +68,7 @@ public class TaskServiceTests
         await _taskService.Delete(taskId, cancellationToken);
 
         //Assert
-        _mockGenericRepository.Verify(x => x.Delete(taskId, cancellationToken), Times.Once);
+        _mockTaskRepository.Verify(x => x.Delete(taskId, cancellationToken), Times.Once);
     }
 
     [Fact]
@@ -84,14 +82,14 @@ public class TaskServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(taskEntityList);
+        _mockTaskRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(taskEntityList);
         SetupMapper(taskModelList, taskEntityList);
 
         //Act
         var result = await _taskService.GetAll(cancellationToken);
 
         //Assert
-        _mockGenericRepository.Verify(x => x.GetAll(cancellationToken), Times.Once);
+        _mockTaskRepository.Verify(x => x.GetAll(cancellationToken), Times.Once);
 
         result.Should().BeOfType<List<TaskModel>>()
             .And.Contain(taskModel);
@@ -111,14 +109,14 @@ public class TaskServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync(taskEntity);
+        _mockTaskRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync(taskEntity);
         SetupMapper(taskModel, taskEntity);
 
         //Act
         var result = await _taskService.GetById(taskId, cancellationToken);
 
         //Assert
-        _mockGenericRepository.Verify(x => x.GetById(taskId, cancellationToken), Times.Once);
+        _mockTaskRepository.Verify(x => x.GetById(taskId, cancellationToken), Times.Once);
 
         result.Should().BeOfType<TaskModel>();
         result.Id.Should().Be(taskModel.Id);
@@ -137,7 +135,7 @@ public class TaskServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync((TaskEntity?)null!);
+        _mockTaskRepository.Setup(x => x.GetById(taskId, cancellationToken)).ReturnsAsync((TaskEntity?)null!);
 
         //Act
         var result = await _taskService.GetById(taskId, cancellationToken);
@@ -160,10 +158,10 @@ public class TaskServiceTests
         SetupMapper(taskEntity, taskModel);
         SetupMapper(taskModelResult, taskEntityResult); ;
 
-        _mockGenericRepository.Setup(x => x.GetById(taskModel.Id, cancellationToken))
+        _mockTaskRepository.Setup(x => x.GetById(taskModel.Id, cancellationToken))
             .ReturnsAsync(taskEntity);
 
-        _mockGenericRepository.Setup(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken))
+        _mockTaskRepository.Setup(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken))
             .ReturnsAsync(taskEntityResult);
 
         //Act
@@ -171,7 +169,7 @@ public class TaskServiceTests
 
         //Assert
         _mockMapper.Verify(x => x.Map<TaskEntity>(It.IsAny<TaskModel>()), Times.Once);
-        _mockGenericRepository.Verify(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken), Times.Once);
+        _mockTaskRepository.Verify(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken), Times.Once);
 
         result.Should().BeOfType<TaskModel>();
         result.Id.Should().Be(taskModelResult.Id);
@@ -179,7 +177,7 @@ public class TaskServiceTests
         result.Date.Should().Be(taskModelResult.Date);
         result.Status.Should().Be(taskModelResult.Status);
 
-        _mockMapper.Verify(x => x.Map<TaskModel>(It.IsAny<TaskEntity>()), Times.Exactly(2));
+        _mockMapper.Verify(x => x.Map<TaskModel>(It.IsAny<TaskEntity>()), Times.Once);
     }
 
     [Fact]
@@ -193,9 +191,9 @@ public class TaskServiceTests
 
         SetupMapper(taskEntity, taskModel);
 
-        _mockGenericRepository.Setup(x => x.GetById(taskModel.Id, cancellationToken))
+        _mockTaskRepository.Setup(x => x.GetById(taskModel.Id, cancellationToken))
             .ReturnsAsync((TaskEntity?)null!);
-        _mockGenericRepository.Setup(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken))
+        _mockTaskRepository.Setup(x => x.Update(It.IsAny<TaskEntity>(), cancellationToken))
             .ReturnsAsync((TaskEntity?)null!);
 
         //Act & Assert

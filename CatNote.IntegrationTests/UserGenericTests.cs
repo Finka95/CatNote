@@ -1,4 +1,4 @@
-using AutoFixture.Xunit2;
+﻿using AutoFixture.Xunit2;
 using CatNote.API.DTO;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -9,11 +9,11 @@ using Xunit;
 namespace CatNote.IntegrationTests;
 
 [Collection("Sequential")]
-public class IntegrationTests
+public class UserGenericTests
 {
     private readonly HttpClient _client;
 
-    public IntegrationTests()
+    public UserGenericTests()
     {
         var factory = new TestingWebAppFactory();
 
@@ -40,7 +40,6 @@ public class IntegrationTests
 
         user.Should().BeOfType<UserDTO>().Which.UserName.Should().Be(name);
         user?.Id.Should().Be(id);
-        
     }
 
     [Fact]

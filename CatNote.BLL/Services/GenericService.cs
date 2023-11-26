@@ -11,6 +11,7 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
 {
     private readonly IMapper _mapper;
     private readonly IGenericRepository<TEntity> _genericRepository;
+    private IUserRepository _userRepository;
 
     public GenericService(IMapper mapper, IGenericRepository<TEntity> genericRepository)
     {
@@ -39,7 +40,7 @@ public class GenericService<TModel, TEntity> : IGenericService<TModel>
     {
         var entity = _mapper.Map<TEntity>(model);
 
-        var findUser = await GetById(entity.Id, cancellationToken);
+        var findUser = await GetById(entity.Id, cancellationToken); //Поменять потом
 
         if (findUser != null)
         {

@@ -23,12 +23,17 @@ public class AchievementRepository : GenericRepository<AchievementEntity>, IAchi
 
         if (userEntity != null && achievementEntities != null)
         {
-            userEntity.Achievements?.Add(achievementEntities);
-            achievementEntities.Users?.Add(userEntity);
-        }
-        
+            userEntity.Achievements!.Add(achievementEntities);
+            achievementEntities.Users!.Add(userEntity);
 
-        _applicationDbContext?.SaveChangesAsync(cancellationToken);
+            dbContext.AchievementsUsers.Add(new AchievementUserEntity
+            {
+                UserId = userId,
+                AchievementId = achievementId
+            });
+        }
+
+        await _applicationDbContext!.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<AchievementEntity?> GetAchievementByTaskCountAchievementType(int taskCount, AchievementType achievementType,

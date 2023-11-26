@@ -37,9 +37,9 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
     {
         var user = await GetUserModelById(userId, cancellationToken);
 
-        var achievement = await GetAchievementByParameters(user.Tasks!.Count(), AchievementType.Add, cancellationToken);
+        var achievement = await GetAchievementByParameters(user!.Tasks!.Count(), AchievementType.Add, cancellationToken);
 
-        if (user == null || achievement == null || user.Achievements.Contains(achievement))
+        if (user == null || achievement == null || user!.Achievements!.Contains(achievement))
             return;
 
         await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievement.Id, userId, cancellationToken);

@@ -8,5 +8,5 @@ public class AchievementEntity : BaseEntity
     public string? Description { get; set; }
     public AchievementType Type { get; set; }
     public int TaskCount { get; set; }
-    public ICollection<UserEntity>? Users { get; set; }
+    public ICollection<UserEntity>? Users { get; set; } = new List<UserEntity>();
 }

@@ -3,6 +3,7 @@ using CatNote.BLL.Interfaces;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
+using CatNote.Domain.Exceptions;
 
 namespace CatNote.BLL.Services;
 
@@ -38,10 +39,19 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
     {
         var entity = _mapper.Map<TaskEntity>(model);
 
-        var resultEntity = await _taskRepository.Update(entity, cancellationToken);
+        var findTask = await _taskRepository.GetById(model.Id, cancellationToken);
 
-        await _achievementService.CheckAchievementToComplete(model.UserId, cancellationToken);
+        if (findTask != null)
+        {
+            var resultEntity = await _taskRepository.Update(entity, cancellationToken);
 
-        return _mapper.Map<TaskModel>(resultEntity);
+            await _achievementService.CheckAchievementToComplete(model.UserId, cancellationToken);
+
+            return _mapper.Map<TaskModel>(resultEntity);
+        }
+        else
+        {
+            throw new NotFoundException("Entity with Id {element.Id} not found.");
+        }
     }
 }
