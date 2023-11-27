@@ -206,4 +206,3 @@ public class TaskServiceTests
         _mockMapper.Setup(x => x.Map<T1>(startElement)).Returns(returnElement);
     }
 }
-

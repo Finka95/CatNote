@@ -14,5 +14,4 @@ public class TaskController : GenericController<TaskModel, TaskDTO>
         : base(mapper, service)
     {
     }
-
 }
