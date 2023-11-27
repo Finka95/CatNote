@@ -26,9 +26,7 @@ public class UserController : GenericController<UserModel, UserDTO>
     {
         var users = await _service.GetUsersByAchievementPoints(cancellationToken);
 
-        var usersDTO = _mapper.Map<List<UserDTO>>(users);
-
-        return usersDTO;
+        return _mapper.Map<List<UserDTO>>(users);
     }
 
 }
