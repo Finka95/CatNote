@@ -35,15 +35,15 @@ public class AchievementServiceTests
         //Arrange
         var cancellationToken = new CancellationToken();
 
-        var achievementModel = AchievementData.AchievementModel;
-        var achievementEntity = AchievementData.AchievementEntity;
+        var achievementModel = AchievementData.AchievementAddModel;
+        var achievementEntity = AchievementData.AchievementAddEntity;
 
         SetupMapper(achievementEntity, achievementModel);
-        _mockAchievementRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(value: AchievementData.AchievementEntity);
+        _mockAchievementRepository.Setup(x => x.Create(It.IsAny<AchievementEntity>(), CancellationToken.None)).ReturnsAsync(value: AchievementData.AchievementAddEntity);
         SetupMapper(achievementModel, achievementEntity);
 
         //Act
-        var result = await _achievementService.Create(AchievementData.AchievementModel, cancellationToken);
+        var result = await _achievementService.Create(AchievementData.AchievementAddModel, cancellationToken);
 
         //Assert
         _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<Achievement>()), Times.Once());
@@ -76,10 +76,10 @@ public class AchievementServiceTests
     public async Task GetAll_GetAllAchievements_AchievementModelList()
     {
         //Arrange
-        var achievementEntityList = new List<AchievementEntity> { AchievementData.AchievementEntity };
+        var achievementEntityList = new List<AchievementEntity> { AchievementData.AchievementAddEntity };
 
         var achievementModelList = new List<Achievement>();
-        var achievementModel = AchievementData.AchievementModel;
+        var achievementModel = AchievementData.AchievementAddModel;
         achievementModelList.Add(achievementModel);
 
         var cancellationToken = new CancellationToken();
@@ -105,9 +105,9 @@ public class AchievementServiceTests
         //Arrange
         var achievementId = 1;
 
-        var achievementEntity = AchievementData.AchievementEntity;
+        var achievementEntity = AchievementData.AchievementAddEntity;
 
-        var achievementModel = AchievementData.AchievementModel;
+        var achievementModel = AchievementData.AchievementAddModel;
 
         var cancellationToken = new CancellationToken();
 
@@ -148,6 +148,7 @@ public class AchievementServiceTests
     [Fact]
     public async Task Get_CheckAchievementToAddByCorrectIdPass_Success()
     {
+        //Arrange
         var cancellationToken = new CancellationToken();
 
         var user = new UserModel
@@ -156,13 +157,7 @@ public class AchievementServiceTests
             UserName = "Default",
             Tasks = new List<TaskModel>
             {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.ToDo,
-                    Date = DateTime.Today
-                }
+                TaskData.TaskModel
             },
             Achievements = new List<Achievement>()
         };
@@ -173,13 +168,7 @@ public class AchievementServiceTests
             UserName = "Default",
             Tasks = new List<TaskEntity>
             {
-                new()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.ToDo,
-                    Date = DateTime.Today
-                }
+                TaskData.TaskEntity
             },
             Achievements = new List<AchievementEntity>()
         };
@@ -189,8 +178,8 @@ public class AchievementServiceTests
         _mockUserRepository.Setup(x => x.GetUserByIdWithTasksAchievements(1, cancellationToken))
             .ReturnsAsync(userEntity);
 
-        var achievement = AchievementData.AchievementModel;
-        var achievementEntity = AchievementData.AchievementEntity;
+        var achievement = AchievementData.AchievementAddModel;
+        var achievementEntity = AchievementData.AchievementAddEntity;
 
         SetupMapper(achievement, achievementEntity);
 
@@ -198,8 +187,10 @@ public class AchievementServiceTests
             .GetAchievementByTaskCountAchievementType(1, AchievementType.Add, cancellationToken))
             .ReturnsAsync(achievementEntity);
 
+         //Act
         await _achievementService.CheckAchievementToAdd(1, cancellationToken);
 
+        //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Once);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Add, cancellationToken), Times.Once);
         _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
@@ -209,64 +200,48 @@ public class AchievementServiceTests
     [Fact]
     public async Task Get_CheckAchievementToCompleteByCorrectIdPass_Success()
     {
+        //Arrange
         var cancellationToken = new CancellationToken();
 
-        var user = new UserModel
+        var user = UserData.UserModel;
+        user.Tasks = new List<TaskModel>
         {
-            Id = 1,
-            UserName = "Default",
-            Tasks = new List<TaskModel>
+            new ()
             {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.Done,
-                    Date = DateTime.Today
-                }
-            },
-            Achievements = new List<Achievement>()
+                Id = 1,
+                Title = "Default",
+                Status = TaskStatus.Done,
+                Date = DateTime.Today,
+                UserId = 1
+            }
         };
 
-        var userEntity = new UserEntity
+        user.Achievements = new List<Achievement>();
+
+        var userEntity = UserData.UserEntity;
+
+        userEntity.Tasks = new List<TaskEntity>
         {
-            Id = 1,
-            UserName = "Default",
-            Tasks = new List<TaskEntity>
+            new ()
             {
-                new()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.Done,
-                    Date = DateTime.Today
-                }
-            },
-            Achievements = new List<AchievementEntity>()
+                Id = 1,
+                Title = "Default",
+                Status = TaskStatus.Done,
+                Date = DateTime.Today,
+                UserId = 1
+            }
         };
+
+        userEntity.Achievements = new List<AchievementEntity>();
 
         SetupMapper(user, userEntity);
 
         _mockUserRepository.Setup(x => x.GetUserByIdWithTasksAchievements(1, cancellationToken))
             .ReturnsAsync(userEntity);
 
-        var achievement = new Achievement
-        {
-            Id = 1,
-            Title = "Default",
-            Description = "Default",
-            TaskCount = 1,
-            Type = AchievementType.Completed
-        };
+        var achievement = AchievementData.AchievementCompletedModel;
 
-        var achievementEntity = new AchievementEntity
-        {
-            Id = 1,
-            Title = "Default",
-            Description = "Default",
-            TaskCount = 1,
-            Type = AchievementType.Completed
-        };
+        var achievementEntity = AchievementData.AchievementCompletedEntity;
 
         SetupMapper(achievement, achievementEntity);
 
@@ -274,8 +249,10 @@ public class AchievementServiceTests
             .GetAchievementByTaskCountAchievementType(1, AchievementType.Completed, cancellationToken))
             .ReturnsAsync(achievementEntity);
 
+        //Act
         await _achievementService.CheckAchievementToComplete(1, cancellationToken);
 
+        //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Once);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Completed, cancellationToken), Times.Once);
         _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
@@ -285,65 +262,34 @@ public class AchievementServiceTests
     [Fact]
     public async Task Get_CheckAchievementToAddWithNoAchievement_AddConnectionBetweenUserAndAchievementNever()
     {
+        //Arrange
         var cancellationToken = new CancellationToken();
 
-        var achievement = new Achievement
+        var achievement = AchievementData.AchievementAddModel;
+
+        var achievementEntity = AchievementData.AchievementAddEntity;
+        achievementEntity.Users = new List<UserEntity>();
+
+        var user = UserData.UserModel;
+
+        user.Tasks = new List<TaskModel>
         {
-            Id = 1,
-            Title = "Default",
-            Description = "Default",
-            Type = AchievementType.Add,
-            TaskCount = 1
+            TaskData.TaskModel
+        };
+        user.Achievements = new List<Achievement>
+        {
+            achievement
         };
 
-        var achievementEntity = new AchievementEntity
-        {
-            Id = 1,
-            Title = "Default",
-            Description = "Default",
-            TaskCount = 1,
-            Type = AchievementType.Add,
-            Users = new List<UserEntity>()
-        };
+        var userEntity = UserData.UserEntity;
 
-        var user = new UserModel
+        userEntity.Tasks = new List<TaskEntity>
         {
-            Id = 1,
-            UserName = "Default",
-            Tasks = new List<TaskModel>
-            {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.ToDo,
-                    Date = DateTime.Today
-                }
-            },
-            Achievements = new List<Achievement>
-            {
-                achievement
-            }
+            TaskData.TaskEntity
         };
-
-        var userEntity = new UserEntity
+        userEntity.Achievements = new List<AchievementEntity>
         {
-            Id = 1,
-            UserName = "Default",
-            Tasks = new List<TaskEntity>
-            {
-                new()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.ToDo,
-                    Date = DateTime.Today
-                }
-            },
-            Achievements = new List<AchievementEntity>
-            {
-                achievementEntity
-            }
+            achievementEntity
         };
 
         SetupMapper(user, userEntity);
@@ -359,8 +305,10 @@ public class AchievementServiceTests
                 .GetAchievementByTaskCountAchievementType(1, AchievementType.Add, cancellationToken))
             .ReturnsAsync(achievementEntity);
 
+        //Act
         await _achievementService.CheckAchievementToAdd(1, cancellationToken);
 
+        //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Never);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Add, cancellationToken), Times.Once);
         _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
@@ -370,64 +318,47 @@ public class AchievementServiceTests
     [Fact]
     public async Task Get_CheckAchievementToCompletedWithNoAchievement_AddConnectionBetweenUserAndAchievementNever()
     {
+        //Arrange
         var cancellationToken = new CancellationToken();
 
-        var achievement = new Achievement
-        {
-            Id = 1,
-            Title = "Default",
-            Description = "Default",
-            TaskCount = 1,
-            Type = AchievementType.Completed
-        };
+        var achievement = AchievementData.AchievementCompletedModel;
 
-        var achievementEntity = new AchievementEntity
-        {
-            Id = 1,
-            Title = "Default",
-            Description = "Default",
-            TaskCount = 1,
-            Type = AchievementType.Completed
-        };
+        var achievementEntity = AchievementData.AchievementCompletedEntity;
 
-        var user = new UserModel
+        var user = UserData.UserModel;
+
+        user.Tasks = new List<TaskModel>
         {
-            Id = 1,
-            UserName = "Default",
-            Tasks = new List<TaskModel>
+            new()
             {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.Done,
-                    Date = DateTime.Today
-                }
-            },
-            Achievements = new List<Achievement>
-            {
-                achievement
+                Id = 1,
+                Title = "Default",
+                Status = TaskStatus.Done,
+                Date = DateTime.Today,
+                UserId = 1
             }
         };
-
-        var userEntity = new UserEntity
+        user.Achievements = new List<Achievement>
         {
-            Id = 1,
-            UserName = "Default",
-            Tasks = new List<TaskEntity>
+            achievement
+        };
+
+        var userEntity = UserData.UserEntity;
+
+        userEntity.Tasks = new List<TaskEntity>
+        {
+            new ()
             {
-                new()
-                {
-                    Id = 1,
-                    Title = "Default",
-                    Status = TaskStatus.Done,
-                    Date = DateTime.Today
-                }
-            },
-            Achievements = new List<AchievementEntity>
-            {
-                achievementEntity
+                Id = 1,
+                Title = "Default",
+                Status = TaskStatus.Done,
+                Date = DateTime.Today,
+                UserId = 1
             }
+        };
+        userEntity.Achievements = new List<AchievementEntity>
+        {
+            achievementEntity
         };
 
         SetupMapper(user, userEntity);
@@ -441,8 +372,10 @@ public class AchievementServiceTests
                 .GetAchievementByTaskCountAchievementType(1, AchievementType.Completed, cancellationToken))
             .ReturnsAsync(achievementEntity);
 
+        //Act
         await _achievementService.CheckAchievementToComplete(1, cancellationToken);
 
+        //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Never);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Completed, cancellationToken), Times.Once);
         _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
@@ -453,8 +386,8 @@ public class AchievementServiceTests
     public async Task Update_UpdateAchievementByCorrectIdPass_AchievementModel()
     {
         //Arrange
-        var achievementModel = AchievementData.AchievementModel;
-        var achievementEntity = AchievementData.AchievementEntity;
+        var achievementModel = AchievementData.AchievementAddModel;
+        var achievementEntity = AchievementData.AchievementAddEntity;
 
         var achievementEntityResult = new AchievementEntity { Id = 1, Title = "default2", Description = "default2" };
 
@@ -491,8 +424,8 @@ public class AchievementServiceTests
     public async Task Update_UpdateAchievementByIncorrectIdPass_NotFoundException()
     {
         //Arrange
-        var achievementModel = AchievementData.AchievementModel;
-        var achievementEntity = AchievementData.AchievementEntity;
+        var achievementModel = AchievementData.AchievementAddModel;
+        var achievementEntity = AchievementData.AchievementAddEntity;
 
         var cancellationToken = new CancellationToken();
 

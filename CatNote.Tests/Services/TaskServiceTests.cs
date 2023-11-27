@@ -150,8 +150,8 @@ public class TaskServiceTests
         //Arrange
         var taskModel = TaskData.TaskModel;
         var taskEntity = TaskData.TaskEntity;
-        var taskEntityResult = new TaskEntity { Id = 1, Title = "default2", Date = DateTime.UtcNow, Status = Domain.Enums.TaskStatus.Done };
-        var taskModelResult = new TaskModel { Id = 1, Title = "default2", Date = DateTime.UtcNow, Status = Domain.Enums.TaskStatus.Done };
+        var taskEntityResult = new TaskEntity { Id = 1, Title = "default2", Date = DateTime.UtcNow, Status = Domain.Enums.TaskStatus.ToDo };
+        var taskModelResult = new TaskModel { Id = 1, Title = "default2", Date = DateTime.UtcNow, Status = Domain.Enums.TaskStatus.ToDo };
         var cancellationToken = new CancellationToken();
 
         SetupMapper(taskModel, taskEntity);
