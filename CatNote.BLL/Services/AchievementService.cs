@@ -66,10 +66,14 @@ public class AchievementService : GenericService<AchievementModel, AchievementEn
     public async Task CheckAchievementToComplete(int userId, CancellationToken cancellationToken)
     {
         var user = await GetUserModelById(userId, cancellationToken);
+
+        if (user == null || user.Tasks == null)
+            return;
+
         var completedTaskCount = user!.Tasks!.Count(x => x.Status == TaskStatus.Done);
         var achievement = await GetAchievementByParameters(completedTaskCount, AchievementType.Completed, cancellationToken);
 
-        if (user == null || completedTaskCount == 0 || achievement == null || user.Achievements!.Contains(achievement))
+        if (completedTaskCount == 0 || achievement == null || user.Achievements!.Contains(achievement))
             return;
 
         await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievement.Id, userId, cancellationToken);

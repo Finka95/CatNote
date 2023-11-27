@@ -13,11 +13,11 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<AchievementUserEntity> AchievementsUsers { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(builder);
+        base.OnModelCreating(modelBuilder);
 
-        builder.Entity<AchievementUserEntity>(b =>
+        modelBuilder.Entity<AchievementUserEntity>(b =>
         {
             b.HasKey(x => new
             {
