@@ -9,5 +9,5 @@ public interface IAchievementRepository : IGenericRepository<AchievementEntity>
     Task<AchievementEntity?> GetAchievementByTaskCountAchievementType(int taskCount, AchievementType achievementType,
         CancellationToken cancellationToken);
 
-    Task<List<AchievementEntity>> GetAchievementsByUser(UserEntity user, CancellationToken cancellationToken);
+    Task<List<AchievementEntity>> GetAchievementsByUser(UserEntity userEntity, CancellationToken cancellationToken);
 }
