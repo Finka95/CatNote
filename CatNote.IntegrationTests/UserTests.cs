@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using AutoFixture.Xunit2;
 using CatNote.API.DTO;
 using CatNote.Domain.Enums;
 using FluentAssertions;
@@ -23,73 +24,76 @@ public class UserTests
         _client = factory.CreateClient();
     }
 
-    [Fact]
-    public async Task Get_UsersFoundList_UserDTO()
+    [Theory]
+    [AutoData]
+    public async Task Get_UsersFoundList_UserDTO(int userId1, int userId2, int achievementId1, int achievementId2, int taskId1, int taskId2)
     {
         //Arrange
-        var userDTO1 = new UserDTO()
+        var userDTO1 = new UserDTO
         {
-            Id = 1,
+            Id = userId1,
             UserName = "Default1",
-            Achievements = new List<AchievementDTO>
-            {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Title1",
-                    Description = "Description1",
-                    Point = 1,
-                    Type = AchievementType.Add,
-                    TaskCount = 1
-                },
-                new ()
-                {
-                    Id = 2,
-                    Title = "Title2",
-                    Description = "Description2",
-                    Point = 3,
-                    Type = AchievementType.Add,
-                    TaskCount = 1
-                }
-            },
-            Tasks = new List<TaskDTO>
-            {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Title",
-                    Status = TaskStatus.ToDo,
-                    Date = DateTime.Today
-                }
-            }
         };
 
-        var userDTO2 = new UserDTO()
+        var achievement1 = new AchievementDTO
         {
-            Id = 2,
+            Id = achievementId1,
+            Title = "Title1",
+            Description = "Description1",
+            Point = 3,
+            Type = AchievementType.Add,
+            TaskCount = 1
+        };
+
+        var task1 = new TaskDTO
+        {
+            Id = taskId1,
+            Title = "Title",
+            Status = TaskStatus.ToDo,
+            Date = DateTime.Today
+        };
+
+        userDTO1.Achievements = new List<AchievementDTO>
+        {
+            achievement1
+        };
+        userDTO1.Tasks = new List<TaskDTO>
+        {
+            task1
+        };
+
+        var userDTO2 = new UserDTO
+        {
+            Id = userId2,
             UserName = "Default2",
-            Achievements = new List<AchievementDTO>
-            {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Title1",
-                    Description = "Description1",
-                    Point = 1,
-                    Type = AchievementType.Add,
-                    TaskCount = 1
-                }
-            },
-            Tasks = new List<TaskDTO>
-            {
-                new ()
-                {
-                    Id = 1,
-                    Title = "Title",
-                    Status = TaskStatus.ToDo,
-                    Date = DateTime.Today
-                }
-            }
+        };
+
+        var achievement2 = new AchievementDTO
+        {
+            Id = achievementId2,
+            Title = "Title1",
+            Description = "Description1",
+            Point = 1,
+            Type = AchievementType.Add,
+            TaskCount = 1
+        };
+
+        var task2 = new TaskDTO
+        {
+            Id = taskId2,
+            Title = "Title",
+            Status = TaskStatus.ToDo,
+            Date = DateTime.Today
+        };
+
+        userDTO2.Achievements = new List<AchievementDTO>
+        {
+            achievement2
+        };
+
+        userDTO2.Tasks = new List<TaskDTO>
+        {
+            task2
         };
 
         //Act
@@ -101,9 +105,11 @@ public class UserTests
         result.EnsureSuccessStatusCode();
         var response = await result.Content.ReadFromJsonAsync<List<UserDTO>>();
 
-        response!.First().Id.Should().Be(userDTO1.Id);
-        response!.First().UserName.Should().Be(userDTO1.UserName);
-        response!.Last().Id.Should().Be(userDTO2.Id);
-        response!.Last().UserName.Should().Be(userDTO2.UserName);
+        response.Should().NotBeNull();
+
+        var rightResponse = response!.OrderByDescending(x => x.Achievements?.Select(y => y.Point).Sum()).ToList();
+
+        response.Should().BeOfType<List<UserDTO>>();
+        response.Should().Equal(rightResponse);
     }
 }
