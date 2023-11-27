@@ -22,12 +22,12 @@ public class UserService : GenericService<UserModel, UserEntity>, IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<List<Achievement>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
+    public async Task<List<UserModel>> GetUsersByAchievementPoints(CancellationToken cancellationToken)
     {
-        var achievementsEntity = await _userRepository.GetAchievementsByUserId(userId, cancellationToken);
+        var usersEntity = await _userRepository.GetUsersWithAchievements(cancellationToken);
 
-        var achievements = _mapper.Map<List<Achievement>>(achievementsEntity);
+        var users = _mapper.Map<List<UserModel>>(usersEntity);
 
-        return achievements;
+        return users.OrderByDescending(x => x.Achievements?.Select(y => y.Point).Sum()).ToList();
     }
 }

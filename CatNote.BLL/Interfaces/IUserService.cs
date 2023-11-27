@@ -5,5 +5,5 @@ namespace CatNote.BLL.Interfaces;
 
 public interface IUserService : IGenericService<UserModel>
 {
-    public Task<List<Achievement>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken);
+    Task<List<UserModel>> GetUsersByAchievementPoints(CancellationToken cancellationToken);
 }

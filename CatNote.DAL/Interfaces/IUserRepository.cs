@@ -10,5 +10,5 @@ namespace CatNote.DAL.Interfaces;
 public interface IUserRepository : IGenericRepository<UserEntity>
 {
     Task<UserEntity?> GetUserByIdWithTasksAchievements(int userId, CancellationToken  cancellationToken);
-    Task<List<AchievementEntity>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken);
+    Task<List<UserEntity>> GetUsersWithAchievements(CancellationToken cancellationToken);
 }

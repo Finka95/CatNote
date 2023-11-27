@@ -21,11 +21,13 @@ public class UserController : GenericController<UserModel, UserDTO>
         _service = service;
     }
 
-    [HttpGet("{id}/achievements")]
-    public async Task<List<AchievementDTO>> GetAchievementsByUserId(int id, CancellationToken cancellationToken)
+    [HttpGet("achievements/points")]
+    public async Task<List<UserDTO>> GetUserByPoints(CancellationToken cancellationToken)
     {
-        var resultModel = await _service.GetAchievementsByUserId(id, cancellationToken);
+        var users = await _service.GetUsersByAchievementPoints(cancellationToken);
 
-        return _mapper.Map<List<AchievementDTO>>(resultModel);
+        var usersDTO = _mapper.Map<List<UserDTO>>(users);
+
+        return usersDTO;
     }
 }

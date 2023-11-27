@@ -26,6 +26,7 @@ public class AchievementEntityResolver : ITypeConverter<Achievement, Achievement
             Id = source.Id,
             Title = source.Title,
             Description = source.Description,
+            Point = source.Point,
             TaskCount = source.TaskCount,
             Type = source.Type
         };
@@ -41,6 +42,7 @@ public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement
             Id = source.Id,
             Title = source.Title,
             Description = source.Description,
+            Point = source.Point,
             TaskCount = source.TaskCount,
             Type = source.Type
         };

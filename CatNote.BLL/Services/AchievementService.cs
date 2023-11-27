@@ -33,13 +33,29 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         _userRepository = userRepository;
     }
 
+    public async Task<List<Achievement>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
+    {
+        var user = await _userRepository.GetById(userId, cancellationToken);
+
+        if (user == null)
+        {
+            return new List<Achievement>();
+        }
+
+        var achievementsEntity = await _achievementRepository.GetAchievementsByUser(user, cancellationToken);
+
+        var achievements = _mapper.Map<List<Achievement>>(achievementsEntity);
+
+        return achievements;
+    }
+
     public async Task CheckAchievementToAdd(int userId, CancellationToken cancellationToken)
     {
         var user = await GetUserModelById(userId, cancellationToken);
 
         var achievement = await GetAchievementByParameters(user!.Tasks!.Count(), AchievementType.Add, cancellationToken);
 
-        if (user == null || achievement == null || user!.Achievements!.Contains(achievement))
+        if (user == null || achievement == null || user.Achievements!.Contains(achievement))
             return;
 
         await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievement.Id, userId, cancellationToken);
@@ -51,7 +67,7 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         var completedTaskCount = user!.Tasks!.Count(x => x.Status == TaskStatus.Done);
         var achievement = await GetAchievementByParameters(completedTaskCount, AchievementType.Completed, cancellationToken);
 
-        if (user == null || completedTaskCount == 0 || achievement == null || user.Achievements.Contains(achievement))
+        if (user == null || completedTaskCount == 0 || achievement == null || user.Achievements!.Contains(achievement))
             return;
 
         await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievement.Id, userId, cancellationToken);

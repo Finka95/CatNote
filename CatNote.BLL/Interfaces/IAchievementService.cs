@@ -10,6 +10,7 @@ namespace CatNote.BLL.Interfaces;
 
 public interface IAchievementService : IGenericService<Achievement>
 {
-    public Task CheckAchievementToAdd(int userId, CancellationToken cancellationToken);
-    public Task CheckAchievementToComplete(int userId, CancellationToken cancellationToken);
+    Task CheckAchievementToAdd(int userId, CancellationToken cancellationToken);
+    Task CheckAchievementToComplete(int userId, CancellationToken cancellationToken);
+    Task<List<Achievement>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken);
 }

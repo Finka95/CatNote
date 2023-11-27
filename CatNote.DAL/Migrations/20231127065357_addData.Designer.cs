@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CatNote.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231122114854_addData")]
+    [Migration("20231127065357_addData")]
     partial class addData
     {
         /// <inheritdoc />
@@ -48,11 +48,11 @@ namespace CatNote.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AchievementType")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
 
                     b.Property<int>("TaskCount")
                         .HasColumnType("int");
@@ -60,9 +60,27 @@ namespace CatNote.DAL.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Achievements");
+                });
+
+            modelBuilder.Entity("CatNote.DAL.Entities.AchievementUserEntity", b =>
+                {
+                    b.Property<int>("AchievementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AchievementId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AchievementsUsers");
                 });
 
             modelBuilder.Entity("CatNote.DAL.Entities.TaskEntity", b =>
@@ -121,6 +139,25 @@ namespace CatNote.DAL.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CatNote.DAL.Entities.AchievementUserEntity", b =>
+                {
+                    b.HasOne("CatNote.DAL.Entities.AchievementEntity", "Achievement")
+                        .WithMany()
+                        .HasForeignKey("AchievementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CatNote.DAL.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Achievement");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CatNote.DAL.Entities.TaskEntity", b =>

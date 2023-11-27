@@ -18,19 +18,12 @@ public class AchievementRepository : GenericRepository<AchievementEntity>, IAchi
 
     public async Task AddConnectionBetweenUserAndAchievement(int achievementId, int userId, CancellationToken cancellationToken)
     {
-        var userEntity = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
-        var achievementEntities = await _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.Id == achievementId, cancellationToken);
+        var userEntity = await _applicationDbContext.Users.Include(x => x.Achievements).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        var achievementEntities = await dbSet.Include(x => x.Users).FirstOrDefaultAsync(x => x.Id == achievementId, cancellationToken);
 
         if (userEntity != null && achievementEntities != null)
         {
             userEntity.Achievements!.Add(achievementEntities);
-            achievementEntities.Users!.Add(userEntity);
-
-            dbContext.AchievementsUsers.Add(new AchievementUserEntity
-            {
-                UserId = userId,
-                AchievementId = achievementId
-            });
         }
 
         await _applicationDbContext!.SaveChangesAsync(cancellationToken);
@@ -39,8 +32,15 @@ public class AchievementRepository : GenericRepository<AchievementEntity>, IAchi
     public async Task<AchievementEntity?> GetAchievementByTaskCountAchievementType(int taskCount, AchievementType achievementType,
         CancellationToken cancellationToken)
     {
-        var achievement = await _applicationDbContext.Achievements.FirstOrDefaultAsync(x => x.Type == achievementType && x.TaskCount == taskCount, cancellationToken);
+        var achievement = await dbSet.FirstOrDefaultAsync(x => x.Type == achievementType && x.TaskCount == taskCount, cancellationToken);
 
         return achievement;
+    }
+
+    public async Task<List<AchievementEntity>> GetAchievementsByUser(UserEntity userEntity, CancellationToken cancellationToken)
+    {
+        var result = await dbSet.Include(x => x.Users).Where(a => a.Users!.Contains(userEntity)).ToListAsync(cancellationToken);
+
+        return result;
     }
 }

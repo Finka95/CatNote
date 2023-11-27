@@ -20,19 +20,8 @@ public class UserRepository : GenericRepository<UserEntity>, IUserRepository
         return user;
     }
 
-    public async Task<List<AchievementEntity>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
+    public async Task<List<UserEntity>> GetUsersWithAchievements(CancellationToken cancellationToken)
     {
-        var s = await dbContext.AchievementsUsers.ToListAsync(cancellationToken);
-
-        var achievementsIds = s.Where(x => x.UserId == userId).Select(x => x.AchievementId).ToList();
-
-        var achievements = await dbContext.Achievements.Where(x => achievementsIds.Contains(x.Id)).ToListAsync(cancellationToken);
-
-        //var h = await dbContext.AchievementsUsers.ToListAsync(cancellationToken);
-        //var a = await dbContext.Achievements.Include(x => x.Users).ToListAsync();
-        //var j = await dbContext.Users.ToListAsync();
-        //var r = await dbContext.Achievements.Include(x => x.Users).Where(x => x.Users!.Any(x => x.Id == userId)).ToListAsync(cancellationToken);
-
-        return achievements;
+        return await dbSet.Include(x => x.Achievements).ToListAsync(cancellationToken);
     }
 }
