@@ -50,19 +50,13 @@ public class TaskTests
         await _client.PostAsJsonAsync("api/Achievement", achievementDTO);
         await _client.PostAsJsonAsync("api/User", userDTO);
         var result = await _client.PostAsJsonAsync("api/Task", taskDTO);
-        //var allAchievement = await _client.GetAsync($"api/Achievement/achievements/{userId}");
 
         //Assert
         result.EnsureSuccessStatusCode();
         var task = await result.Content.ReadFromJsonAsync<TaskDTO>();
 
-        //var achievements = await allAchievement.Content.ReadFromJsonAsync<List<AchievementDTO>>();
-
         task.Should().BeOfType<TaskDTO>();
         task?.Title.Should().Be(title);
-
-        //achievements.Should().BeOfType<List<AchievementDTO>>()
-        //    .And.Contain(x => x.Title == "First task");
     }
 
     [Theory]
