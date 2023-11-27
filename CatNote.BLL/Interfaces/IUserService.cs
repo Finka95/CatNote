@@ -1,5 +1,4 @@
-﻿using CatNote.BLL.AchievementTypes;
-using CatNote.BLL.Models;
+﻿using CatNote.BLL.Models;
 
 namespace CatNote.BLL.Interfaces;
 

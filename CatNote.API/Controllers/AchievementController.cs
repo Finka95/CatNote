@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using CatNote.API.DTO;
-using CatNote.BLL.AchievementTypes;
 using CatNote.BLL.Interfaces;
 using CatNote.BLL.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatNote.API.Controllers;
 
-public class AchievementController : GenericController<Achievement, AchievementDTO>
+public class AchievementController : GenericController<AchievementModel, AchievementDTO>
 {
     private readonly IMapper _mapper;
     private readonly IAchievementService _service;

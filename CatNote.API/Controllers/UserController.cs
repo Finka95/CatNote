@@ -30,4 +30,5 @@ public class UserController : GenericController<UserModel, UserDTO>
 
         return usersDTO;
     }
+
 }

@@ -9,14 +9,13 @@ using System.Threading.Tasks;
 using CatNote.BLL.Interfaces;
 using AutoMapper;
 using System.Diagnostics;
-using CatNote.BLL.AchievementTypes;
 using CatNote.DAL.Repositories;
 using CatNote.Domain.Enums;
 using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 
 namespace CatNote.BLL.Services;
 
-public class AchievementService : GenericService<Achievement, AchievementEntity>, IAchievementService
+public class AchievementService : GenericService<AchievementModel, AchievementEntity>, IAchievementService
 {
     private readonly IMapper _mapper;
     private readonly IAchievementRepository _achievementRepository;
@@ -33,18 +32,18 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         _userRepository = userRepository;
     }
 
-    public async Task<List<Achievement>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
+    public async Task<List<AchievementModel>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetById(userId, cancellationToken);
 
         if (user == null)
         {
-            return new List<Achievement>();
+            return new List<AchievementModel>();
         }
 
         var achievementsEntity = await _achievementRepository.GetAchievementsByUser(user, cancellationToken);
 
-        var achievements = _mapper.Map<List<Achievement>>(achievementsEntity);
+        var achievements = _mapper.Map<List<AchievementModel>>(achievementsEntity);
 
         return achievements;
     }
@@ -53,9 +52,12 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
     {
         var user = await GetUserModelById(userId, cancellationToken);
 
+        if (user == null || user.Tasks == null)
+            return;
+
         var achievement = await GetAchievementByParameters(user!.Tasks!.Count(), AchievementType.Add, cancellationToken);
 
-        if (user == null || achievement == null || user.Achievements!.Contains(achievement))
+        if (achievement == null || user.Achievements!.Contains(achievement))
             return;
 
         await _achievementRepository.AddConnectionBetweenUserAndAchievement(achievement.Id, userId, cancellationToken);
@@ -81,13 +83,13 @@ public class AchievementService : GenericService<Achievement, AchievementEntity>
         return user;
     }
 
-    private async Task<Achievement?> GetAchievementByParameters(int taskCount, AchievementType achievementType,
+    private async Task<AchievementModel?> GetAchievementByParameters(int taskCount, AchievementType achievementType,
         CancellationToken cancellationToken)
     {
         var achievementEntity =
             await _achievementRepository.GetAchievementByTaskCountAchievementType(taskCount, achievementType, cancellationToken);
 
-        var achievement = _mapper.Map<Achievement>(achievementEntity);
+        var achievement = _mapper.Map<AchievementModel>(achievementEntity);
 
         return achievement;
     }

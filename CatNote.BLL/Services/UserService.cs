@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CatNote.BLL.AchievementTypes;
 using CatNote.BLL.Interfaces;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;

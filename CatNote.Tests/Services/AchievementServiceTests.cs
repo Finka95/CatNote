@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CatNote.BLL.AchievementTypes;
 using CatNote.BLL.Models;
 using CatNote.BLL.Services;
 using CatNote.DAL.Entities;
@@ -46,15 +45,15 @@ public class AchievementServiceTests
         var result = await _achievementService.Create(AchievementData.AchievementAddModel, cancellationToken);
 
         //Assert
-        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<Achievement>()), Times.Once());
+        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once());
 
-        result.Should().BeOfType<Achievement>();
+        result.Should().BeOfType<AchievementModel>();
         result.Id.Should().Be(achievementEntity.Id);
         result.Title.Should().Be(achievementEntity.Title);
         result.Description.Should().Be(achievementEntity.Description);
 
         _mockAchievementRepository.Verify(x => x.Create(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
-        _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once());
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once());
     }
 
     [Fact]
@@ -78,7 +77,7 @@ public class AchievementServiceTests
         //Arrange
         var achievementEntityList = new List<AchievementEntity> { AchievementData.AchievementAddEntity };
 
-        var achievementModelList = new List<Achievement>();
+        var achievementModelList = new List<AchievementModel>();
         var achievementModel = AchievementData.AchievementAddModel;
         achievementModelList.Add(achievementModel);
 
@@ -93,10 +92,10 @@ public class AchievementServiceTests
         //Assert
         _mockAchievementRepository.Verify(x => x.GetAll(cancellationToken), Times.Once);
 
-        result.Should().BeOfType<List<Achievement>>()
+        result.Should().BeOfType<List<AchievementModel>>()
             .And.Contain(achievementModel);
 
-        _mockMapper.Verify(x => x.Map<List<Achievement>>(It.IsAny<List<AchievementEntity>>()), Times.Exactly(achievementModelList.Count));
+        _mockMapper.Verify(x => x.Map<List<AchievementModel>>(It.IsAny<List<AchievementEntity>>()), Times.Exactly(achievementModelList.Count));
     }
 
     [Fact]
@@ -120,12 +119,12 @@ public class AchievementServiceTests
         //Assert
         _mockAchievementRepository.Verify(x => x.GetById(achievementId, cancellationToken), Times.Once);
 
-        result.Should().BeOfType<Achievement>();
+        result.Should().BeOfType<AchievementModel>();
         result.Id.Should().Be(achievementModel.Id);
         result.Title.Should().Be(achievementModel.Title);
         result.Description.Should().Be(achievementModel.Description);
 
-        _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
     }
 
     [Fact]
@@ -159,7 +158,7 @@ public class AchievementServiceTests
             {
                 TaskData.TaskModel
             },
-            Achievements = new List<Achievement>()
+            Achievements = new List<AchievementModel>()
         };
 
         var userEntity = new UserEntity
@@ -193,7 +192,7 @@ public class AchievementServiceTests
         //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Once);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Add, cancellationToken), Times.Once);
-        _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
         _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
     }
 
@@ -216,7 +215,7 @@ public class AchievementServiceTests
             }
         };
 
-        user.Achievements = new List<Achievement>();
+        user.Achievements = new List<AchievementModel>();
 
         var userEntity = UserData.UserEntity;
 
@@ -255,7 +254,7 @@ public class AchievementServiceTests
         //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Once);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Completed, cancellationToken), Times.Once);
-        _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
         _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
     }
 
@@ -276,7 +275,7 @@ public class AchievementServiceTests
         {
             TaskData.TaskModel
         };
-        user.Achievements = new List<Achievement>
+        user.Achievements = new List<AchievementModel>
         {
             achievement
         };
@@ -311,7 +310,7 @@ public class AchievementServiceTests
         //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Never);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Add, cancellationToken), Times.Once);
-        _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
         _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
     }
 
@@ -338,7 +337,7 @@ public class AchievementServiceTests
                 UserId = 1
             }
         };
-        user.Achievements = new List<Achievement>
+        user.Achievements = new List<AchievementModel>
         {
             achievement
         };
@@ -378,7 +377,7 @@ public class AchievementServiceTests
         //Assert
         _mockAchievementRepository.Verify(x => x.AddConnectionBetweenUserAndAchievement(1, 1, cancellationToken), Times.Never);
         _mockAchievementRepository.Verify(x => x.GetAchievementByTaskCountAchievementType(1, AchievementType.Completed, cancellationToken), Times.Once);
-        _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Once);
         _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once);
     }
 
@@ -391,7 +390,7 @@ public class AchievementServiceTests
 
         var achievementEntityResult = new AchievementEntity { Id = 1, Title = "default2", Description = "default2" };
 
-        var achievementModelResult = new Achievement { Id = 1, Title = "default2", Description = "default2" };
+        var achievementModelResult = new AchievementModel { Id = 1, Title = "default2", Description = "default2" };
 
         var cancellationToken = new CancellationToken();
 
@@ -409,15 +408,15 @@ public class AchievementServiceTests
         var result = await _achievementService.Update(achievementModel, cancellationToken);
 
         //Assert
-        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<Achievement>()), Times.Once);
+        _mockMapper.Verify(x => x.Map<AchievementEntity>(It.IsAny<AchievementModel>()), Times.Once);
         _mockAchievementRepository.Verify(x => x.Update(It.IsAny<AchievementEntity>(), cancellationToken), Times.Once);
 
-        result.Should().BeOfType<Achievement>();
+        result.Should().BeOfType<AchievementModel>();
         result.Id.Should().Be(achievementModelResult.Id);
         result.Title.Should().Be(achievementModelResult.Title);
         result.Description.Should().Be(achievementModelResult.Description);
 
-        _mockMapper.Verify(x => x.Map<Achievement>(It.IsAny<AchievementEntity>()), Times.Exactly(2));
+        _mockMapper.Verify(x => x.Map<AchievementModel>(It.IsAny<AchievementEntity>()), Times.Exactly(2));
     }
 
     [Fact]

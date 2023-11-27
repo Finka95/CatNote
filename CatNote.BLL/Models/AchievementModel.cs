@@ -1,8 +1,7 @@
-﻿using CatNote.BLL.Models;
-using CatNote.Domain.Enums;
+﻿using CatNote.Domain.Enums;
 
-namespace CatNote.BLL.AchievementTypes;
-public class Achievement
+namespace CatNote.BLL.Models;
+public class AchievementModel
 {
     public int Id { get; set; }
     public string? Title { get; set; }

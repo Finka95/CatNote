@@ -1,10 +1,10 @@
 ﻿namespace CatNote.API.Controllers;
 
-public interface IGenericController<TDTO>
+public interface IGenericController<TDto>
 {
-    Task<TDTO> Create(TDTO dto, CancellationToken cancellationToken);
+    Task<TDto> Create(TDto dto, CancellationToken cancellationToken);
     Task Delete(int id, CancellationToken cancellationToken);
-    Task<IEnumerable<TDTO>> GetAll(CancellationToken cancellationToken);
-    Task<TDTO> GetById(int id, CancellationToken cancellationToken);
-    Task<TDTO> Update(TDTO dto, CancellationToken cancellationToken);
+    Task<IEnumerable<TDto>> GetAll(CancellationToken cancellationToken);
+    Task<TDto> GetById(int id, CancellationToken cancellationToken);
+    Task<TDto> Update(TDto dto, CancellationToken cancellationToken);
 }

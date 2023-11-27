@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CatNote.BLL.AchievementTypes;
 using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 using CatNote.Domain.Enums;
@@ -12,14 +11,14 @@ public class MapperBllProfile : Profile
     {
         CreateMap<UserEntity, UserModel>().ReverseMap();
         CreateMap<TaskEntity, TaskModel>().ReverseMap();
-        CreateMap<AchievementEntity, Achievement>().ConvertUsing<AchievementResolver>();
-        CreateMap<Achievement, AchievementEntity>().ConvertUsing<AchievementEntityResolver>();
+        CreateMap<AchievementEntity, AchievementModel>().ConvertUsing<AchievementResolver>();
+        CreateMap<AchievementModel, AchievementEntity>().ConvertUsing<AchievementEntityResolver>();
     }
 }
 
-public class AchievementEntityResolver : ITypeConverter<Achievement, AchievementEntity>
+public class AchievementEntityResolver : ITypeConverter<AchievementModel, AchievementEntity>
 {
-    public AchievementEntity Convert(Achievement source, AchievementEntity destination, ResolutionContext context)
+    public AchievementEntity Convert(AchievementModel source, AchievementEntity destination, ResolutionContext context)
     {
         return new AchievementEntity
         {
@@ -33,11 +32,11 @@ public class AchievementEntityResolver : ITypeConverter<Achievement, Achievement
     }
 }
 
-public class AchievementResolver : ITypeConverter<AchievementEntity, Achievement>
+public class AchievementResolver : ITypeConverter<AchievementEntity, AchievementModel>
 {
-    public Achievement Convert(AchievementEntity source, Achievement destination, ResolutionContext context)
+    public AchievementModel Convert(AchievementEntity source, AchievementModel destination, ResolutionContext context)
     {
-        return new Achievement
+        return new AchievementModel
         {
             Id = source.Id,
             Title = source.Title,
