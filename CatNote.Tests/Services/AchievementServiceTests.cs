@@ -128,6 +128,23 @@ public class AchievementServiceTests
     }
 
     [Fact]
+    public async Task GetByUserId_GetAchievementsByIncorrectUserIdPass_ListAchievementModel()
+    {
+        //Arrange
+        var userId = 1;
+        var cancellationToken = new CancellationToken();
+
+        _mockUserRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity?)null!);
+
+        //Act
+        var result = await _achievementService.GetAchievementsByUserId(1, cancellationToken);
+
+        //Assert
+        result.Should().BeOfType<List<AchievementModel>>();
+        result.Count.Should().Be(0);
+    }
+
+    [Fact]
     public async Task GetById_GetAchievementByIncorrectId_Null()
     {
         //Arrange
