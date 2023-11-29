@@ -4,6 +4,7 @@ using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
 using CatNote.Domain.Enums;
+using CatNote.Domain.Exceptions;
 using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 
 namespace CatNote.BLL.Services;
@@ -45,7 +46,10 @@ public class AchievementService : GenericService<AchievementModel, AchievementEn
     {
         var user = await GetUserModelById(userId, cancellationToken);
 
-        if (user == null || user.Tasks == null)
+        if (user == null)
+            throw new NotFoundException($"User with id {userId} not found");
+
+        if (user.Tasks == null)
             return;
 
         var achievement = await GetAchievementByParameters(user!.Tasks!.Count(), AchievementType.Add, cancellationToken);

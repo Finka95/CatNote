@@ -31,7 +31,7 @@ public class TaskTests
 
         var achievementDTO = AchievementData.AchievementAddFirstTaskDTO;
 
-        var taskDTO = TaskData.TaskDTO(id);
+        var taskDTO = TaskData.TaskDTO(id, userId);
 
         //Act
         await _client.PostAsJsonAsync("api/Achievement", achievementDTO);
