@@ -1,15 +1,8 @@
-﻿using CatNote.BLL.Models;
+﻿using AutoMapper;
+using CatNote.BLL.Interfaces;
+using CatNote.BLL.Models;
 using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CatNote.BLL.Interfaces;
-using AutoMapper;
-using System.Diagnostics;
-using CatNote.DAL.Repositories;
 using CatNote.Domain.Enums;
 using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 

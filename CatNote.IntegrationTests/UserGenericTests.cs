@@ -1,7 +1,6 @@
 ﻿using AutoFixture.Xunit2;
 using CatNote.API.DTO;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit;

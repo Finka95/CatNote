@@ -2,7 +2,7 @@
 
 public enum AchievementType
 {
-    None,
-    Add,
-    Completed
+    None = 0,
+    Add = 1,
+    Completed = 2
 }

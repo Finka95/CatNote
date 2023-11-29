@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Json;
 using AutoFixture.Xunit2;
 using CatNote.API.DTO;
 using CatNote.Domain.Enums;
+using CatNote.IntegrationTests.DataForIntegrationTests;
 using FluentAssertions;
 using Xunit;
-using TaskStatus = CatNote.Domain.Enums.TaskStatus;
 
 namespace CatNote.IntegrationTests;
 
@@ -35,31 +30,13 @@ public class UserTests
             UserName = "Default1",
         };
 
-        var achievement1 = new AchievementDTO
-        {
-            Id = achievementId1,
-            Title = "Title1",
-            Description = "Description1",
-            Point = 3,
-            Type = AchievementType.Add,
-            TaskCount = 1
-        };
-
-        var task1 = new TaskDTO
-        {
-            Id = taskId1,
-            Title = "Title",
-            Status = TaskStatus.ToDo,
-            Date = DateTime.Today
-        };
-
         userDTO1.Achievements = new List<AchievementDTO>
         {
-            achievement1
+             AchievementData.AchievementAddDTOWithPoint(achievementId1, 3)
         };
         userDTO1.Tasks = new List<TaskDTO>
         {
-            task1
+            TaskData.TaskDTO(taskId1)
         };
 
         var userDTO2 = new UserDTO
@@ -68,32 +45,14 @@ public class UserTests
             UserName = "Default2",
         };
 
-        var achievement2 = new AchievementDTO
-        {
-            Id = achievementId2,
-            Title = "Title1",
-            Description = "Description1",
-            Point = 1,
-            Type = AchievementType.Add,
-            TaskCount = 1
-        };
-
-        var task2 = new TaskDTO
-        {
-            Id = taskId2,
-            Title = "Title",
-            Status = TaskStatus.ToDo,
-            Date = DateTime.Today
-        };
-
         userDTO2.Achievements = new List<AchievementDTO>
         {
-            achievement2
+            AchievementData.AchievementAddDTOWithPoint(achievementId2, 1)
         };
 
         userDTO2.Tasks = new List<TaskDTO>
         {
-            task2
+            TaskData.TaskDTO(taskId2)
         };
 
         //Act

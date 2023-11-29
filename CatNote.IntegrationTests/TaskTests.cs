@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using AutoFixture.Xunit2;
 using CatNote.API.DTO;
-using CatNote.Domain.Enums;
+using CatNote.IntegrationTests.DataForIntegrationTests;
 using FluentAssertions;
 using Xunit;
 
@@ -20,7 +20,7 @@ public class TaskTests
 
     [Theory]
     [AutoData]
-    public async Task Create_CorrectTaskPass_TaskDTO(string title, int userId, string userName)
+    public async Task Create_CorrectTaskPass_TaskDTO(int id, int userId, string userName)
     {
         //Arrange
         var userDTO = new UserDTO
@@ -29,22 +29,9 @@ public class TaskTests
             UserName = userName
         };
 
-        var achievementDTO = new AchievementDTO
-        {
-            Title = "First task",
-            Point = 1,
-            Description = "Add first task",
-            Type = AchievementType.Add,
-            TaskCount = 1
-        };
+        var achievementDTO = AchievementData.AchievementAddFirstTaskDTO;
 
-        var taskDTO = new TaskDTO
-        {
-            Title = title,
-            Date = DateTime.Now,
-            Status = Domain.Enums.TaskStatus.ToDo,
-            UserId = userId
-        };
+        var taskDTO = TaskData.TaskDTO(id);
 
         //Act
         await _client.PostAsJsonAsync("api/Achievement", achievementDTO);
@@ -56,12 +43,12 @@ public class TaskTests
         var task = await result.Content.ReadFromJsonAsync<TaskDTO>();
 
         task.Should().BeOfType<TaskDTO>();
-        task?.Title.Should().Be(title);
+        task?.Title.Should().Be(taskDTO.Title);
     }
 
     [Theory]
     [AutoData]
-    public async Task Update_TaskByCorrectIdPass_TaskDTO(int id, string title, int userId, string userName)
+    public async Task Update_TaskByCorrectIdPass_TaskDTO(int id, int userId, string userName)
     {
         //Arrange
         var userDTO = new UserDTO
@@ -70,21 +57,9 @@ public class TaskTests
             UserName = userName
         };
 
-        var achievementDTO = new AchievementDTO
-        {
-            Title = "Completed first task",
-            Description = "Completed first task",
-            Type = AchievementType.Completed,
-            TaskCount = 1
-        };
+        var achievementDTO = AchievementData.AchievementCompletedFirstTaskDTO;
 
-        var taskDTO = new TaskDTO { 
-            Id = id,
-            Title = title,
-            Date = DateTime.Now,
-            Status = Domain.Enums.TaskStatus.ToDo,
-            UserId = userId
-        };
+        var taskDTO = TaskData.TaskDTO(id);
 
         await _client.PostAsJsonAsync("api/Task", taskDTO);
 
@@ -99,7 +74,7 @@ public class TaskTests
 
         response.Should().BeOfType<TaskDTO>();
         response?.Id.Should().Be(id);
-        response?.Title.Should().Be(title);
+        response?.Title.Should().Be(taskDTO.Title);
     }
 
     [Theory]
