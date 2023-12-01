@@ -23,11 +23,8 @@ public class TaskTests
     public async Task Create_CorrectTaskPass_TaskDTO(int id, int userId, string userName)
     {
         //Arrange
-        var userDTO = new UserDTO
-        {
-            Id = userId,
-            UserName = userName
-        };
+
+        var userDTO = UserData.UserDTO(userId, userName);
 
         var achievementDTO = AchievementData.AchievementAddFirstTaskDTO;
 
@@ -51,11 +48,7 @@ public class TaskTests
     public async Task Update_TaskByCorrectIdPass_TaskDTO(int id, int userId, string userName)
     {
         //Arrange
-        var userDTO = new UserDTO
-        {
-            Id = userId,
-            UserName = userName
-        };
+        var userDTO = UserData.UserDTO(userId, userName);
 
         var achievementDTO = AchievementData.AchievementCompletedFirstTaskDTO;
 
@@ -82,11 +75,7 @@ public class TaskTests
     public async Task Update_TaskByIncorrectIdPass_UnsuccessfulStatusCode(int id, string title, int userId, string userName)
     {
         //Arrange
-        var userDTO = new UserDTO
-        {
-            Id = userId,
-            UserName = userName
-        };
+        var userDTO = UserData.UserDTO(userId, userName);
 
         //Act
         await _client.PostAsJsonAsync("api/User", userDTO);

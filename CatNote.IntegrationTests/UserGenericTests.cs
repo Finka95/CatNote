@@ -3,6 +3,7 @@ using CatNote.API.DTO;
 using FluentAssertions;
 using System.Net;
 using System.Net.Http.Json;
+using CatNote.IntegrationTests.DataForIntegrationTests;
 using Xunit;
 
 namespace CatNote.IntegrationTests;
@@ -24,11 +25,7 @@ public class UserGenericTests
     public async Task Create_CorrectUserPass_UserDTO(int id, string name)
     {
         //Arrange
-        var userDTO = new UserDTO
-        {
-            Id = id,
-            UserName = name
-        };
+        var userDTO = UserData.UserDTO(id, name);
 
         //Act
         var result = await _client.PostAsJsonAsync("api/User", userDTO);

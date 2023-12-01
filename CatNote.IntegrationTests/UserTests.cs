@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Json;
 using AutoFixture.Xunit2;
 using CatNote.API.DTO;
-using CatNote.Domain.Enums;
 using CatNote.IntegrationTests.DataForIntegrationTests;
 using FluentAssertions;
 using Xunit;
@@ -24,36 +23,9 @@ public class UserTests
     public async Task Get_UsersFoundList_UserDTO(int userId1, int userId2, int achievementId1, int achievementId2, int taskId1, int taskId2)
     {
         //Arrange
-        var userDTO1 = new UserDTO
-        {
-            Id = userId1,
-            UserName = "Default1",
-        };
+        var userDTO1 = UserData.UserWithTaskAchievement(userId1, achievementId1, 3, taskId1);
 
-        userDTO1.Achievements = new List<AchievementDTO>
-        {
-             AchievementData.AchievementAddDTOWithPoint(achievementId1, 3)
-        };
-        userDTO1.Tasks = new List<TaskDTO>
-        {
-            TaskData.TaskDTO(taskId1)
-        };
-
-        var userDTO2 = new UserDTO
-        {
-            Id = userId2,
-            UserName = "Default2",
-        };
-
-        userDTO2.Achievements = new List<AchievementDTO>
-        {
-            AchievementData.AchievementAddDTOWithPoint(achievementId2, 1)
-        };
-
-        userDTO2.Tasks = new List<TaskDTO>
-        {
-            TaskData.TaskDTO(taskId2)
-        };
+        var userDTO2 = UserData.UserWithTaskAchievement(userId2, achievementId2, 1, taskId2);
 
         //Act
         await _client.PostAsJsonAsync("api/User", userDTO1);
