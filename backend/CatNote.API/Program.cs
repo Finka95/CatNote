@@ -27,6 +27,20 @@ public class Program
 
         builder.Services.AddBusinessServices(connection);
 
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+        });
+
+        var authConfig = builder.Configuration.GetSection("Auth0").Get<AuthenticationConfiguration>();
+
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
@@ -35,6 +49,9 @@ public class Program
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 NameClaimType = ClaimTypes.NameIdentifier,
+
+                ValidateIssuerSigningKey = false,
+                IssuerSigningKey = authConfig.GetSecurityKey()
             };
         });
 
@@ -63,7 +80,9 @@ public class Program
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
+
+        app.UseCors();
 
         app.UseAuthentication();
         app.UseAuthorization();

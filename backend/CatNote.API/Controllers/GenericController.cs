@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CatNote.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatNote.API.Controllers;
@@ -35,6 +36,7 @@ public class GenericController<TModel, TDto> : ControllerBase, IGenericControlle
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IEnumerable<TDto>> GetAll(CancellationToken cancellationToken)
     {
         var resultModel = await _service.GetAll(cancellationToken);
