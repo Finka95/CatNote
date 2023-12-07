@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CatNote.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class GenericController<TModel, TDto> : ControllerBase, IGenericController<TDto>
 {
@@ -26,7 +27,6 @@ public class GenericController<TModel, TDto> : ControllerBase, IGenericControlle
         var resultModel = await _service.Create(model, cancellationToken);
 
         return _mapper.Map<TDto>(resultModel);
-        ;
     }
 
     [HttpDelete("{id}")]
@@ -36,7 +36,6 @@ public class GenericController<TModel, TDto> : ControllerBase, IGenericControlle
     }
 
     [HttpGet]
-    [Authorize]
     public async Task<IEnumerable<TDto>> GetAll(CancellationToken cancellationToken)
     {
         var resultModel = await _service.GetAll(cancellationToken);

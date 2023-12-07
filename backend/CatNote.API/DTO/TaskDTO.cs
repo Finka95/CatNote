@@ -1,4 +1,6 @@
-﻿namespace CatNote.API.DTO;
+﻿using TaskStatus = CatNote.Domain.Enums.TaskStatus;
+
+namespace CatNote.API.DTO;
 
 public class TaskDTO
 {
