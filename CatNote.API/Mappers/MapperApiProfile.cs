@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CatNote.API.DTO;
 using CatNote.BLL.Models;
-
 namespace CatNote.API.Mappers;
 
 public class MapperApiProfile : Profile

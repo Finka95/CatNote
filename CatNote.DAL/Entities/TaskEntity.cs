@@ -1,4 +1,6 @@
-﻿namespace CatNote.DAL.Entities;
+﻿using TaskStatus = CatNote.Domain.Enums.TaskStatus;
+
+namespace CatNote.DAL.Entities;
 
 public class TaskEntity : BaseEntity
 {

@@ -11,8 +11,22 @@ namespace CatNote.API.Controllers;
 
 public class UserController : GenericController<UserModel, UserDTO>
 {
-    public UserController(IMapper mapper, IGenericService<UserModel> service)
+    private readonly IMapper _mapper;
+    private readonly IUserService _service;
+
+    public UserController(IMapper mapper, IUserService service)
         : base(mapper, service)
     {
+        _mapper = mapper;
+        _service = service;
     }
+
+    [HttpGet("achievements/points")]
+    public async Task<List<UserDTO>> GetUserByPoints(CancellationToken cancellationToken)
+    {
+        var users = await _service.GetUsersByAchievementPoints(cancellationToken);
+
+        return _mapper.Map<List<UserDTO>>(users);
+    }
+
 }

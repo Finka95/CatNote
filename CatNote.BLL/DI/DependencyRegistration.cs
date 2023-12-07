@@ -12,8 +12,10 @@ public static class DependencyRegistration
     {
         services.AddDatabaseServices(connectionString);
 
-        services.AddScoped<IGenericService<TaskModel>, GenericService<TaskModel, TaskEntity>>();
+        services.AddScoped<IGenericService<TaskModel>, TaskService>();
         services.AddScoped<IGenericService<AchievementModel>, GenericService<AchievementModel, AchievementEntity>>();
         services.AddScoped<IGenericService<UserModel>, GenericService<UserModel, UserEntity>>();
+        services.AddScoped<IAchievementService, AchievementService>();
+        services.AddScoped<IUserService, UserService>();
     }
 }

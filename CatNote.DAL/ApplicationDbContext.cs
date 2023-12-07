@@ -11,4 +11,29 @@ public class ApplicationDbContext : DbContext
     public DbSet<AchievementEntity> Achievements { get; set; }
     public DbSet<TaskEntity> Tasks { get; set; }
     public DbSet<UserEntity> Users { get; set; }
+    public DbSet<AchievementUserEntity> AchievementsUsers { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<AchievementUserEntity>(b =>
+        {
+            b.HasKey(x => new
+            {
+                x.AchievementId,
+                x.UserId
+            });
+
+            b.HasOne(x => x.Achievement)
+                .WithMany()
+                .HasForeignKey(x => x.AchievementId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne(x => x.User)
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
 }

@@ -3,6 +3,6 @@
 public class UserEntity : BaseEntity
 {
     public string? UserName { get; set; } = null!;
-    public IEnumerable<TaskEntity>? Tasks { get; set; }
-    public IEnumerable<AchievementEntity>? Achievements { get; set;}
+    public ICollection<TaskEntity>? Tasks { get; set; }
+    public ICollection<AchievementEntity>? Achievements { get; set; }
 }

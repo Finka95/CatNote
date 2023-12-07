@@ -1,19 +1,19 @@
-using AutoFixture.Xunit2;
+﻿using AutoFixture.Xunit2;
 using CatNote.API.DTO;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Net.Http.Json;
+using CatNote.IntegrationTests.DataForIntegrationTests;
 using Xunit;
 
 namespace CatNote.IntegrationTests;
 
 [Collection("Sequential")]
-public class IntegrationTests
+public class UserGenericTests
 {
     private readonly HttpClient _client;
 
-    public IntegrationTests()
+    public UserGenericTests()
     {
         var factory = new TestingWebAppFactory();
 
@@ -25,11 +25,7 @@ public class IntegrationTests
     public async Task Create_CorrectUserPass_UserDTO(int id, string name)
     {
         //Arrange
-        var userDTO = new UserDTO
-        {
-            Id = id,
-            UserName = name
-        };
+        var userDTO = UserData.UserDTO(id, name);
 
         //Act
         var result = await _client.PostAsJsonAsync("api/User", userDTO);
@@ -40,7 +36,6 @@ public class IntegrationTests
 
         user.Should().BeOfType<UserDTO>().Which.UserName.Should().Be(name);
         user?.Id.Should().Be(id);
-        
     }
 
     [Fact]

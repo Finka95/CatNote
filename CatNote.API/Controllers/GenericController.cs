@@ -25,7 +25,6 @@ public class GenericController<TModel, TDto> : ControllerBase, IGenericControlle
         var resultModel = await _service.Create(model, cancellationToken);
 
         return _mapper.Map<TDto>(resultModel);
-        ;
     }
 
     [HttpDelete("{id}")]

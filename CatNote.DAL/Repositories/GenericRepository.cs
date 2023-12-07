@@ -1,4 +1,4 @@
-using CatNote.DAL.Entities;
+﻿using CatNote.DAL.Entities;
 using CatNote.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using CatNote.Domain.Exceptions;
