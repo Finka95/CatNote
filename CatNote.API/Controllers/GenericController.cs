@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using CatNote.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatNote.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class GenericController<TModel, TDto> : ControllerBase, IGenericController<TDto>
 {
     private readonly IMapper _mapper;
