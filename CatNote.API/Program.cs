@@ -13,6 +13,8 @@ namespace CatNote.API;
 
 public class Program
 {
+    private static string[] openIdArray = { "openid" };
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -50,7 +52,7 @@ public class Program
                 NameClaimType = ClaimTypes.NameIdentifier,
 
                 ValidateIssuerSigningKey = false,
-                IssuerSigningKey = authConfig.GetSecurityKey()
+                IssuerSigningKey = authConfig!.GetSecurityKey()
             };
         });
 
@@ -90,7 +92,7 @@ public class Program
                     {
                         Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
                     },
-                    new[] { "openid" }
+                    openIdArray
                 }
             });
         });
@@ -110,8 +112,6 @@ public class Program
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-        //app.UseHttpsRedirection();
 
         app.UseCors();
 
