@@ -54,8 +54,6 @@ public class Program
             };
         });
 
-        builder.Services.AddAuthentication();
-
         builder.Services.AddAutoMapper(typeof(MapperApiProfile).Assembly, typeof(MapperBllProfile).Assembly);
 
         builder.Services.AddSwaggerGen(options =>
@@ -115,6 +113,9 @@ public class Program
 
         //app.UseHttpsRedirection();
 
+        app.UseCors();
+
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
