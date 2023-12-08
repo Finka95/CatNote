@@ -23,7 +23,6 @@ public class TaskTests
     public async Task Create_CorrectTaskPass_TaskDTO(int id, int userId, string userName)
     {
         //Arrange
-
         var userDTO = UserData.UserDTO(userId, userName);
 
         var achievementDTO = AchievementData.AchievementAddFirstTaskDTO;
