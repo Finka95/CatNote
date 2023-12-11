@@ -30,4 +30,19 @@ public class UserController : GenericController<UserModel, UserDTO>
         return _mapper.Map<List<UserDTO>>(users);
     }
 
+    [HttpGet("check")]
+    public async Task<bool> CheckUserByUserName(UserDTO userDTO, CancellationToken cancellationToken)
+    {
+        var user = await _service.GetUserByUserName(userDTO.UserName!, cancellationToken);
+
+        return user == null;
+    }
+
+    [HttpGet("id")]
+    public async Task<UserDTO> GetUserByUserName(UserDTO userDTO, CancellationToken cancellationToken)
+    {
+        var user = await _service.GetUserByUserName(userDTO.UserName!, cancellationToken);
+
+        return _mapper.Map<UserDTO>(user);
+    }
 }

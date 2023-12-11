@@ -24,4 +24,9 @@ public class UserRepository : GenericRepository<UserEntity>, IUserRepository
     {
         return await dbSet.Include(x => x.Achievements).ToListAsync(cancellationToken);
     }
+
+    public async Task<UserEntity?> GetUserByUserName(string userName, CancellationToken cancellationToken)
+    {
+        return await dbSet.FirstOrDefaultAsync(x => x.UserName == userName, cancellationToken);
+    }
 }
