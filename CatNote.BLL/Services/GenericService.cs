@@ -9,8 +9,8 @@ namespace CatNote.BLL.Services;
 public class GenericService<TModel, TEntity> : IGenericService<TModel>
     where TEntity : IBaseEntity
 {
-    private readonly IMapper _mapper;
-    private readonly IGenericRepository<TEntity> _genericRepository;
+    protected readonly IMapper _mapper;
+    protected readonly IGenericRepository<TEntity> _genericRepository;
 
     public GenericService(IMapper mapper, IGenericRepository<TEntity> genericRepository)
     {

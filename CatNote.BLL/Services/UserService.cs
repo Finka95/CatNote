@@ -9,7 +9,6 @@ namespace CatNote.BLL.Services;
 
 public class UserService : GenericService<UserModel, UserEntity>, IUserService
 {
-    private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
 
     public UserService(
@@ -17,7 +16,6 @@ public class UserService : GenericService<UserModel, UserEntity>, IUserService
         IUserRepository userRepository)
         :base(mapper, userRepository)
     {
-        _mapper = mapper;
         _userRepository = userRepository;
     }
 
