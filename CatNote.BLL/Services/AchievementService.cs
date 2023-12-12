@@ -11,7 +11,6 @@ namespace CatNote.BLL.Services;
 
 public class AchievementService : GenericService<AchievementModel, AchievementEntity>, IAchievementService
 {
-    private readonly IMapper _mapper;
     private readonly IAchievementRepository _achievementRepository;
     private readonly IUserRepository _userRepository;
 
@@ -21,7 +20,6 @@ public class AchievementService : GenericService<AchievementModel, AchievementEn
         IUserRepository userRepository)
         :base(mapper, achievementRepository)
     {
-        _mapper = mapper;
         _achievementRepository = achievementRepository;
         _userRepository = userRepository;
     }
@@ -52,7 +50,7 @@ public class AchievementService : GenericService<AchievementModel, AchievementEn
         if (user.Tasks == null)
             return;
 
-        var achievement = await GetAchievementByParameters(user!.Tasks!.Count(), AchievementType.Add, cancellationToken);
+        var achievement = await GetAchievementByParameters(user.Tasks.Count(), AchievementType.Add, cancellationToken);
 
         if (achievement == null || user.Achievements!.Contains(achievement))
             return;
@@ -67,7 +65,7 @@ public class AchievementService : GenericService<AchievementModel, AchievementEn
         if (user == null || user.Tasks == null)
             return;
 
-        var completedTaskCount = user!.Tasks!.Count(x => x.Status == TaskStatus.Done);
+        var completedTaskCount = user.Tasks.Count(x => x.Status == TaskStatus.Done);
         var achievement = await GetAchievementByParameters(completedTaskCount, AchievementType.Completed, cancellationToken);
 
         if (completedTaskCount == 0 || achievement == null || user.Achievements!.Contains(achievement))

@@ -10,8 +10,6 @@ namespace CatNote.BLL.Services;
 public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
 {
     private readonly IAchievementService _achievementService;
-    private readonly IMapper _mapper;
-    private readonly ITaskRepository _taskRepository;
 
     public TaskService(
         IMapper mapper,
@@ -19,8 +17,6 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
         IAchievementService achievementService)
         :base(mapper, taskRepository)
     {
-        _mapper = mapper;
-        _taskRepository = taskRepository;
         _achievementService = achievementService;
     }
 
@@ -28,7 +24,7 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
     {
         var entity = _mapper.Map<TaskEntity>(model);
 
-        var resultEntity = await _taskRepository.Create(entity, cancellationToken);
+        var resultEntity = await _genericRepository.Create(entity, cancellationToken);
 
         await _achievementService.CheckAchievementToAdd(model.UserId, cancellationToken);
 
@@ -39,11 +35,11 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
     {
         var entity = _mapper.Map<TaskEntity>(model);
 
-        var findTask = await _taskRepository.GetById(model.Id, cancellationToken);
+        var findTask = await _genericRepository.GetById(model.Id, cancellationToken);
 
         if (findTask != null)
         {
-            var resultEntity = await _taskRepository.Update(entity, cancellationToken);
+            var resultEntity = await _genericRepository.Update(entity, cancellationToken);
 
             await _achievementService.CheckAchievementToComplete(model.UserId, cancellationToken);
 

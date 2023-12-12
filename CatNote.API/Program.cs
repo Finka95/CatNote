@@ -1,7 +1,7 @@
-﻿using CatNote.API.Mappers;
+﻿using CatNote.API.Configurations;
+using CatNote.API.DI;
 using CatNote.API.Middlewares;
 using CatNote.BLL.DI;
-using CatNote.BLL.Mappers;
 using FluentValidation.AspNetCore;
 
 namespace CatNote.API;
@@ -22,19 +22,30 @@ public class Program
 
         builder.Services.AddBusinessServices(connection);
 
-        builder.Services.AddAutoMapper(typeof(MapperApiProfile).Assembly, typeof(MapperBllProfile).Assembly);
+        var authConfig = builder.Configuration.GetSection("Auth0").Get<AuthenticationConfiguration>();
+
+        builder.Services.AddApiServices(authConfig!);
 
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1.0");
+                c.OAuthClientId(builder.Configuration["Auth0:ClientId"]);
+                c.OAuthClientSecret(builder.Configuration["Auth0:ClientSecret"]);
+                c.OAuthUsePkce();
+            });
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-        app.UseHttpsRedirection();
+        app.UseCors();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.UseAuthorization();
 
