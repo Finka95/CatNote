@@ -1,14 +1,8 @@
-﻿using System.Security.Claims;
-using CatNote.API.Configurations;
+﻿using CatNote.API.Configurations;
 using CatNote.API.DI;
-using CatNote.API.Mappers;
 using CatNote.API.Middlewares;
 using CatNote.BLL.DI;
-using CatNote.BLL.Mappers;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 
 namespace CatNote.API;
 
