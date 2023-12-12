@@ -12,13 +12,11 @@ namespace CatNote.API.Controllers;
 [Authorize]
 public class AchievementController : GenericController<AchievementModel, AchievementDTO>
 {
-    private readonly IMapper _mapper;
     private readonly IAchievementService _service;
 
     public AchievementController(IMapper mapper, IAchievementService service)
         : base(mapper, service)
     {
-        _mapper = mapper;
         _service = service;
     }
 

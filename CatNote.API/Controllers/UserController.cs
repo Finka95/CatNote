@@ -13,13 +13,11 @@ namespace CatNote.API.Controllers;
 
 public class UserController : GenericController<UserModel, UserDTO>
 {
-    private readonly IMapper _mapper;
     private readonly IUserService _service;
 
     public UserController(IMapper mapper, IUserService service)
         : base(mapper, service)
     {
-        _mapper = mapper;
         _service = service;
     }
 
@@ -31,4 +29,18 @@ public class UserController : GenericController<UserModel, UserDTO>
         return _mapper.Map<List<UserDTO>>(users);
     }
 
+    [HttpPost("{userName}")]
+    public async Task<UserDTO> GetOrCreateUser(string userName, CancellationToken cancellationToken)
+    {
+        var userCheck = await _service.GetUserByUserName(userName, cancellationToken);
+        var userCheckDTO = _mapper.Map<UserDTO>(userCheck);
+
+        if (userCheckDTO == null)
+        {
+            var userModel = new UserModel { UserName = userName };
+            userCheck = await _service.Create(userModel, cancellationToken);
+            userCheckDTO = _mapper.Map<UserDTO>(userCheck);
+        }
+        return userCheckDTO;
+    }
 }

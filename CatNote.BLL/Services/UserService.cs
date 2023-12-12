@@ -27,4 +27,14 @@ public class UserService : GenericService<UserModel, UserEntity>, IUserService
 
         return users.OrderByDescending(x => x.Achievements?.Select(y => y.Point).Sum()).ToList();
     }
+
+    public async Task<UserModel?> GetUserByUserName(string userName, CancellationToken cancellationToken)
+    {
+        var userEntity = await _userRepository.GetUserByUserName(userName, cancellationToken);
+
+        if (userEntity == null)
+            return null;
+
+        return _mapper.Map<UserModel>(userEntity);
+    }
 }
