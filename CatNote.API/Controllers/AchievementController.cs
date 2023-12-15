@@ -20,7 +20,7 @@ public class AchievementController : GenericController<AchievementModel, Achieve
         _service = service;
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet("user/{userId}")]
     public async Task<List<AchievementDTO>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
     {
         var resultModel = await _service.GetAchievementsByUserId(userId, cancellationToken);
