@@ -10,7 +10,7 @@ namespace CatNote.API.Controllers;
 [Authorize]
 public class GenericController<TModel, TDto> : ControllerBase, IGenericController<TDto>
 {
-    private readonly IMapper _mapper;
+    protected readonly IMapper _mapper;
     private readonly IGenericService<TModel> _service;
 
     public GenericController(IMapper mapper, IGenericService<TModel> service)

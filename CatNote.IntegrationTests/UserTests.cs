@@ -43,4 +43,22 @@ public class UserTests
         response.Should().BeOfType<List<UserDTO>>();
         response.Should().Equal(rightResponse);
     }
+
+    [Theory]
+    [AutoData]
+    public async Task Post_CreateUser_UserDTO(string userName)
+    {
+        //Arrange
+        var content = new StringContent(userName);
+
+        //Act
+        var result = await _client.PostAsync($"api/User/{userName}", content);
+
+        //Assert
+        result.EnsureSuccessStatusCode();
+        var response = await result.Content.ReadFromJsonAsync<UserDTO>();
+
+        response.Should().NotBeNull();
+        response!.UserName.Should().Be(userName);
+    }
 }

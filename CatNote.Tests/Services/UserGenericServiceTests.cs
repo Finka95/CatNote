@@ -13,15 +13,15 @@ namespace CatNote.Tests.Services;
 
 public class UserGenericServiceTests
 {
-    private readonly Mock<IGenericRepository<UserEntity>> _mockGenericRepository;
+    private readonly Mock<IUserRepository> _mockUserRepository;
     private readonly Mock<IMapper> _mockMapper;
-    private readonly GenericService<UserModel, UserEntity> _userService;
+    private readonly UserService _userService;
 
     public UserGenericServiceTests()
     {
-        _mockGenericRepository = new Mock<IGenericRepository<UserEntity>>();
+        _mockUserRepository = new Mock<IUserRepository>();
         _mockMapper = new Mock<IMapper>();
-        _userService = new GenericService<UserModel, UserEntity>(_mockMapper.Object, _mockGenericRepository.Object);
+        _userService = new UserService(_mockMapper.Object, _mockUserRepository.Object);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class UserGenericServiceTests
         var userEntity = UserData.UserEntity;
 
         SetupMapper(userEntity, userModel);
-        _mockGenericRepository.Setup(x => x.Create(It.IsAny<UserEntity>(), CancellationToken.None)).ReturnsAsync(value: UserData.UserEntity);
+        _mockUserRepository.Setup(x => x.Create(It.IsAny<UserEntity>(), CancellationToken.None)).ReturnsAsync(value: UserData.UserEntity);
         SetupMapper(userModel, userEntity);
         
         //Act
@@ -47,7 +47,7 @@ public class UserGenericServiceTests
         result.Id.Should().Be(userModel.Id);
         result.UserName.Should().Be(userModel.UserName);
 
-        _mockGenericRepository.Verify(x => x.Create(It.IsAny<UserEntity>(), cancellationToken), Times.Once);
+        _mockUserRepository.Verify(x => x.Create(It.IsAny<UserEntity>(), cancellationToken), Times.Once);
         _mockMapper.Verify(x => x.Map<UserModel>(It.IsAny<UserEntity>()), Times.Once());
     }
 
@@ -63,7 +63,7 @@ public class UserGenericServiceTests
         await _userService.Delete(userId, cancellationToken);
 
         //Assert
-        _mockGenericRepository.Verify(x => x.Delete(userId, cancellationToken), Times.Once);
+        _mockUserRepository.Verify(x => x.Delete(userId, cancellationToken), Times.Once);
     }
 
     [Fact]
@@ -78,14 +78,14 @@ public class UserGenericServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(userEntityList);
+        _mockUserRepository.Setup(x => x.GetAll(cancellationToken)).ReturnsAsync(userEntityList);
         SetupMapper(userModelList, userEntityList);
 
         //Act
         var result = await _userService.GetAll(cancellationToken);
 
         //Assert
-        _mockGenericRepository.Verify(x => x.GetAll(cancellationToken), Times.Once);
+        _mockUserRepository.Verify(x => x.GetAll(cancellationToken), Times.Once);
 
         result.Should().BeOfType<List<UserModel>>()
             .And.Contain(userModel);
@@ -105,14 +105,14 @@ public class UserGenericServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync(userEntity);
+        _mockUserRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync(userEntity);
         SetupMapper(userModel, userEntity);
 
         //Act
         var result = await _userService.GetById(userId, cancellationToken);
 
         //Assert
-        _mockGenericRepository.Verify(x => x.GetById(userId, cancellationToken), Times.Once);
+        _mockUserRepository.Verify(x => x.GetById(userId, cancellationToken), Times.Once);
 
         result.Should().BeOfType<UserModel>();
         result.Id.Should().Be(userModel.Id);
@@ -129,10 +129,47 @@ public class UserGenericServiceTests
 
         var cancellationToken = new CancellationToken();
 
-        _mockGenericRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity?)null!);
+        _mockUserRepository.Setup(x => x.GetById(userId, cancellationToken)).ReturnsAsync((UserEntity?)null!);
 
         //Act
         var result = await _userService.GetById(userId, cancellationToken);
+
+        //Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetByUserName_GetUserByCorrectIdPass_UserModel()
+    {
+        //Arrange
+        var userName = "name";
+
+        var userModel = UserData.UserModel;
+        var userEntity = UserData.UserEntity;
+        var cancellationToken = new CancellationToken();
+
+        _mockUserRepository.Setup(x => x.GetUserByUserName(userName, cancellationToken)).ReturnsAsync(userEntity);
+        SetupMapper(userModel, userEntity);
+
+        //Act
+        var result = await _userService.GetUserByUserName(userName, cancellationToken);
+
+        //Assert
+        result.Should().BeOfType<UserModel>();
+        result!.UserName.Should().Be(userName);
+    }
+
+    [Fact]
+    public async Task GetByUserName_GetUserByIncorrectUserNamePass_Null()
+    {
+        //Arrange
+        var userName = "name";
+
+        var cancellationToken = new CancellationToken();
+        _mockUserRepository.Setup(x => x.GetUserByUserName(userName, cancellationToken)).ReturnsAsync((UserEntity?)null);
+
+        //Act
+        var result = await _userService.GetUserByUserName(userName, cancellationToken);
 
         //Assert
         result.Should().BeNull();
@@ -152,10 +189,10 @@ public class UserGenericServiceTests
         SetupMapper(userEntity, userModel);
         SetupMapper(userModelResult, userEntityResult);
 
-        _mockGenericRepository.Setup(x => x.GetById(userModel.Id, cancellationToken))
+        _mockUserRepository.Setup(x => x.GetById(userModel.Id, cancellationToken))
             .ReturnsAsync(userEntity);
 
-        _mockGenericRepository.Setup(x => x.Update(userEntity, cancellationToken))
+        _mockUserRepository.Setup(x => x.Update(userEntity, cancellationToken))
             .ReturnsAsync(userEntityResult);
 
         //Act
@@ -163,7 +200,7 @@ public class UserGenericServiceTests
 
         //Assert
         _mockMapper.Verify(x => x.Map<UserEntity>(It.IsAny<UserModel>()), Times.Once);
-        _mockGenericRepository.Verify(x => x.Update(It.IsAny<UserEntity>(), cancellationToken), Times.Once);
+        _mockUserRepository.Verify(x => x.Update(It.IsAny<UserEntity>(), cancellationToken), Times.Once);
         result.Should().BeOfType<UserModel>();
         result.Id.Should().Be(userModelResult.Id);
         result.UserName.Should().Be(userModelResult.UserName);
@@ -182,10 +219,10 @@ public class UserGenericServiceTests
 
         SetupMapper(userEntity, userModel);
 
-        _mockGenericRepository.Setup(x => x.GetById(userModel.Id, cancellationToken))
+        _mockUserRepository.Setup(x => x.GetById(userModel.Id, cancellationToken))
             .ReturnsAsync((UserEntity?)null);
 
-        _mockGenericRepository.Setup(x => x.Update(It.IsAny<UserEntity>(), cancellationToken))
+        _mockUserRepository.Setup(x => x.Update(It.IsAny<UserEntity>(), cancellationToken))
             .ReturnsAsync((UserEntity?)null!);
 
         //Act & Assert

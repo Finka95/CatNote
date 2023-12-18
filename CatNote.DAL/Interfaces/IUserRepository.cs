@@ -11,4 +11,5 @@ public interface IUserRepository : IGenericRepository<UserEntity>
 {
     Task<UserEntity?> GetUserByIdWithTasksAchievements(int userId, CancellationToken  cancellationToken);
     Task<List<UserEntity>> GetUsersWithAchievements(CancellationToken cancellationToken);
+    Task<UserEntity?> GetUserByUserName(string userName, CancellationToken cancellationToken);
 }

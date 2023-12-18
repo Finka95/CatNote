@@ -12,17 +12,15 @@ namespace CatNote.API.Controllers;
 [Authorize]
 public class AchievementController : GenericController<AchievementModel, AchievementDTO>
 {
-    private readonly IMapper _mapper;
     private readonly IAchievementService _service;
 
     public AchievementController(IMapper mapper, IAchievementService service)
         : base(mapper, service)
     {
-        _mapper = mapper;
         _service = service;
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet("user/{userId}")]
     public async Task<List<AchievementDTO>> GetAchievementsByUserId(int userId, CancellationToken cancellationToken)
     {
         var resultModel = await _service.GetAchievementsByUserId(userId, cancellationToken);
