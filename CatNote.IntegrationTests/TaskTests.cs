@@ -92,4 +92,29 @@ public class TaskTests
         //Assert
         result.IsSuccessStatusCode.Should().BeFalse();
     }
+
+    [Theory]
+    [AutoData]
+    public async Task Get_TasksByUserIdCorrectIdPass_UserDTOList(int id, int userId, string userName)
+    {
+        //Arrange
+        var userDTO = UserData.UserDTO(userId, userName);
+        var taskDTO = TaskData.TaskDTO(id, userId);
+
+        await _client.PostAsJsonAsync("api/User", userDTO);
+        await _client.PostAsJsonAsync("api/Task", taskDTO);
+
+        //Act
+
+        var result = await _client.GetAsync($"api/Task/user/{userId}");
+
+        //Assert
+        result.EnsureSuccessStatusCode();
+        var response = await result.Content.ReadFromJsonAsync<List<TaskDTO>>();
+
+        response.Should().NotBeNull();
+        response.Should().BeOfType<List<TaskDTO>>()
+            .And.Contain(x => x.Id == id)
+            .And.Contain(x => x.UserId == userId);
+    }
 }

@@ -201,6 +201,29 @@ public class TaskServiceTests
 
     }
 
+    [Fact]
+    public async Task Get_GetTasksByUserId_TaskModelList()
+    {
+        //Arrange
+        var taskModel = new List<TaskModel>{TaskData.TaskModel};
+        var taskEntity = new List<TaskEntity> { TaskData.TaskEntity };
+        int userId = taskModel[0].UserId;
+
+        var cancellationToken = new CancellationToken();
+
+        SetupMapper(taskModel, taskEntity);
+
+        _mockTaskRepository.Setup(x => x.GetTasksByUserId(userId, cancellationToken))
+            .ReturnsAsync(taskEntity);
+
+        //Act
+        var result = await _taskService.GetTasksByUserId(userId, cancellationToken);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<List<TaskModel>>();
+    }
+
     private void SetupMapper<T1, T2>(T1 returnElement, T2 startElement)
     {
         _mockMapper.Setup(x => x.Map<T1>(startElement)).Returns(returnElement);
