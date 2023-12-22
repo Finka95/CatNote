@@ -10,6 +10,7 @@ namespace CatNote.BLL.Services;
 public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
 {
     private readonly IAchievementService _achievementService;
+    private readonly ITaskRepository _taskRepository;
 
     public TaskService(
         IMapper mapper,
@@ -18,6 +19,14 @@ public class TaskService : GenericService<TaskModel, TaskEntity>, ITaskService
         :base(mapper, taskRepository)
     {
         _achievementService = achievementService;
+        _taskRepository = taskRepository;
+    }
+
+    public async Task<List<TaskModel>> GetTasksByUserId(int userId, CancellationToken cancellationToken)
+    {
+        var resultEntity = await _taskRepository.GetTasksByUserId(userId, cancellationToken);
+
+        return _mapper.Map<List<TaskModel>>(resultEntity);
     }
 
     public override async Task<TaskModel> Create(TaskModel model, CancellationToken cancellationToken)
