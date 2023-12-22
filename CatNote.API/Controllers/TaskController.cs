@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CatNote.API.DTO;
-using CatNote.API.Extensions;
 using CatNote.BLL.Interfaces;
 using CatNote.BLL.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -25,8 +24,6 @@ public class TaskController : GenericController<TaskModel, TaskDTO>
     [HttpGet("user/{userId}")]
     public async Task<List<TaskDTO>> GetTasksByUserId(int userId, CancellationToken cancellationToken)
     {
-        var a = this.User.GetPermissions();
-
         var resultModel = await _service.GetTasksByUserId(userId, cancellationToken);
 
         return _mapper.Map<List<TaskDTO>>(resultModel);
