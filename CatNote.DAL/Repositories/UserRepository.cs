@@ -6,17 +6,14 @@ namespace CatNote.DAL.Repositories;
 
 public class UserRepository : GenericRepository<UserEntity>, IUserRepository
 {
-    private readonly ApplicationDbContext _applicationDbContext;
-
     public UserRepository(ApplicationDbContext applicationDbContext)
     : base(applicationDbContext)
     {
-        _applicationDbContext = applicationDbContext;
     }
 
     public async Task<UserEntity?> GetUserByIdWithTasksAchievements(int userId, CancellationToken cancellationToken)
     {
-        var user = await _applicationDbContext.Users.Include(x => x.Tasks).Include(x => x.Achievements).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        var user = await dbSet.Include(x => x.Tasks).Include(x => x.Achievements).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
         return user;
     }
 

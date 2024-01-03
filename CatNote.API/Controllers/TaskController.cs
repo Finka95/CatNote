@@ -12,8 +12,20 @@ namespace CatNote.API.Controllers;
 [Authorize]
 public class TaskController : GenericController<TaskModel, TaskDTO>
 {
-    public TaskController(IMapper mapper, IGenericService<TaskModel> service)
+    private readonly ITaskService _service;
+
+    public TaskController(IMapper mapper, ITaskService service)
         : base(mapper, service)
     {
+        _service = service;
+    }
+
+
+    [HttpGet("user/{userId}")]
+    public async Task<List<TaskDTO>> GetTasksByUserId(int userId, CancellationToken cancellationToken)
+    {
+        var resultModel = await _service.GetTasksByUserId(userId, cancellationToken);
+
+        return _mapper.Map<List<TaskDTO>>(resultModel);
     }
 }
